@@ -72,8 +72,7 @@ public class MainActivity extends Activity {
             	    }
             	};
 
-            	searchView.setOnQueryTextListener(queryTextListener);            	
-            	
+            	searchView.setOnQueryTextListener(queryTextListener);            		
             }
         });
         //end of searchButton onClickListener...
@@ -83,8 +82,12 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				//TODO create a new intent for random quote page...
-				 Toast.makeText(getApplicationContext(), "Random Quote Will be Generated...", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "Random Quote Will be Generated...", Toast.LENGTH_LONG).show();				//
+
+				//Now a new intent will be created to go to the RandomQuote.java activity! 
+				Intent intent = new Intent(getBaseContext(), RandomQuote.class);
+				startActivity(intent);
+				 
 			}
 		});        
     }
@@ -101,7 +104,7 @@ public class MainActivity extends Activity {
 		
 		return;
 	}
-
+	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -114,6 +117,8 @@ public class MainActivity extends Activity {
         
         //setting hint value via .java.... should be able to do in .XML....
         searchView.setQueryHint("Search Brainy Quote!");
+        
+        //TODO launch a new intent to get specific quote result page. 
         return true;
     }
     
