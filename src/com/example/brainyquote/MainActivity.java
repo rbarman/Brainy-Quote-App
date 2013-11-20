@@ -5,11 +5,14 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
@@ -21,15 +24,15 @@ public class MainActivity extends Activity {
 
         //creates an action bar. 
         ActionBar actionBar = getActionBar();
+        
         //sets the home button. 
         actionBar.setDisplayHomeAsUpEnabled(true); 
         
         final Button searchButton = (Button) findViewById(R.id.searchButton);
         final Button randomButton = (Button) findViewById(R.id.randomButton);
-
         final SearchView searchView = (SearchView) findViewById(R.id.searchView);
         final ImageView logo = (ImageView)findViewById(R.id.logo);
-        
+       
         //onClickListener for searchButton...
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -37,11 +40,38 @@ public class MainActivity extends Activity {
             	logo.setVisibility(4);
             	searchButton.setVisibility(4);
             	randomButton.setVisibility(4);
-            	//search dialog will become visible and expand. 
+            	
+            	//search dialog will become visible and expanded and will have a :hint value. 
             	searchView.setVisibility(0);
-            	searchView.setIconified(false);	
+            	searchView.setQueryHint("Search Brainy Quote");
+            	//searchView.setSubmitButtonEnabled(true);
+            	searchView.setIconified(false); 
+            	
+            	//OnQueryTextListener created for SearchView
+            	//this will track when the user either enters text or submits inputted text!. 
+            	final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+            	    @Override
+            	    public boolean onQueryTextChange(String newText) {
+            	        // Do something
+            	        return true;
+            	    }
+
+            	    @Override
+            	    public boolean onQueryTextSubmit(String query) {
+            	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_LONG);
+            	        toast.setGravity(Gravity.CENTER, 0, 0);
+            	        toast.show();
+            	        return true;
+            	    }
+            	};
+
+            	searchView.setOnQueryTextListener(queryTextListener);            	
+            	
             }
         });
+        //end of searchButton onClickListener...
+        
+      
         
         //onClickListener for randomButton....
         randomButton.setOnClickListener(new View.OnClickListener() {
@@ -50,7 +80,7 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				//create a toast..
 				 Toast.makeText(getApplicationContext(), "Random Quote Will be Generated...", Toast.LENGTH_LONG).show();
-				
+				 
 			}
 		});        
     }
@@ -82,6 +112,9 @@ public class MainActivity extends Activity {
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        
+        //setting hint value via .java.... should be able to do in .XML....
+        searchView.setQueryHint("Search Brainy Quote!");
         return true;
     }
     
