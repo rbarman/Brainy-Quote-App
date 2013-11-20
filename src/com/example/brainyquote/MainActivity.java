@@ -22,18 +22,36 @@ public class MainActivity extends Activity {
         ActionBar actionBar = getActionBar();
         //sets the home button. 
         actionBar.setDisplayHomeAsUpEnabled(true); 
+        
         final Button searchButton = (Button) findViewById(R.id.searchButton);
         final SearchView searchView = (SearchView) findViewById(R.id.searchView);
         final ImageView logo = (ImageView)findViewById(R.id.logo);
         searchButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+            	//logo and searchButton will become invisible.
             	logo.setVisibility(4);
+            	searchButton.setVisibility(4);
+            	//search dialog will become visible and expand. 
             	searchView.setVisibility(0);
             	searchView.setIconified(false);
-            	//search dialog will become visible and expand. 
+            	
             }
         });
     }
+
+	@Override
+	public void onBackPressed() {
+		//action listener on when the backButton is pressed. 
+		 final Button searchButton = (Button) findViewById(R.id.searchButton);
+	     final SearchView searchView = (SearchView) findViewById(R.id.searchView);
+	     final ImageView logo = (ImageView)findViewById(R.id.logo);
+	     
+	     searchButton.setVisibility(0);
+	     logo.setVisibility(0);
+	     searchView.setVisibility(4);
+		
+		return;
+	}
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
