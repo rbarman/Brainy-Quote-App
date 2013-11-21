@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >  
+  
+    <item  
+        android:id="@+id/byAuthor"  
+        android:title="Quote By Author?"/>  
+      
+    <item  
+        android:id="@+id/aboutAuthor"  
+        android:title="Quote About Author?"/>  
+        
+          
+</menu>  
