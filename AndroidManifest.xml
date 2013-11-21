@@ -3,7 +3,10 @@
     package="com.example.brainyquote"
     android:versionCode="1"
     android:versionName="1.0" >
-<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="17" />
@@ -33,6 +36,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brainyquote" />
+        </activity>
+        <activity
+            android:name="com.example.brainyquote.SpecificQuote"
+            android:label="@string/title_activity_specific_quote"
+            android:parentActivityName="com.example.brainyquote.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.brainyquote.MainActivity" />
         </activity>
     </application>
 

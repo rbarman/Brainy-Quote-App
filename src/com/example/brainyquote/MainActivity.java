@@ -64,9 +64,14 @@ public class MainActivity extends Activity {
             	    public boolean onQueryTextSubmit(String query) {
             	    	
             	    	//TODO create new intent.. for specific quote search
-            	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_LONG);
+            	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
             	        toast.setGravity(Gravity.CENTER, 0, 0);
             	        toast.show();
+            	        
+            	      //Now a new intent will be created to go to the SpecificQuote.java activity! 
+        				Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
+        				startActivity(intent);	
+            	        
             	        return true;
             	    }
             	};
@@ -81,7 +86,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(), "Random Quote Will be Generated...", Toast.LENGTH_LONG).show();				//
+				Toast.makeText(getApplicationContext(), "Random Quote Will be Generated...", Toast.LENGTH_SHORT).show();				//
 
 				//Now a new intent will be created to go to the RandomQuote.java activity! 
 				Intent intent = new Intent(getBaseContext(), RandomQuote.class);

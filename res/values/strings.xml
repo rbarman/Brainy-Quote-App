@@ -7,5 +7,6 @@
     <string name="search_hint">Search Brainy Quote!</string>
     <string name="title_activity_random_quote">RandomQuote</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_specific_quote">SpecificQuote</string>
 
 </resources>

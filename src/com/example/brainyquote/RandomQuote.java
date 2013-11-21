@@ -48,7 +48,7 @@ public class RandomQuote extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				textView.setText(""); //clear the current textView because we will replace it with a new Quote.
-				Toast.makeText(getApplicationContext(), "New Random Quote Coming...", Toast.LENGTH_LONG).show();				//
+				Toast.makeText(getApplicationContext(), "New Random Quote Coming...", Toast.LENGTH_SHORT).show();				//
 				//execute the async task to get a new quote...!
 				new GetQuote().execute();
 			}			
