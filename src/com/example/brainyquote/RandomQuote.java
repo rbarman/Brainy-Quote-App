@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.renderscript.Element;
@@ -26,8 +27,9 @@ public class RandomQuote extends Activity {
 	
 
 	//This is the activity launched when the user selects the randomButton on main activity.
-	Handler handler;
+	
 	TextView textView;
+	Button nextRandom;
 	ArrayList<String> categories = new ArrayList<String>();
 	
 	@Override
@@ -35,10 +37,24 @@ public class RandomQuote extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_random_quote);
 		// Show the Up button in the action bar.
-		setupActionBar();
-	
-		handler = new Handler();
+		setupActionBar();		
 		textView = (TextView)findViewById(R.id.textView);
+		nextRandom = (Button)findViewById(R.id.nextRandom);
+		
+		//on Click Listener for nextRandom Button
+		nextRandom.setOnClickListener(new View.OnClickListener(){
+			//goal is to replace the current quote with a new random quote every time the user presses nextRandom.
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				textView.setText(""); //clear the current textView because we will replace it with a new Quote.
+				Toast.makeText(getApplicationContext(), "New Random Quote Coming...", Toast.LENGTH_LONG).show();				//
+				//execute the async task to get a new quote...!
+				new GetCategories().execute();
+			}			
+		});
+		
+		
 		//execute the async task
 		new GetCategories().execute();
 		

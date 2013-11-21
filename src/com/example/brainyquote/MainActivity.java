@@ -85,8 +85,7 @@ public class MainActivity extends Activity {
 
 				//Now a new intent will be created to go to the RandomQuote.java activity! 
 				Intent intent = new Intent(getBaseContext(), RandomQuote.class);
-				startActivity(intent);
-				 
+				startActivity(intent);				 
 			}
 		});        
     }
