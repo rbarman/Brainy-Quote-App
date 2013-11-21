@@ -1,9 +1,13 @@
 package com.example.brainyquote;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.renderscript.Element;
 import android.support.v4.app.NavUtils;
 
 public class RandomQuote extends Activity {
@@ -22,6 +28,7 @@ public class RandomQuote extends Activity {
 	//This is the activity launched when the user selects the randomButton on main activity.
 	Handler handler;
 	TextView textView;
+	ArrayList<String> categories = new ArrayList<String>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,31 +40,50 @@ public class RandomQuote extends Activity {
 		handler = new Handler();
 		textView = (TextView)findViewById(R.id.textView);
 		//execute the async task
-		new GetTitle().execute();
+		new GetCategories().execute();
 		
 	}
 	//need to create an AsyncTask so that the UI thread does not have to do extra work
 	//if we make the UI thread to the Jsoup.connect, the application will crash.
 	//currently I am just pulling the title from Google as a simple test. 
-	private class GetTitle extends AsyncTask<Void, Void, String> {
+	private class GetCategories extends AsyncTask<Void, Void, String> {
 
 		@Override
 		protected String doInBackground(Void... params) {
 			// TODO Auto-generated method stub
-			 Document doc;
-	         try {
-	                doc = Jsoup.connect("http://www.google.com").userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-	                return doc.title();
-	         } catch (IOException e) {
-	                return null;
-	            }
-			}
+			 
+			 BufferedReader br = null;
+			    try {
+			        br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
+			        String word;
+			        while((word=br.readLine()) != null){
+			            categories.add(word); 
+			        }
+			        //categories ArrayList now has all of the different categories within categories.txt
+			        String topic = categories.get((int) (Math.random() * (categories.size() -1)));
+			        Document doc;
+			         try {
+			        	 String url = "http://www.brainyquote.com/quotes/topics/topic_" + topic + ".html";
+			        	 //sample url for age quote : http://www.brainyquote.com/quotes/topics/topic_age.html
+			                doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+			                
+			                
+			             Elements elm = doc.select(".boxyPaddingBig span.bqQuoteLink a"); 
+			             
+			             return elm.get((int) (Math.random()*elm.size()-1)).text();
+			         } catch (IOException e) {
+			                return null;
+			            }
+			    }
+			    catch(IOException e) {
+			        return null;
+			    }
+		}
 		@Override
 		protected void onPostExecute(String title){
 			TextView textView = (TextView)findViewById(R.id.textView);
 			textView.setText(title);
 		}
-	
 	}
 
 	/**
