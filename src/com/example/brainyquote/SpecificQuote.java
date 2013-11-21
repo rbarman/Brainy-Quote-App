@@ -59,47 +59,104 @@ public class SpecificQuote extends Activity {
 				
 				//splits queryText into 2 parts for first and last name;
 				String [] authorName = queryText.split(" ");
-				String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
-				+ queryText.charAt(0) + "/" + authorName[0] + "_" + authorName[1] + ".html";
+				if(authorName.length > 1) {
+					String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
+							+ authorName[0].charAt(0) + "/" + authorName[0] + "_" + authorName[1] + ".html";
+							
+					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+						
+					return queryText;
+				}
+				else if (authorName.length == 1){
+					//user has entered a string with 1 word. 
+					String authorUrl = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" 
+							+ authorName[0] + ".html";
+					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+					
+					return queryText;
+				}
+				else {
+					//user has entered nothing. (just spaces)
+					return "PLEASE ENTER A VALID SEARCH!";
+				}
 				
-				Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-				
-				return queryText;
 				
 				
-			}catch(IOException execption) {
-				//if queryText gets us an invalid aythor page with author search, we are put here. 
+			}catch(IOException ioe) {
+				//if queryText gets us an invalid author page with author search, we are put here. 
+				return "error";
 			}
 			
-			
-			return null;
+			//return null;
 		}
 		
 		@Override
 		protected void onPostExecute(String message){
-			textView.setText("You are searching for " + message + " quotes");
-			 PopupMenu popup = new PopupMenu(SpecificQuote.this, textView);
-	            //second parameter is the "anchor";
-	            popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu()); 
-	            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() { 
-	            	
-	                public boolean onMenuItemClick(MenuItem item) { 
-	                
-	                	switch(item.getItemId()) {
-	                	case R.id.aboutAuthor:
-	                		new AboutAuthorSearch().execute();
-	                		break;
-	                	case R.id.byAuthor:
-	                		new ByAuthorSearch().execute();
-	                		break;	                	
-	                	}
-	                	return true;
-	                }  
-	               });  	     
-	               popup.show();
-		}		
+			
+			if(message.equals("error")){
+				//we now know that the search query the user entered does NOT represent an author
+				//the search query entered something that represents a keyword / topic. 
+				//we can start a new AsyncTask that will run a keyword search on the searchQuery.
+				
+				new KeywordSearch().execute();
+				
+			}
+			else {
+				textView.setText("You are searching for " + message + " quotes");
+				
+				//we have determined that the user has entered search query that represents an author
+				//Brainy Quote has 2 possibilites for authors : quotes BY the author and quotes ABOUT the author.
+				//we use the pop up menu to let the user determine which category he wants. 
+				 PopupMenu popup = new PopupMenu(SpecificQuote.this, textView);
+		            //second parameter is the "anchor";
+		            popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu()); 
+		            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() { 
+		            	
+		                public boolean onMenuItemClick(MenuItem item) { 
+		                
+		                	switch(item.getItemId()) {
+		                	case R.id.aboutAuthor:
+		                		new AboutAuthorSearch().execute();
+		                		break;
+		                	case R.id.byAuthor:
+		                		new ByAuthorSearch().execute();
+		                		break;	                	
+		                	}
+		                	return true;
+		                }  
+		               });  	     
+		               popup.show();
+			}	
+		}
 	}
 
+	private class KeywordSearch extends AsyncTask<Void, Void, String> {
+		//this method will run a keyword search. 
+		
+		//for now I will do a single word keyword search.. (assume queryText is a single word...).
+		@Override
+		protected String doInBackground(Void... params) {
+			try{
+				//sample keyword search : http://www.brainyquote.com/quotes/keywords/random.html
+				String url = "http://www.brainyquote.com/quotes/keywords/" + queryText + ".html";
+				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+				
+				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
+				
+				return quote.get(0).text() + "\n\n--" + author.get(0).text();
+				
+			} catch(IOException ioe) {
+				return "ERROR!  INVALID SEARCH";
+			}
+			
+		}
+		@Override
+		protected void onPostExecute(String quote) {
+			textView.setText(quote);
+		}
+	}
+	
 	private class ByAuthorSearch extends AsyncTask<Void, Void, String> {
 		//this method will return a quote BY the author
 		@Override
