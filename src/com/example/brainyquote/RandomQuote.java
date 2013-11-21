@@ -50,19 +50,19 @@ public class RandomQuote extends Activity {
 				textView.setText(""); //clear the current textView because we will replace it with a new Quote.
 				Toast.makeText(getApplicationContext(), "New Random Quote Coming...", Toast.LENGTH_LONG).show();				//
 				//execute the async task to get a new quote...!
-				new GetCategories().execute();
+				new GetQuote().execute();
 			}			
 		});
 		
 		
 		//execute the async task
-		new GetCategories().execute();
+		new GetQuote().execute();
 		
 	}
 	//need to create an AsyncTask so that the UI thread does not have to do extra work
 	//if we make the UI thread to the Jsoup.connect, the application will crash.
-	//currently I am just pulling the title from Google as a simple test. 
-	private class GetCategories extends AsyncTask<Void, Void, String> {
+	
+	private class GetQuote extends AsyncTask<Void, Void, String> {
 
 		@Override
 		protected String doInBackground(Void... params) {
@@ -84,9 +84,12 @@ public class RandomQuote extends Activity {
 			                doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 			                
 			                
-			             Elements elm = doc.select(".boxyPaddingBig span.bqQuoteLink a"); 
+			             Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+			             Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 			             
-			             return elm.get((int) (Math.random()*elm.size()-1)).text();
+			             
+			             return quote.get((int) (Math.random()*quote.size()-1)).text() +"\n\n - "
+			             + author.get((int) (Math.random()*author.size()-1)).text();
 			         } catch (IOException e) {
 			                return null;
 			            }
