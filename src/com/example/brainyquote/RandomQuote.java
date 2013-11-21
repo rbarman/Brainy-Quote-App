@@ -1,4 +1,4 @@
-package com.example.brainyquote;
+				package com.example.brainyquote;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,8 +11,6 @@ import org.jsoup.select.Elements;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.renderscript.Element;
 import android.support.v4.app.NavUtils;
 
 public class RandomQuote extends Activity {

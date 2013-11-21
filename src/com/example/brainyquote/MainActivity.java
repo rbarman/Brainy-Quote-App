@@ -70,6 +70,10 @@ public class MainActivity extends Activity {
             	        
             	      //Now a new intent will be created to go to the SpecificQuote.java activity! 
         				Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
+        				
+        				//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
+        				//so the SpecificQuote activity can use the queryText as the search parameter. 
+        				intent.putExtra("queryText", query);
         				startActivity(intent);	
             	        
             	        return true;

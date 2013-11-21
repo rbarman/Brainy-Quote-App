@@ -1,12 +1,20 @@
 package com.example.brainyquote;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TextView;
 import android.support.v4.app.NavUtils;
 
 public class SpecificQuote extends Activity {
+	
+	TextView textView;
+	Button previousButton;
+	Button nextButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -14,8 +22,18 @@ public class SpecificQuote extends Activity {
 		setContentView(R.layout.activity_specific_quote);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		
+		Intent intent = getIntent();
+		String queryText = intent.getExtras().getString("queryText");
+		
+	
+		textView = (TextView)findViewById(R.id.textView);
+//		previousButton = (Button)findViewById(R.id.previousButton);
+//		nextButton = (Button)findViewById(R.id.nextButton);
+		
+		//setting textView as queryText to just see if the string is actually transferred between activities
+		textView.setText(queryText);
 	}
-
 	/**
 	 * Set up the {@link android.app.ActionBar}.
 	 */
