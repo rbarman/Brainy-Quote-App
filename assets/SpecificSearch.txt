@@ -1,0 +1,50 @@
+User clicks on the search button ... 
+User sees the search dialog and enters some query string. 
+User clicks on the search icon and we search the query.....
+
+NOW.......
+
+User presumably types in an author or topic
+
+Topic vs Keyword?
+	A Keyword search will redirect to a Topic search if the Keyword is a predefined Topic
+
+	But we can not enter a Topic search with a Keyword... we can only enter a specified Keyword... 
+
+	Sample URL for "random" : http://www.brainyquote.com/quotes/keywords/random.html
+
+Thus for topic search, we really will be using the URL for a keyword search.
+
+IF we enter an author name in the KeyWord search, we get quotes ABOUT the author, not quotes by the Author... 
+	Thus we must have a spinner.. 
+		Spinner seems too much activity for a search, User just wants to search quickly
+	Or some way to ask the user if they want quotes by author or about author... 
+
+
+								Sample Cases.
+	1. User enters a query
+		ex) Random
+	2. A keyword seach with Random is valid
+	3. An Author search with Happiness is not valid. 
+		http://www.brainyquote.com/quotes/authors/r/random
+			"Sorry this page is not available"
+
+	1. User enters a query
+		ex) Mark Twain
+	2. A keyword search with Mark Twain is valid.
+	3. An Author Search with Mark Twain is valid. 
+	
+
+	Thus... General Search Overview
+
+	1. User enters a query
+	2. Run an Author Search with the query in the background.
+		- IF the link is invalid, we know that the query is a topic
+			=> Run a Keyword search with the query
+				IF Keyword search is invalid, user entered an invalid query
+					=> return error message.
+				ELSE return quote, etc. 
+
+		- IF the link is valid, we know that the query is an Author
+			=> Somehow ask user if they want quotes BY the author or ABOUT the author
+				=> Based on user's response we return either keyword search or author search quote. 
