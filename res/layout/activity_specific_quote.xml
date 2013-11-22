@@ -14,26 +14,29 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="176dp"
-        android:text="" />
+        android:layout_marginTop="76dp" />
 
-    <ImageButton
-        android:id="@+id/nextButton"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="78dp"
-        android:layout_marginLeft="70dp"
-        android:layout_toRightOf="@+id/textView"
-        android:src="@android:drawable/ic_media_next" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="58dp" >
 
-    <ImageButton
-        android:id="@+id/previousButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignTop="@+id/nextButton"
-        android:layout_marginLeft="32dp"
-        android:src="@android:drawable/ic_media_previous" />
+        <ImageButton
+            android:id="@+id/prevButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_media_previous" 
+            />
+
+        <ImageButton
+            android:id="@+id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_media_next" 
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

@@ -13,7 +13,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,9 +23,12 @@ import android.support.v4.app.NavUtils;
 public class SpecificQuote extends Activity {
 	
 	TextView textView;
-	Button previousButton;
-	Button nextButton;
+	ImageButton prevButton;
+	ImageButton nextButton;
 	String queryText;
+	int index = 0;
+	String searchType = null;
+		//possible types are aboutAuthor, byAuthor, keyword
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +42,44 @@ public class SpecificQuote extends Activity {
 		
 	
 		textView = (TextView)findViewById(R.id.textView);
-//		previousButton = (Button)findViewById(R.id.previousButton);
-//		nextButton = (Button)findViewById(R.id.nextButton);
+		prevButton = (ImageButton)findViewById(R.id.prevButton);
+		nextButton = (ImageButton)findViewById(R.id.nextButton);
+		//onClickListener for nextButton;
+		nextButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				index++;
+				
+				if(searchType.equals("keyword")) 
+					new KeywordSearch().execute();
+				else if(searchType.equals("byAuthor")) 
+					new ByAuthorSearch().execute();
+				else
+					new AboutAuthorSearch().execute();
+			}
+		});
+
+		//onClickListener for prevButton;
+		prevButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				while (index > 0){
+					index = index - 1;
+					
+					if(searchType.equals("keyword")) 
+						new KeywordSearch().execute();
+					else if(searchType.equals("byAuthor")) 
+						new ByAuthorSearch().execute();
+					else
+						new AboutAuthorSearch().execute();
+				}
+			}
+		});
+		
+		
+		
 		
 		//execute the AsyncTask
 		//InitialSearch will determine if we have an author or topic query.
@@ -127,6 +167,7 @@ public class SpecificQuote extends Activity {
 		               });  	     
 		               popup.show();
 			}	
+			
 		}
 	}
 
@@ -137,6 +178,7 @@ public class SpecificQuote extends Activity {
 		@Override
 		protected String doInBackground(Void... params) {
 			try{
+				searchType = "keyword";
 				//sample keyword search : http://www.brainyquote.com/quotes/keywords/random.html
 				String url = "http://www.brainyquote.com/quotes/keywords/" + queryText + ".html";
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
@@ -144,7 +186,8 @@ public class SpecificQuote extends Activity {
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 				
-				return quote.get(0).text() + "\n\n--" + author.get(0).text();
+				//TODO : I am only getting the first quote for the keyword!
+				return quote.get(index).text() + "\n\n--" + author.get(index).text();
 				
 			} catch(IOException ioe) {
 				return "ERROR!  INVALID SEARCH";
@@ -154,6 +197,7 @@ public class SpecificQuote extends Activity {
 		@Override
 		protected void onPostExecute(String quote) {
 			textView.setText(quote);
+			
 		}
 	}
 	
@@ -163,6 +207,7 @@ public class SpecificQuote extends Activity {
 		protected String doInBackground(Void... params) {
 			
 			try{
+				searchType = "byAuthor";
 				String [] authorName = queryText.split(" ");
 				String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
 						+ queryText.charAt(0) + "/" + authorName[0] + "_" + authorName[1] + ".html";
@@ -170,7 +215,7 @@ public class SpecificQuote extends Activity {
 				Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				
 				Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-				return quotes.get(0).text();
+				return quotes.get(index).text();
 				//only returns the first quote.
 				//TODO: need to somehow increment when user presses next button. 
 				
@@ -182,6 +227,7 @@ public class SpecificQuote extends Activity {
 		@Override
 		protected void onPostExecute(String quote) {
 			textView.setText(quote);
+			
 		}
 	}
 
@@ -191,6 +237,7 @@ public class SpecificQuote extends Activity {
 		protected String doInBackground(Void... params) {
 			
 			try{
+				searchType = "aboutAuthor";
 				String [] authorName = queryText.split(" ");
 				//Sample keyword search : http://www.brainyquote.com/quotes/keywords/mark_twain.html
 				String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0] 
@@ -200,11 +247,11 @@ public class SpecificQuote extends Activity {
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 				
-				return quote.get(0).text() + "\n\n--" + author.get(0).text();
+				return quote.get(index).text() + "\n\n--" + author.get(index).text();
 				
 			} catch(IOException exception){
 				
-			}
+				}
 			
 			
 			return null;
@@ -212,6 +259,7 @@ public class SpecificQuote extends Activity {
 		@Override
 		protected void onPostExecute(String quote){
 			textView.setText(quote);
+			
 		}
 	}
 	

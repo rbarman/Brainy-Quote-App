@@ -140,7 +140,7 @@ public class MainActivity extends Activity {
     	    @Override
     	    public boolean onQueryTextSubmit(String query) {
     	    	
-    	    	//TODO create new intent.. for specific quote search
+   
     	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
     	        toast.setGravity(Gravity.CENTER, 0, 0);
     	        toast.show();
