@@ -65,7 +65,7 @@ public class SpecificQuote extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				while (index > 0){
+				if (index > 0){
 					index = index - 1;
 					
 					if(searchType.equals("keyword")) 
