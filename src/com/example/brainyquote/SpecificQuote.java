@@ -77,7 +77,7 @@ public class SpecificQuote extends Activity {
 				}
 				else {
 					//user has entered nothing. (just spaces)
-					return "PLEASE ENTER A VALID SEARCH!";
+					return "You have not entered anything";
 				}
 				
 				

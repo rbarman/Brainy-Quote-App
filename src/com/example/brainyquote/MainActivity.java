@@ -87,6 +87,7 @@ public class MainActivity extends Activity {
         
         //onClickListener for randomButton....
         randomButton.setOnClickListener(new View.OnClickListener() {
+
 			
 			@Override
 			public void onClick(View v) {
@@ -97,7 +98,11 @@ public class MainActivity extends Activity {
 				startActivity(intent);				 
 			}
 		});        
+    
+        
+        
     }
+    
 
 	@Override
 	public void onBackPressed() {
@@ -124,6 +129,36 @@ public class MainActivity extends Activity {
         
         //setting hint value via .java.... should be able to do in .XML....
         searchView.setQueryHint("Search Brainy Quote!");
+        
+        final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+    	    @Override
+    	    public boolean onQueryTextChange(String newText) {
+    	        // Do something
+    	        return true;
+    	    }
+
+    	    @Override
+    	    public boolean onQueryTextSubmit(String query) {
+    	    	
+    	    	//TODO create new intent.. for specific quote search
+    	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
+    	        toast.setGravity(Gravity.CENTER, 0, 0);
+    	        toast.show();
+    	        
+    	      //Now a new intent will be created to go to the SpecificQuote.java activity! 
+				Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
+				
+				//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
+				//so the SpecificQuote activity can use the queryText as the search parameter. 
+				intent.putExtra("queryText", query);
+				startActivity(intent);	
+    	        
+    	        return true;
+    	    }
+    	    
+    	};
+    	searchView.setOnQueryTextListener(queryTextListener);
+        
         
         //TODO launch a new intent to get specific quote result page. 
         return true;
