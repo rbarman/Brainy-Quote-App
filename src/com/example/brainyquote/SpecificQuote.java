@@ -65,7 +65,7 @@ public class SpecificQuote extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				if (index > 0){
+				if (index > 0) {
 					index = index - 1;
 					
 					if(searchType.equals("keyword")) 
@@ -77,8 +77,6 @@ public class SpecificQuote extends Activity {
 				}
 			}
 		});
-		
-		
 		
 		
 		//execute the AsyncTask
@@ -250,16 +248,18 @@ public class SpecificQuote extends Activity {
 				return quote.get(index).text() + "\n\n--" + author.get(index).text();
 				
 			} catch(IOException exception){
-				
+					return "error";
 				}
-			
-			
-			return null;
 		}
 		@Override
 		protected void onPostExecute(String quote){
-			textView.setText(quote);
 			
+			if(quote.equals("error")) {
+				textView.setText("No available quotes about " + queryText + "!");
+			}
+			else {
+				textView.setText(quote);
+			}
 		}
 	}
 	
