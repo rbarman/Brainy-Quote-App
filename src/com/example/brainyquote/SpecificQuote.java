@@ -164,8 +164,7 @@ public class SpecificQuote extends Activity {
 		                }  
 		               });  	     
 		               popup.show();
-			}	
-			
+			}				
 		}
 	}
 
@@ -189,7 +188,7 @@ public class SpecificQuote extends Activity {
 				
 			} catch(IOException ioe) {
 				return "ERROR!  INVALID SEARCH";
-			}
+				}
 			
 		}
 		@Override
@@ -219,7 +218,7 @@ public class SpecificQuote extends Activity {
 				
 			}catch(IOException exception){
 				
-			}			
+				}			
 			return null;
 		}
 		@Override

@@ -51,6 +51,7 @@ public class MainActivity extends Activity {
             	//searchView.setSubmitButtonEnabled(true);
             	searchView.setIconified(false); 
             	
+            	
             	//OnQueryTextListener created for SearchView
             	//this will track when the user either enters text or submits inputted text!. 
             	final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
@@ -107,7 +108,8 @@ public class MainActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 
-	     //all below become visible again. 
+		
+		 //all below become visible again. 
 	     searchButton.setVisibility(0);
 	     logo.setVisibility(0);
 	     randomButton.setVisibility(0);
@@ -158,7 +160,6 @@ public class MainActivity extends Activity {
     	    
     	};
     	searchView.setOnQueryTextListener(queryTextListener);
-        
         
         //TODO launch a new intent to get specific quote result page. 
         return true;

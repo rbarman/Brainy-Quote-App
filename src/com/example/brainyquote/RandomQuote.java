@@ -50,11 +50,9 @@ public class RandomQuote extends Activity {
 				new GetQuote().execute();
 			}			
 		});
-		
-		
+
 		//execute the async task
-		new GetQuote().execute();
-		
+		new GetQuote().execute();		
 	}
 	//need to create an AsyncTask so that the UI thread does not have to do extra work
 	//if we make the UI thread to the Jsoup.connect, the application will crash.
