@@ -84,9 +84,9 @@ public class RandomQuote extends Activity {
 			             Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 			             Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 			             
-			             
-			             return quote.get((int) (Math.random()*quote.size()-1)).text() +"\n\n - "
-			             + author.get((int) (Math.random()*author.size()-1)).text();
+			             int randIndex = (int) (Math.random()*quote.size()-1);
+			             return quote.get(randIndex).text() +"\n\n - "
+			             + author.get(randIndex).text();
 			         } catch (IOException e) {
 			                return null;
 			            }
