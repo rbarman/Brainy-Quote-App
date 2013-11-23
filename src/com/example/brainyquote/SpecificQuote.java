@@ -28,6 +28,7 @@ public class SpecificQuote extends Activity {
 	String queryText;
 	int index = 0;
 	String searchType = null;
+	int pageNum = 1;
 		//possible types are aboutAuthor, byAuthor, keyword
 
 	@Override
@@ -65,8 +66,19 @@ public class SpecificQuote extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+
 				if (index > 0) {
-					index = index - 1;
+					index--;
+					
+					if(searchType.equals("keyword")) 
+						new KeywordSearch().execute();
+					else if(searchType.equals("byAuthor")) 
+						new ByAuthorSearch().execute();
+					else
+						new AboutAuthorSearch().execute();
+				}
+				else if(index == 0 && pageNum > 1) {
+					index = 25;
 					
 					if(searchType.equals("keyword")) 
 						new KeywordSearch().execute();
@@ -176,15 +188,32 @@ public class SpecificQuote extends Activity {
 		protected String doInBackground(Void... params) {
 			try{
 				searchType = "keyword";
-				//sample keyword search : http://www.brainyquote.com/quotes/keywords/random.html
-				String url = "http://www.brainyquote.com/quotes/keywords/" + queryText + ".html";
-				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				
-				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-				
-				return quote.get(index).text() + "\n\n--" + author.get(index).text();
-				
+				//by saying index > 25, I will only display 26 quotes per page. 
+				if (index > 25 ) {
+					pageNum++;
+					index = 0;
+				}
+				else{}
+				if (pageNum == 1) {
+					String url = "http://www.brainyquote.com/quotes/keywords/" + queryText + ".html";
+					Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+					
+					Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+					Elements author = doc.select(".boxyPaddingBig span.bodybold a");
+					
+					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
+				}
+				else {
+					String url = "http://www.brainyquote.com/quotes/keywords/" + queryText + "_" + pageNum + ".html";
+					Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+					
+					Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+					Elements author = doc.select(".boxyPaddingBig span.bodybold a");
+					
+					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
+				}
+
 			} catch(IOException ioe) {
 				return "ERROR!  INVALID SEARCH";
 				}
