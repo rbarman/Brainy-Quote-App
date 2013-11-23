@@ -183,7 +183,6 @@ public class SpecificQuote extends Activity {
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 				
-				//TODO : I am only getting the first quote for the keyword!
 				return quote.get(index).text() + "\n\n--" + author.get(index).text();
 				
 			} catch(IOException ioe) {
@@ -206,6 +205,17 @@ public class SpecificQuote extends Activity {
 			try{
 				searchType = "byAuthor";
 				String [] authorName = queryText.split(" ");
+			
+			if(authorName.length == 1) {	
+				String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
+						+ queryText.charAt(0) + "/" + authorName[0] + ".html";
+				Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+				
+				Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+				return quotes.get(index).text();
+			}
+			else{
+				
 				String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
 						+ queryText.charAt(0) + "/" + authorName[0] + "_" + authorName[1] + ".html";
 				
@@ -213,10 +223,9 @@ public class SpecificQuote extends Activity {
 				
 				Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				return quotes.get(index).text();
-				//only returns the first quote.
-				//TODO: need to somehow increment when user presses next button. 
+				}
 				
-			}catch(IOException exception){
+			} catch(IOException exception){
 				
 				}			
 			return null;
@@ -237,15 +246,26 @@ public class SpecificQuote extends Activity {
 				searchType = "aboutAuthor";
 				String [] authorName = queryText.split(" ");
 				//Sample keyword search : http://www.brainyquote.com/quotes/keywords/mark_twain.html
-				String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0] 
-						+ "_" + authorName[1] + ".html";
-				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				
-				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-				
-				return quote.get(index).text() + "\n\n--" + author.get(index).text();
-				
+				if(authorName.length == 1) {
+					String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0]  + ".html";
+					Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+					
+					Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+					Elements author = doc.select(".boxyPaddingBig span.bodybold a");
+					
+					return quote.get(index).text() + "\n\n--" + author.get(index).text();
+				}
+				else {
+					String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0] 
+							+ "_" + authorName[1] + ".html";
+					Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+					
+					Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+					Elements author = doc.select(".boxyPaddingBig span.bodybold a");
+					
+					return quote.get(index).text() + "\n\n--" + author.get(index).text();
+				}
 			} catch(IOException exception){
 					return "error";
 				}
