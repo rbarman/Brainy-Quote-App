@@ -78,7 +78,8 @@ public class SpecificQuote extends Activity {
 						new AboutAuthorSearch().execute();
 				}
 				else if(index == 0 && pageNum > 1) {
-					index = 25;
+					index = 24;
+					pageNum --;
 					
 					if(searchType.equals("keyword")) 
 						new KeywordSearch().execute();
@@ -189,8 +190,8 @@ public class SpecificQuote extends Activity {
 			try{
 				searchType = "keyword";
 				
-				//by saying index > 25, I will only display 26 quotes per page. 
-				if (index > 25 ) {
+				//by saying index > 24, I will only display 25 quotes per page. 
+				if (index > 24 ) {
 					pageNum++;
 					index = 0;
 				}
@@ -230,29 +231,58 @@ public class SpecificQuote extends Activity {
 		//this method will return a quote BY the author
 		@Override
 		protected String doInBackground(Void... params) {
-			
+			//first page : http://www.brainyquote.com/quotes/authors/m/mark_twain.html
+			//2nd   page : http://www.brainyquote.com/quotes/authors/m/mark_twain_2.html
 			try{
 				searchType = "byAuthor";
 				String [] authorName = queryText.split(" ");
+				if (index > 24 ) {
+					pageNum++;
+					index = 0;
+				}
+				else{}
 			
-			if(authorName.length == 1) {	
-				String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
-						+ queryText.charAt(0) + "/" + authorName[0] + ".html";
-				Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-				
-				Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-				return quotes.get(index).text();
+			if(pageNum == 1) {
+				if(authorName.length == 1) {	
+					String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
+							+ queryText.charAt(0) + "/" + authorName[0] + ".html";
+					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+					
+					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+					return quotes.get(index).text() + "\n\n INDEX : " + index;
+				}
+				else{
+					
+					String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
+							+ queryText.charAt(0) + "/" + authorName[0] + "_" + authorName[1] + ".html";
+					
+					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+					
+					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+					return quotes.get(index).text()+ "\n\n INDEX : " + index;
+					}
 			}
 			else{
-				
-				String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
-						+ queryText.charAt(0) + "/" + authorName[0] + "_" + authorName[1] + ".html";
-				
-				Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-				
-				Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-				return quotes.get(index).text();
+				//2nd   page : http://www.brainyquote.com/quotes/authors/m/mark_twain_2.html
+				if(authorName.length == 1) {
+					String authorUrl = "http://www.brainyquote.com/quotes/authors/"
+							+ queryText.charAt(0) + "/" + authorName[0] + "_" + pageNum + ".html";
+					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+					
+					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+					return quotes.get(index).text() + "\n\n INDEX : " + index;
 				}
+				else {
+					String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
+							+ queryText.charAt(0) + "/" + authorName[0] + "_" + authorName[1] + "_" + pageNum + ".html";
+					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+					
+					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+					return quotes.get(index).text() + "\n\n INDEX : " + index;
+				}
+			}
+				
+			
 				
 			} catch(IOException exception){
 				
@@ -273,6 +303,7 @@ public class SpecificQuote extends Activity {
 			
 			try{
 				searchType = "aboutAuthor";
+				
 				String [] authorName = queryText.split(" ");
 				//Sample keyword search : http://www.brainyquote.com/quotes/keywords/mark_twain.html
 				
