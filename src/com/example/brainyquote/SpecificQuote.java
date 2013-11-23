@@ -28,7 +28,8 @@ public class SpecificQuote extends Activity {
 	String queryText;
 	int index = 0;
 	String searchType = null;
-	int pageNum = 1;
+	int pageNum = 0;
+	int quoteNum = 0; //number of quotes
 		//possible types are aboutAuthor, byAuthor, keyword
 
 	@Override
@@ -78,7 +79,7 @@ public class SpecificQuote extends Activity {
 						new AboutAuthorSearch().execute();
 				}
 				else if(index == 0 && pageNum > 1) {
-					index = 24;
+					index = quoteNum - 1;
 					pageNum --;
 					
 					if(searchType.equals("keyword")) 
@@ -190,8 +191,7 @@ public class SpecificQuote extends Activity {
 			try{
 				searchType = "keyword";
 				
-				//by saying index > 24, I will only display 25 quotes per page. 
-				if (index > 24 ) {
+				if (index > quoteNum -1) {
 					pageNum++;
 					index = 0;
 				}
@@ -203,6 +203,7 @@ public class SpecificQuote extends Activity {
 					Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 					Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 					
+					quoteNum = quote.size() -1;
 					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
 				}
 				else {
@@ -212,6 +213,7 @@ public class SpecificQuote extends Activity {
 					Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 					Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 					
+					quoteNum = quote.size() -1;
 					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
 				}
 
@@ -236,7 +238,7 @@ public class SpecificQuote extends Activity {
 			try{
 				searchType = "byAuthor";
 				String [] authorName = queryText.split(" ");
-				if (index > 24 ) {
+				if (index > quoteNum -1 ) {
 					pageNum++;
 					index = 0;
 				}
@@ -249,7 +251,8 @@ public class SpecificQuote extends Activity {
 					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 					
 					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					return quotes.get(index).text() + "\n\n INDEX : " + index;
+					quoteNum = quotes.size() -1 ;
+					return quotes.get(index).text() + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
 				}
 				else{
 					
@@ -259,7 +262,8 @@ public class SpecificQuote extends Activity {
 					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 					
 					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					return quotes.get(index).text()+ "\n\n INDEX : " + index;
+					quoteNum = quotes.size() -1;
+					return quotes.get(index).text()+ "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
 					}
 			}
 			else{
@@ -270,7 +274,8 @@ public class SpecificQuote extends Activity {
 					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 					
 					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					return quotes.get(index).text() + "\n\n INDEX : " + index;
+					quoteNum = quotes.size() - 1;
+					return quotes.get(index).text() + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
 				}
 				else {
 					String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
@@ -278,7 +283,8 @@ public class SpecificQuote extends Activity {
 					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 					
 					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					return quotes.get(index).text() + "\n\n INDEX : " + index;
+					quoteNum = quotes.size() - 1;
+					return quotes.get(index).text() + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
 				}
 			}
 				
@@ -300,41 +306,51 @@ public class SpecificQuote extends Activity {
 		//this method will return a quote ABOUT the author.
 		@Override
 		protected String doInBackground(Void... params) {
-			
+			//TODO : somehow check if the user has gone past the first page for ABOUT author search
 			try{
 				searchType = "aboutAuthor";
-				
 				String [] authorName = queryText.split(" ");
+//				if (index > quoteNum -1 ) {
+//					pageNum++;
+//					index = 0;
+//				}
+//				else{}
 				//Sample keyword search : http://www.brainyquote.com/quotes/keywords/mark_twain.html
 				
-				if(authorName.length == 1) {
-					String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0]  + ".html";
-					Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-					
-					Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-					
-					return quote.get(index).text() + "\n\n--" + author.get(index).text();
-				}
-				else {
-					String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0] 
-							+ "_" + authorName[1] + ".html";
-					Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-					
-					Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-					
-					return quote.get(index).text() + "\n\n--" + author.get(index).text();
-				}
+					if(authorName.length == 1) {
+						String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0]  + ".html";
+						Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+						
+						Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+						Elements author = doc.select(".boxyPaddingBig span.bodybold a");
+						quoteNum = quote.size();
+						return quote.get(index).text() + "\n\n--" + author.get(index).text();
+					}
+					else {
+						String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0] 
+								+ "_" + authorName[1] + ".html";
+						Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+						
+						Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+						Elements author = doc.select(".boxyPaddingBig span.bodybold a");
+						
+						return quote.get(index).text() + "\n\n--" + author.get(index).text();
+					}
+				
+				
 			} catch(IOException exception){
 					return "error";
 				}
+			
 		}
 		@Override
 		protected void onPostExecute(String quote){
 			
 			if(quote.equals("error")) {
 				textView.setText("No available quotes about " + queryText + "!");
+			}
+			else if(quote.equals("no more")) {
+				textView.setText("There are no more quotes about " + queryText + "! SORRY");
 			}
 			else {
 				textView.setText(quote);
