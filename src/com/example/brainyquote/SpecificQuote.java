@@ -110,9 +110,9 @@ public class SpecificQuote extends Activity {
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 		public void onSwipeRight(){
 			//on every swipe to the right we will get the previous quote. 
-			Toast.makeText(SpecificQuote.this, "Swipe to Right : Previous Quote Coming!", Toast.LENGTH_SHORT).show();
 			
 			if (index > 0) {
+				Toast.makeText(SpecificQuote.this, "Swipe to Right : Previous Quote Coming!", Toast.LENGTH_SHORT).show();
 				index--;
 				
 				if(searchType.equals("keyword")) 
@@ -123,6 +123,7 @@ public class SpecificQuote extends Activity {
 					new AboutAuthorSearch().execute();
 			}
 			else if(index == 0 && pageNum > 1) {
+				Toast.makeText(SpecificQuote.this, "Swipe to Right : Previous Quote Coming!", Toast.LENGTH_SHORT).show();
 				index = quoteNum - 1;
 				pageNum --;
 				
@@ -132,6 +133,9 @@ public class SpecificQuote extends Activity {
 					new ByAuthorSearch().execute();
 				else
 					new AboutAuthorSearch().execute();
+			}
+			else {
+				Toast.makeText(SpecificQuote.this, "Swipe to Right : No more previous Quotes :(",Toast.LENGTH_SHORT).show();
 			}
 			
 		}
@@ -308,7 +312,7 @@ public class SpecificQuote extends Activity {
 					
 					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 					quoteNum = quotes.size() -1 ;
-					return quotes.get(index).text() + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
+					return quotes.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
 				}
 				else{
 					
@@ -319,7 +323,7 @@ public class SpecificQuote extends Activity {
 					
 					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 					quoteNum = quotes.size() -1;
-					return quotes.get(index).text()+ "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
+					return quotes.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
 					}
 			}
 			else{
