@@ -19,6 +19,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -33,6 +34,7 @@ public class RandomQuote extends Activity {
 	TextView textView;
 	Button nextRandom;
 	ArrayList<String> categories = new ArrayList<String>();
+	View view;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,9 @@ public class RandomQuote extends Activity {
 		setupActionBar();		
 		textView = (TextView)findViewById(R.id.textView);
 		nextRandom = (Button)findViewById(R.id.nextRandom);
+		
+		view = (View)findViewById(R.id.view);
+		view.setOnTouchListener(viewSwiped);
 		
 		//on Click Listener for nextRandom Button
 		nextRandom.setOnClickListener(new View.OnClickListener(){
@@ -59,6 +64,29 @@ public class RandomQuote extends Activity {
 		//execute the async task
 		new GetQuote().execute();		
 	}
+	
+	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
+		public void onSwipeRight(){
+			//TODO : implement a swipe to right where the user can see the previous random qutoe? 
+			
+			
+		}
+		public void onSwipeLeft(){
+			//on every swipe to the left we will get the next random quote.
+			Toast.makeText(RandomQuote.this, "Swipe to Left : New Random Quote Coming!", Toast.LENGTH_SHORT).show();
+			textView.setText(""); //clear the current textView because we will replace it with a new Quote.
+
+			//execute the async task to get a new quote...!
+			new GetQuote().execute();
+		}
+		public void onSwipeBottom() {
+			
+		}
+		public void onSwipeTop() {
+			
+		}
+	};
+	
 	//need to create an AsyncTask so that the UI thread does not have to do extra work
 	//if we make the UI thread to the Jsoup.connect, the application will crash.
 	
