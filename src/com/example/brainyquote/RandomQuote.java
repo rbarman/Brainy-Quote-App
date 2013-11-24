@@ -58,7 +58,7 @@ public class RandomQuote extends Activity {
 			public void onClick(View v) {
 				
 				textView.setText(""); //clear the current textView because we will replace it with a new Quote.
-				Toast.makeText(getApplicationContext(), "New Random Quote Coming...", Toast.LENGTH_SHORT).show();				//
+				Toast.makeText(getApplicationContext(), "New Random Quote Coming...", Toast.LENGTH_SHORT).show();			
 				//execute the async task to get a new quote...!
 				new GetQuote().execute();
 			}			
@@ -70,33 +70,33 @@ public class RandomQuote extends Activity {
 	
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 		public void onSwipeRight(){
-			//TODO : implement a swipe to right where the user can see the previous random qutoe? 
+			 
 			//on every swipe to the left we will get the next random quote. 
-			Toast.makeText(RandomQuote.this, "Swipe to Right : Previous Random Quote Coming!", Toast.LENGTH_SHORT).show();
+			
 			//textView.setText()
-			if(currentIndex != -1 || currentIndex != 0) {
-				currentIndex --;
+			if(currentIndex > 0) {
+				currentIndex--;
+				Toast.makeText(RandomQuote.this, "Swipe to Right : Previous Random Quote Coming!", Toast.LENGTH_SHORT).show();
+				
 				textView.setText(randomQuotes.get(currentIndex));
+			}
+			else {
+				Toast.makeText(RandomQuote.this, "Swipe to Right : No more previous Quotes :(", Toast.LENGTH_SHORT).show();
 			}
 			
 		}
 		public void onSwipeLeft(){
 			//on every swipe to the left we will get the next random quote.
 			if(currentIndex < quotePlaceHolder) {
-				Toast.makeText(RandomQuote.this, "Swipe to Left : Next Random Quote Coming!", Toast.LENGTH_SHORT).show();
 				currentIndex ++;
+				Toast.makeText(RandomQuote.this, "Swipe to Left : Next Random Quote Coming!", Toast.LENGTH_SHORT).show();
+				
 				textView.setText(randomQuotes.get(currentIndex));
 			}
 			else {
 				Toast.makeText(RandomQuote.this, "Swipe to Left : New Random Quote Coming!", Toast.LENGTH_SHORT).show();
 				new GetQuote().execute();
-			}
-			
-			
-			//textView.setText(""); //clear the current textView because we will replace it with a new Quote.
-
-			//execute the async task to get a new quote...!
-			
+			}	
 		}
 		public void onSwipeBottom() {
 			
