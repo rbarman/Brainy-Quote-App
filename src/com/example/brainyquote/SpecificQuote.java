@@ -17,6 +17,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
@@ -32,9 +33,10 @@ public class SpecificQuote extends Activity {
 	String queryText;
 	int index = 0;
 	String searchType = null;
+		//possible types are aboutAuthor, byAuthor, keyword
 	int pageNum = 0;
 	int quoteNum = 0; //number of quotes
-		//possible types are aboutAuthor, byAuthor, keyword
+	View view;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,9 @@ public class SpecificQuote extends Activity {
 		Intent intent = getIntent();
 		queryText = intent.getExtras().getString("queryText");
 		
-	
+		view = (View)findViewById(R.id.view);
+		view.setOnTouchListener(viewSwiped);
+		
 		textView = (TextView)findViewById(R.id.textView);
 		prevButton = (ImageButton)findViewById(R.id.prevButton);
 		nextButton = (ImageButton)findViewById(R.id.nextButton);
@@ -102,6 +106,54 @@ public class SpecificQuote extends Activity {
 		//then from InitialSearch we will start other respective AsyncTasks.
 		new InitialSearch().execute();	
 	}
+	
+	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
+		public void onSwipeRight(){
+			//on every swipe to the right we will get the previous quote. 
+			Toast.makeText(SpecificQuote.this, "Swipe to Right : Previous Quote Coming!", Toast.LENGTH_SHORT).show();
+			
+			if (index > 0) {
+				index--;
+				
+				if(searchType.equals("keyword")) 
+					new KeywordSearch().execute();
+				else if(searchType.equals("byAuthor")) 
+					new ByAuthorSearch().execute();
+				else
+					new AboutAuthorSearch().execute();
+			}
+			else if(index == 0 && pageNum > 1) {
+				index = quoteNum - 1;
+				pageNum --;
+				
+				if(searchType.equals("keyword")) 
+					new KeywordSearch().execute();
+				else if(searchType.equals("byAuthor")) 
+					new ByAuthorSearch().execute();
+				else
+					new AboutAuthorSearch().execute();
+			}
+			
+		}
+		public void onSwipeLeft(){
+			//on every swipe to the left we will get the next quote.
+			index++;
+			Toast.makeText(SpecificQuote.this, "Swipe to Left : Next Quote Coming!", Toast.LENGTH_SHORT).show();
+			if(searchType.equals("keyword")) 
+				new KeywordSearch().execute();
+			else if(searchType.equals("byAuthor")) 
+				new ByAuthorSearch().execute();
+			else
+				new AboutAuthorSearch().execute();
+			
+		}
+		public void onSwipeBottom() {
+			
+		}
+		public void onSwipeTop() {
+			
+		}
+	};
 	
 	private class InitialSearch extends AsyncTask<Void, Void, String> {
 
