@@ -34,7 +34,10 @@ public class RandomQuote extends Activity {
 	TextView textView;
 	Button nextRandom;
 	ArrayList<String> categories = new ArrayList<String>();
+	ArrayList<String> randomQuotes = new ArrayList<String>();
 	View view;
+	int currentIndex = -1;
+	int quotePlaceHolder = -1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +71,32 @@ public class RandomQuote extends Activity {
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 		public void onSwipeRight(){
 			//TODO : implement a swipe to right where the user can see the previous random qutoe? 
-			
+			//on every swipe to the left we will get the next random quote. 
+			Toast.makeText(RandomQuote.this, "Swipe to Right : Previous Random Quote Coming!", Toast.LENGTH_SHORT).show();
+			//textView.setText()
+			if(currentIndex != -1 || currentIndex != 0) {
+				currentIndex --;
+				textView.setText(randomQuotes.get(currentIndex));
+			}
 			
 		}
 		public void onSwipeLeft(){
 			//on every swipe to the left we will get the next random quote.
-			Toast.makeText(RandomQuote.this, "Swipe to Left : New Random Quote Coming!", Toast.LENGTH_SHORT).show();
-			textView.setText(""); //clear the current textView because we will replace it with a new Quote.
+			if(currentIndex < quotePlaceHolder) {
+				Toast.makeText(RandomQuote.this, "Swipe to Left : Next Random Quote Coming!", Toast.LENGTH_SHORT).show();
+				currentIndex ++;
+				textView.setText(randomQuotes.get(currentIndex));
+			}
+			else {
+				Toast.makeText(RandomQuote.this, "Swipe to Left : New Random Quote Coming!", Toast.LENGTH_SHORT).show();
+				new GetQuote().execute();
+			}
+			
+			
+			//textView.setText(""); //clear the current textView because we will replace it with a new Quote.
 
 			//execute the async task to get a new quote...!
-			new GetQuote().execute();
+			
 		}
 		public void onSwipeBottom() {
 			
@@ -116,6 +135,12 @@ public class RandomQuote extends Activity {
 			             Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 			             
 			             int randIndex = (int) (Math.random()*quote.size()-1);
+			             
+			             randomQuotes.add(quote.get(randIndex).text() +"\n\n - "
+					             + author.get(randIndex).text());
+			             currentIndex ++;
+			             quotePlaceHolder ++;
+			             
 			             return quote.get(randIndex).text() +"\n\n - "
 			             + author.get(randIndex).text();
 			         } catch (IOException e) {
