@@ -173,11 +173,11 @@ public class SpecificQuote extends Activity {
 				String[] authorName = queryText.split(" ");
 				String url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
 				int i = 1;
-				while(i < authorName.length -1) {
+				while(i < authorName.length) {
 					url = url + "_" + authorName[i];
 					i++;
 				}
-				url = url + "_" + authorName[i] + ".html";
+				url = url + ".html";
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				return queryText;
 				
@@ -243,26 +243,31 @@ public class SpecificQuote extends Activity {
 					index = 0;
 				}
 				else{}
-				if (pageNum == 1) {
-					String url = "http://www.brainyquote.com/quotes/keywords/" + queryText + ".html";
-					Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-					
-					Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-					
-					quoteNum = quote.size() -1;
-					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
+				
+				String[] keywords = queryText.split(" ");
+
+				String url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
+
+				int i = 1;
+				while(i < keywords.length) {
+					url = url + "_" + keywords[i];
+					i++;
+				}
+				
+				if(pageNum == 1) {
+					//http://www.brainyquote.com/quotes/keywords/random.html
+					url = url + ".html";
 				}
 				else {
-					String url = "http://www.brainyquote.com/quotes/keywords/" + queryText + "_" + pageNum + ".html";
-					Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-					
-					Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-					
-					quoteNum = quote.size() -1;
-					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
+					//http://www.brainyquote.com/quotes/keywords/random_2.html
+					url = url + "_" + pageNum + ".html";
 				}
+				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+			
+				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+				Elements author = doc.select(".boxyPaddingBig span.bodybold a");				
+				quoteNum = quote.size() -1;
+				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
 
 			} catch(IOException ioe) {
 				return "ERROR!  INVALID SEARCH";
@@ -293,17 +298,16 @@ public class SpecificQuote extends Activity {
 			
 				String url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
 				int i = 1;
-				while(i < authorName.length -1) {
+				while(i < authorName.length) {
 					url = url + "_" + authorName[i];
 					i++;
 				}
-				
-				
+								
 				if(pageNum == 1) {
-					url = url + "_" + authorName[i] + ".html";
+					url = url + ".html";
 				}
 				else {
-					url = url + "_" + authorName[i] + "_" + pageNum +  ".html";
+					url = url + "_" + pageNum +  ".html";
 				}
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();				
 					
@@ -330,61 +334,39 @@ public class SpecificQuote extends Activity {
 			
 			try{
 				searchType = "aboutAuthor";
-				String [] authorName = queryText.split(" ");
+				
 				if (index > quoteNum -1 ) {
 					pageNum++;
 					index = 0;
 				}
 				else{}
 				//Sample keyword search : http://www.brainyquote.com/quotes/keywords/mark_twain.html
-				if(pageNum == 1){
-					if(authorName.length == 1) {
-						String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0]  + ".html";
-						Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-						
-						Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-						Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-						quoteNum = quote.size() -1 ;
-						return quote.get(index).text() + "\n\n--" + author.get(index).text()
-								+ "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
-					}
-					else {
-						String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0] 
-								+ "_" + authorName[1] + ".html";
-						Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-						
-						Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-						Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-						quoteNum = quote.size() - 1;
-						return quote.get(index).text() + "\n\n--" + author.get(index).text()
-								+ "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
-					}
+				String[] keywords = queryText.split(" ");
+
+				String url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
+
+				int i = 1;
+				while(i < keywords.length) {
+					url = url + "_" + keywords[i];
+					i++;
+				}
+				
+				if(pageNum == 1) {
+					//http://www.brainyquote.com/quotes/keywords/random.html
+					url = url + ".html";
 				}
 				else {
-					//sample URL : http://www.brainyquote.com/quotes/keywords/barack_obama_2.html
-					if(authorName.length == 1) {
-						String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0]  
-								+ "_" + pageNum + ".html";
-						Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-						
-						Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-						Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-						quoteNum = quote.size() -1 ;
-						return quote.get(index).text() + "\n\n--" + author.get(index).text()
-								+ "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
-					}
-					else {
-						String url = "http://www.brainyquote.com/quotes/keywords/" + authorName[0] 
-								+ "_" + authorName[1] + "_" + pageNum + ".html";
-						Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-						
-						Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-						Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-						quoteNum = quote.size() - 1;
-						return quote.get(index).text() + "\n\n--" + author.get(index).text()
-								+ "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
-					}
+					//http://www.brainyquote.com/quotes/keywords/random_2.html
+					url = url + "_" + pageNum + ".html";
 				}
+				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+			
+				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
+//				
+				quoteNum = quote.size() -1;
+				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
+				
 				
 			} catch(IOException exception){
 					return "error";
