@@ -110,7 +110,7 @@ public class SpecificQuote extends Activity {
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 		public void onSwipeRight(){
 			//on every swipe to the right we will get the previous quote. 
-			
+
 			if (index > 0) {
 				Toast.makeText(SpecificQuote.this, "Swipe to Right : Previous Quote Coming!", Toast.LENGTH_SHORT).show();
 				index--;
@@ -169,30 +169,17 @@ public class SpecificQuote extends Activity {
 				//first run an author search...
 				//sample author url : http://www.brainyquote.com/quotes/authors/m/mark_twain.html
 				
-				//splits queryText into 2 parts for first and last name;
-				String [] authorName = queryText.split(" ");
-				if(authorName.length > 1) {
-					String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
-							+ authorName[0].charAt(0) + "/" + authorName[0] + "_" + authorName[1] + ".html";
-							
-					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-						
-					return queryText;
-				}
-				else if (authorName.length == 1){
-					//user has entered a string with 1 word. 
-					String authorUrl = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" 
-							+ authorName[0] + ".html";
-					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-					
-					return queryText;
-				}
-				else {
-					//user has entered nothing. (just spaces)
-					return "You have not entered anything";
-				}
 				
-				
+				String[] authorName = queryText.split(" ");
+				String url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
+				int i = 1;
+				while(i < authorName.length -1) {
+					url = url + "_" + authorName[i];
+					i++;
+				}
+				url = url + "_" + authorName[i] + ".html";
+				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+				return queryText;
 				
 			}catch(IOException ioe) {
 				//if queryText gets us an invalid author page with author search, we are put here. 
@@ -304,53 +291,27 @@ public class SpecificQuote extends Activity {
 				}
 				else{}
 			
-			if(pageNum == 1) {
-				if(authorName.length == 1) {	
-					String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
-							+ queryText.charAt(0) + "/" + authorName[0] + ".html";
-					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-					
-					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					quoteNum = quotes.size() -1 ;
-					return quotes.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
+				String url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
+				int i = 1;
+				while(i < authorName.length -1) {
+					url = url + "_" + authorName[i];
+					i++;
 				}
-				else{
-					
-					String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
-							+ queryText.charAt(0) + "/" + authorName[0] + "_" + authorName[1] + ".html";
-					
-					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-					
-					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					quoteNum = quotes.size() -1;
-					return quotes.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
-					}
-			}
-			else{
-				//2nd   page : http://www.brainyquote.com/quotes/authors/m/mark_twain_2.html
-				if(authorName.length == 1) {
-					String authorUrl = "http://www.brainyquote.com/quotes/authors/"
-							+ queryText.charAt(0) + "/" + authorName[0] + "_" + pageNum + ".html";
-					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-					
-					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					quoteNum = quotes.size() - 1;
-					return quotes.get(index).text() + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
+				
+				
+				if(pageNum == 1) {
+					url = url + "_" + authorName[i] + ".html";
 				}
 				else {
-					String authorUrl = "http://www.brainyquote.com/quotes/authors/" 
-							+ queryText.charAt(0) + "/" + authorName[0] + "_" + authorName[1] + "_" + pageNum + ".html";
-					Document doc = Jsoup.connect(authorUrl).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-					
-					Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					quoteNum = quotes.size() - 1;
-					return quotes.get(index).text() + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
+					url = url + "_" + authorName[i] + "_" + pageNum +  ".html";
 				}
-			}
-				
-			
-				
-			} catch(IOException exception){
+				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();				
+					
+				Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+				quoteNum = quotes.size() -1 ;
+				return quotes.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
+					
+		} catch(IOException exception){
 				
 				}			
 			return null;
@@ -366,7 +327,7 @@ public class SpecificQuote extends Activity {
 		//this method will return a quote ABOUT the author.
 		@Override
 		protected String doInBackground(Void... params) {
-			//TODO : somehow check if the user has gone past the first page for ABOUT author search
+			
 			try{
 				searchType = "aboutAuthor";
 				String [] authorName = queryText.split(" ");
