@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.os.AsyncTask;
@@ -47,6 +46,10 @@ public class SpecificQuote extends Activity {
 		
 		Intent intent = getIntent();
 		queryText = intent.getExtras().getString("queryText");
+		
+		 //we need to save the recent search queries to suggest to users...
+        
+		
 		
 		view = (View)findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
@@ -159,6 +162,8 @@ public class SpecificQuote extends Activity {
 		}
 	};
 	
+	
+	
 	private class InitialSearch extends AsyncTask<Void, Void, String> {
 
 		@Override
@@ -169,8 +174,12 @@ public class SpecificQuote extends Activity {
 				//first run an author search...
 				//sample author url : http://www.brainyquote.com/quotes/authors/m/mark_twain.html
 				
-				
+				queryText = queryText.replaceAll("[^a-zA-Z0-9\\s]","");
+				//regex command will get rid of all non letter characters : .,-,_, etc
+				//this is put in place in case user accidently types one + now the user won't have to restart a search
 				String[] authorName = queryText.split(" ");
+					
+				
 				String url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
 				int i = 1;
 				while(i < authorName.length) {
@@ -201,6 +210,8 @@ public class SpecificQuote extends Activity {
 				
 			}
 			else {
+				//message = message.replaceAll("[^a-zA-Z0-9\\s]","");
+
 				textView.setText("You are searching for " + message + " quotes");
 				
 				//we have determined that the user has entered search query that represents an author
@@ -410,6 +421,8 @@ public class SpecificQuote extends Activity {
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         
+       
+        
         //setting hint value via .java.... should be able to do in .XML....
         searchView.setQueryHint("Search Brainy Quote!");
         
@@ -423,7 +436,7 @@ public class SpecificQuote extends Activity {
     	    @Override
     	    public boolean onQueryTextSubmit(String query) {
     	    	
-   
+				query = query.replaceAll("[^a-zA-Z0-9\\s]","");
     	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
     	        toast.setGravity(Gravity.CENTER, 0, 0);
     	        toast.show();
