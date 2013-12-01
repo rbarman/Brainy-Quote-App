@@ -36,6 +36,8 @@ public class SpecificQuote extends Activity {
 	int pageNum = 0;
 	int quoteNum = 0; //number of quotes
 	View view;
+	//boolean firstAttempt = false;
+	//String modifiedQueryText = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +109,8 @@ public class SpecificQuote extends Activity {
 		//execute the AsyncTask
 		//InitialSearch will determine if we have an author or topic query.
 		//then from InitialSearch we will start other respective AsyncTasks.
-		new InitialSearch().execute((generateAuthorUrl(queryText)));	
+		new InitialSearch().execute((generateAuthorUrl(queryText)));
+		
 	}
 	
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
@@ -165,14 +168,31 @@ public class SpecificQuote extends Activity {
 	
 	public String generateAuthorUrl(String queryText) {
 		//returns the AuthorUrl without the ".html"
+		String url ="";
 		queryText = queryText.replaceAll("[^a-zA-Z\\s]","");
 		String[] authorName = queryText.split(" ");
-		String url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
-					int i = 1;
-					while(i < authorName.length) {
-						url = url + "_" + authorName[i];
-						i++;
-					}			
+		
+		//VERY RISKY way of checking for searches with intitials such as : JK Rowling, TS Eliot, etc
+		//first string will be 2 characters of each initial.
+		
+		//TODO: Make a more efficient way to check for searches with initials. 
+		if(authorName[0].length() == 2) {
+			//http://www.brainyquote.com/quotes/authors/j/j_k_rowling.html
+			url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" 
+		+ authorName[0].substring(0, 1) + "_" + authorName[0].substring(1,2);
+			
+			for(int i = 1; i < authorName.length; i++){
+				url = url + "_" + authorName[i];
+			}
+		}
+		else {
+			url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
+			int i = 1;
+			while(i < authorName.length) {
+				url = url + "_" + authorName[i];
+				i++;
+					}
+			}
 		return url;
 		
 	}
@@ -269,7 +289,7 @@ public class SpecificQuote extends Activity {
 					index = 0;
 				}
 				else{}
-				String url ="";
+				String url = "";
 				if(pageNum == 1) {
 					//http://www.brainyquote.com/quotes/keywords/random.html
 					url = generateKeywordUrl(queryText) + ".html";
@@ -286,9 +306,10 @@ public class SpecificQuote extends Activity {
 				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
 
 			} catch(IOException ioe) {
-				return "ERROR!  INVALID SEARCH";
+
+					return "ERROR!  INVALID SEARCH";
+				
 				}
-			
 		}
 		@Override
 		protected void onPostExecute(String quote) {
@@ -313,10 +334,16 @@ public class SpecificQuote extends Activity {
 			
 				String url ="";			
 				if(pageNum == 1) {
-					url = generateAuthorUrl(queryText) + ".html";
+//					if(modifiedQueryText.isEmpty())
+//						url = generateAuthorUrl(modifiedQueryText) + ".html";
+//					else
+						url = generateAuthorUrl(queryText) + ".html";
 				}
 				else {
-					url = generateAuthorUrl(queryText) + "_" + pageNum +  ".html";
+//					if(modifiedQueryText.isEmpty())
+//						url = generateAuthorUrl(modifiedQueryText) + "_" + pageNum +  ".html";
+//					else
+						url = generateAuthorUrl(queryText) + "_" + pageNum +  ".html";
 				}
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();				
 					
