@@ -107,7 +107,7 @@ public class SpecificQuote extends Activity {
 		//execute the AsyncTask
 		//InitialSearch will determine if we have an author or topic query.
 		//then from InitialSearch we will start other respective AsyncTasks.
-		new InitialSearch().execute();	
+		new InitialSearch().execute((generateAuthorUrl(queryText)));	
 	}
 	
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
@@ -192,19 +192,18 @@ public class SpecificQuote extends Activity {
 		
 	}
 	
-	private class InitialSearch extends AsyncTask<Void, Void, String> {
+	private class InitialSearch extends AsyncTask<String, Void, String> {
 
 		@Override
-		protected String doInBackground(Void... params) {
+		protected String doInBackground(String... params) {
 			
 			try {
 				
-				//here we can call the new method... 
-				
 				//we have queryText already.. 
 				//first run an author search...
-				//sample author url : http://www.brainyquote.com/quotes/authors/m/mark_twain.html
-				String url = generateAuthorUrl(queryText) + ".html";
+				
+				String url = params[0] + ".html";
+
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				return queryText;
 				
