@@ -63,8 +63,8 @@ public class MainActivity extends Activity {
 
             	    @Override
             	    public boolean onQueryTextSubmit(String query) {
-            	    	//query = query.replaceAll("[^a-zA-Z0-9\\s]","");
-            	        Toast toast = Toast.makeText(getApplicationContext(), query.replaceAll("[^a-zA-Z0-9\\s]","") + " Quotes coming soon...", Toast.LENGTH_SHORT);
+            	   
+            	        Toast toast = Toast.makeText(getApplicationContext(), query.replaceAll("[^a-zA-Z\\s]","") + " Quotes coming soon...", Toast.LENGTH_SHORT);
             	        toast.setGravity(Gravity.CENTER, 0, 0);
             	        toast.show();
             	        
@@ -140,7 +140,7 @@ public class MainActivity extends Activity {
     	    public boolean onQueryTextSubmit(String query) {
     	    	
     	    	
-    	        Toast toast = Toast.makeText(getApplicationContext(), query.replaceAll("[^a-zA-Z0-9\\s]","") + " Quotes coming soon...", Toast.LENGTH_SHORT);
+    	        Toast toast = Toast.makeText(getApplicationContext(), query.replaceAll("[^a-zA-Z\\s]","") + " Quotes coming soon...", Toast.LENGTH_SHORT);
     	        toast.setGravity(Gravity.CENTER, 0, 0);
     	        toast.show();
     	        

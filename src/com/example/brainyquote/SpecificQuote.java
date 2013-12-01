@@ -174,7 +174,7 @@ public class SpecificQuote extends Activity {
 				//first run an author search...
 				//sample author url : http://www.brainyquote.com/quotes/authors/m/mark_twain.html
 				
-				queryText = queryText.replaceAll("[^a-zA-Z0-9\\s]","");
+				queryText = queryText.replaceAll("[^a-zA-Z\\s]","");
 				//regex command will get rid of all non letter characters : .,-,_, etc
 				//this is put in place in case user accidently types one + now the user won't have to restart a search
 				String[] authorName = queryText.split(" ");
@@ -210,7 +210,6 @@ public class SpecificQuote extends Activity {
 				
 			}
 			else {
-				//message = message.replaceAll("[^a-zA-Z0-9\\s]","");
 
 				textView.setText("You are searching for " + message + " quotes");
 				
@@ -436,7 +435,7 @@ public class SpecificQuote extends Activity {
     	    @Override
     	    public boolean onQueryTextSubmit(String query) {
     	    	
-				query = query.replaceAll("[^a-zA-Z0-9\\s]","");
+				query = query.replaceAll("[^a-zA-Z\\s]","");
     	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
     	        toast.setGravity(Gravity.CENTER, 0, 0);
     	        toast.show();
