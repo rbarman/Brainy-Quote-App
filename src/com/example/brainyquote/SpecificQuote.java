@@ -163,6 +163,34 @@ public class SpecificQuote extends Activity {
 	};
 	
 	
+	public String generateAuthorUrl(String queryText) {
+		//returns the AuthorUrl without the ".html"
+		queryText = queryText.replaceAll("[^a-zA-Z\\s]","");
+		String[] authorName = queryText.split(" ");
+		String url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
+					int i = 1;
+					while(i < authorName.length) {
+						url = url + "_" + authorName[i];
+						i++;
+					}			
+		return url;
+		
+	}
+	
+	public String generateKeywordUrl(String queryText) {
+		//returns the KeywordUrl without the ".html"
+		String[] keywords = queryText.split(" ");
+
+		String url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
+
+		int i = 1;
+		while(i < keywords.length) {
+			url = url + "_" + keywords[i];
+			i++;
+		}
+		return url;
+		
+	}
 	
 	private class InitialSearch extends AsyncTask<Void, Void, String> {
 
@@ -170,23 +198,13 @@ public class SpecificQuote extends Activity {
 		protected String doInBackground(Void... params) {
 			
 			try {
+				
+				//here we can call the new method... 
+				
 				//we have queryText already.. 
 				//first run an author search...
 				//sample author url : http://www.brainyquote.com/quotes/authors/m/mark_twain.html
-				
-				queryText = queryText.replaceAll("[^a-zA-Z\\s]","");
-				//regex command will get rid of all non letter characters : .,-,_, etc
-				//this is put in place in case user accidently types one + now the user won't have to restart a search
-				String[] authorName = queryText.split(" ");
-					
-				
-				String url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
-				int i = 1;
-				while(i < authorName.length) {
-					url = url + "_" + authorName[i];
-					i++;
-				}
-				url = url + ".html";
+				String url = generateAuthorUrl(queryText) + ".html";
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				return queryText;
 				
@@ -241,8 +259,7 @@ public class SpecificQuote extends Activity {
 
 	private class KeywordSearch extends AsyncTask<Void, Void, String> {
 		//this method will run a keyword search. 
-		
-		//for now I will do a single word keyword search.. (assume queryText is a single word...).
+
 		@Override
 		protected String doInBackground(Void... params) {
 			try{
@@ -253,24 +270,14 @@ public class SpecificQuote extends Activity {
 					index = 0;
 				}
 				else{}
-				
-				String[] keywords = queryText.split(" ");
-
-				String url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
-
-				int i = 1;
-				while(i < keywords.length) {
-					url = url + "_" + keywords[i];
-					i++;
-				}
-				
+				String url ="";
 				if(pageNum == 1) {
 					//http://www.brainyquote.com/quotes/keywords/random.html
-					url = url + ".html";
+					url = generateKeywordUrl(queryText) + ".html";
 				}
 				else {
 					//http://www.brainyquote.com/quotes/keywords/random_2.html
-					url = url + "_" + pageNum + ".html";
+					url = generateKeywordUrl(queryText) + "_" + pageNum + ".html";
 				}
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 			
@@ -299,25 +306,18 @@ public class SpecificQuote extends Activity {
 			//2nd   page : http://www.brainyquote.com/quotes/authors/m/mark_twain_2.html
 			try{
 				searchType = "byAuthor";
-				String [] authorName = queryText.split(" ");
 				if (index > quoteNum -1 ) {
 					pageNum++;
 					index = 0;
 				}
 				else{}
 			
-				String url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
-				int i = 1;
-				while(i < authorName.length) {
-					url = url + "_" + authorName[i];
-					i++;
-				}
-								
+				String url ="";			
 				if(pageNum == 1) {
-					url = url + ".html";
+					url = generateAuthorUrl(queryText) + ".html";
 				}
 				else {
-					url = url + "_" + pageNum +  ".html";
+					url = generateAuthorUrl(queryText) + "_" + pageNum +  ".html";
 				}
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();				
 					
@@ -350,30 +350,21 @@ public class SpecificQuote extends Activity {
 					index = 0;
 				}
 				else{}
-				//Sample keyword search : http://www.brainyquote.com/quotes/keywords/mark_twain.html
-				String[] keywords = queryText.split(" ");
 
-				String url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
-
-				int i = 1;
-				while(i < keywords.length) {
-					url = url + "_" + keywords[i];
-					i++;
-				}
-				
+				String url = "";
 				if(pageNum == 1) {
 					//http://www.brainyquote.com/quotes/keywords/random.html
-					url = url + ".html";
+					url = generateKeywordUrl(queryText) + ".html";
 				}
 				else {
 					//http://www.brainyquote.com/quotes/keywords/random_2.html
-					url = url + "_" + pageNum + ".html";
+					url = generateKeywordUrl(queryText) + "_" + pageNum + ".html";
 				}
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 			
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-//				
+	
 				quoteNum = quote.size() -1;
 				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
 				
