@@ -36,9 +36,7 @@ public class SpecificQuote extends Activity {
 	int pageNum = 0;
 	int quoteNum = 0; //number of quotes
 	View view;
-	//boolean firstAttempt = false;
-	//String modifiedQueryText = "";
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,10 +46,6 @@ public class SpecificQuote extends Activity {
 		
 		Intent intent = getIntent();
 		queryText = intent.getExtras().getString("queryText");
-		
-		 //we need to save the recent search queries to suggest to users...
-        
-		
 		
 		view = (View)findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
@@ -105,7 +99,6 @@ public class SpecificQuote extends Activity {
 			}
 		});
 		
-		
 		//execute the AsyncTask
 		//InitialSearch will determine if we have an author or topic query.
 		//then from InitialSearch we will start other respective AsyncTasks.
@@ -143,7 +136,6 @@ public class SpecificQuote extends Activity {
 			else {
 				Toast.makeText(SpecificQuote.this, "Swipe to Right : No more previous Quotes :(",Toast.LENGTH_SHORT).show();
 			}
-			
 		}
 		public void onSwipeLeft(){
 			//on every swipe to the left we will get the next quote.
@@ -155,7 +147,6 @@ public class SpecificQuote extends Activity {
 				new ByAuthorSearch().execute();
 			else
 				new AboutAuthorSearch().execute();
-			
 		}
 		public void onSwipeBottom() {
 			
@@ -164,7 +155,6 @@ public class SpecificQuote extends Activity {
 			
 		}
 	};
-	
 	
 	public String generateAuthorUrl(String queryText) {
 		//returns the AuthorUrl without the ".html"
@@ -230,9 +220,7 @@ public class SpecificQuote extends Activity {
 			}catch(IOException ioe) {
 				//if queryText gets us an invalid author page with author search, we are put here. 
 				return "error";
-			}
-			
-			//return null;
+			}			
 		}
 		
 		@Override
@@ -306,15 +294,14 @@ public class SpecificQuote extends Activity {
 				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
 
 			} catch(IOException ioe) {
-
-					return "ERROR!  INVALID SEARCH";
 				
+				return "ERROR!  INVALID SEARCH";
 				}
 		}
 		@Override
 		protected void onPostExecute(String quote) {
-			textView.setText(quote);
 			
+				textView.setText(quote);
 		}
 	}
 	
@@ -333,18 +320,11 @@ public class SpecificQuote extends Activity {
 				else{}
 			
 				String url ="";			
-				if(pageNum == 1) {
-//					if(modifiedQueryText.isEmpty())
-//						url = generateAuthorUrl(modifiedQueryText) + ".html";
-//					else
+				if (pageNum == 1) 
 						url = generateAuthorUrl(queryText) + ".html";
-				}
-				else {
-//					if(modifiedQueryText.isEmpty())
-//						url = generateAuthorUrl(modifiedQueryText) + "_" + pageNum +  ".html";
-//					else
+				else 
 						url = generateAuthorUrl(queryText) + "_" + pageNum +  ".html";
-				}
+				
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();				
 					
 				Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
@@ -378,14 +358,14 @@ public class SpecificQuote extends Activity {
 				else{}
 
 				String url = "";
-				if(pageNum == 1) {
+				if(pageNum == 1) 
 					//http://www.brainyquote.com/quotes/keywords/random.html
 					url = generateKeywordUrl(queryText) + ".html";
-				}
-				else {
+				
+				else 
 					//http://www.brainyquote.com/quotes/keywords/random_2.html
 					url = generateKeywordUrl(queryText) + "_" + pageNum + ".html";
-				}
+				
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 			
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
@@ -398,7 +378,6 @@ public class SpecificQuote extends Activity {
 			} catch(IOException exception){
 					return "error";
 				}
-			
 		}
 		@Override
 		protected void onPostExecute(String quote){
