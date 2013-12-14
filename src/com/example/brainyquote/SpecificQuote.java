@@ -117,11 +117,15 @@ public class SpecificQuote extends Activity {
 				index--;
 				
 				if(searchType.equals("keyword")) 
-					new KeywordSearch().execute();
-				else if(searchType.equals("byAuthor")) 
-					new ByAuthorSearch().execute();
+					new KeywordSearch().execute(generateKeywordUrl(queryText));
+				else if(searchType.equals("byAuthor") && twoLetter == false) 
+					new ByAuthorSearch().execute(generateAuthorUrl(queryText));
+				else if(searchType.equals("byAuthor") && twoLetter == true)
+					new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
+				else if(searchType.equals("aboutAuthor") && twoLetter == true)
+					new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 				else
-					new AboutAuthorSearch().execute();
+					new AboutAuthorSearch().execute(generateAuthorUrl(queryText));
 			}
 			else if(index == 0 && pageNum > 1) {
 				Toast.makeText(SpecificQuote.this, "Swipe to Right : Previous Quote Coming!", Toast.LENGTH_SHORT).show();
@@ -129,11 +133,15 @@ public class SpecificQuote extends Activity {
 				pageNum --;
 				
 				if(searchType.equals("keyword")) 
-					new KeywordSearch().execute();
-				else if(searchType.equals("byAuthor")) 
-					new ByAuthorSearch().execute();
+					new KeywordSearch().execute(generateKeywordUrl(queryText));
+				else if(searchType.equals("byAuthor") && twoLetter == false) 
+					new ByAuthorSearch().execute(generateAuthorUrl(queryText));
+				else if(searchType.equals("byAuthor") && twoLetter == true)
+					new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
+				else if(searchType.equals("aboutAuthor") && twoLetter == true)
+					new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 				else
-					new AboutAuthorSearch().execute();
+					new AboutAuthorSearch().execute(generateAuthorUrl(queryText));
 			}
 			else {
 				Toast.makeText(SpecificQuote.this, "Swipe to Right : No more previous Quotes :(",Toast.LENGTH_SHORT).show();
@@ -144,11 +152,15 @@ public class SpecificQuote extends Activity {
 			index++;
 			Toast.makeText(SpecificQuote.this, "Swipe to Left : Next Quote Coming!", Toast.LENGTH_SHORT).show();
 			if(searchType.equals("keyword")) 
-				new KeywordSearch().execute();
-			else if(searchType.equals("byAuthor")) 
-				new ByAuthorSearch().execute();
+				new KeywordSearch().execute(generateKeywordUrl(queryText));
+			else if(searchType.equals("byAuthor") && twoLetter == false) 
+				new ByAuthorSearch().execute(generateAuthorUrl(queryText));
+			else if(searchType.equals("byAuthor") && twoLetter == true)
+				new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
+			else if(searchType.equals("aboutAuthor") && twoLetter == true)
+				new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 			else
-				new AboutAuthorSearch().execute();
+				new AboutAuthorSearch().execute(generateAuthorUrl(queryText));
 		}
 		public void onSwipeBottom() {
 			
@@ -235,10 +247,10 @@ public class SpecificQuote extends Activity {
 		                
 		                	switch(item.getItemId()) {
 		                	case R.id.aboutAuthor:
-		                		new AboutAuthorSearch().execute();
+		                		new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 		                		break;
 		                	case R.id.byAuthor:
-		                		new ByAuthorSearch().execute();
+		                		new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 		                		break;	                	
 		                	}
 		                	return true;
@@ -280,7 +292,7 @@ public class SpecificQuote extends Activity {
 				//the search query entered something that represents a keyword / topic. 
 				//we can start a new AsyncTask that will run a keyword search on the searchQuery.
 				
-				new KeywordSearch().execute();
+				new KeywordSearch().execute(generateKeywordUrl(queryText));
 				
 			}
 			else if (message.equals("2")) {
@@ -303,10 +315,10 @@ public class SpecificQuote extends Activity {
 		                
 		                	switch(item.getItemId()) {
 		                	case R.id.aboutAuthor:
-		                		new AboutAuthorSearch().execute();
+		                		new AboutAuthorSearch().execute(generateAuthorUrl(queryText));
 		                		break;
 		                	case R.id.byAuthor:
-		                		new ByAuthorSearch().execute();
+		                		new ByAuthorSearch().execute(generateAuthorUrl(queryText));
 		                		break;	                	
 		                	}
 		                	return true;
@@ -317,11 +329,11 @@ public class SpecificQuote extends Activity {
 		}
 	}
 
-	private class KeywordSearch extends AsyncTask<Void, Void, String> {
+	private class KeywordSearch extends AsyncTask<String, Void, String> {
 		//this method will run a keyword search. 
 
 		@Override
-		protected String doInBackground(Void... params) {
+		protected String doInBackground(String... params) {
 			try{
 				searchType = "keyword";
 				
@@ -333,11 +345,11 @@ public class SpecificQuote extends Activity {
 				String url = "";
 				if(pageNum == 1) {
 					//http://www.brainyquote.com/quotes/keywords/random.html
-					url = generateKeywordUrl(queryText) + ".html";
+					url = params[0] + ".html";
 				}
 				else {
 					//http://www.brainyquote.com/quotes/keywords/random_2.html
-					url = generateKeywordUrl(queryText) + "_" + pageNum + ".html";
+					url = params[0] + "_" + pageNum + ".html";
 				}
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 			
@@ -358,10 +370,10 @@ public class SpecificQuote extends Activity {
 		}
 	}
 	
-	private class ByAuthorSearch extends AsyncTask<Void, Void, String> {
+	private class ByAuthorSearch extends AsyncTask<String, Void, String> {
 		//this method will return a quote BY the author
 		@Override
-		protected String doInBackground(Void... params) {
+		protected String doInBackground(String... params) {
 			//first page : http://www.brainyquote.com/quotes/authors/m/mark_twain.html
 			//2nd   page : http://www.brainyquote.com/quotes/authors/m/mark_twain_2.html
 			try{
@@ -374,9 +386,9 @@ public class SpecificQuote extends Activity {
 			
 				String url ="";			
 				if (pageNum == 1) 
-						url = generateAuthorUrl(queryText) + ".html";
+						url = params[0] + ".html";
 				else 
-						url = generateAuthorUrl(queryText) + "_" + pageNum +  ".html";
+						url = params[0] + "_" + pageNum +  ".html";
 				
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();				
 					
@@ -396,10 +408,10 @@ public class SpecificQuote extends Activity {
 		}
 	}
 
-	private class AboutAuthorSearch extends AsyncTask<Void, Void, String> {
+	private class AboutAuthorSearch extends AsyncTask<String, Void, String> {
 		//this method will return a quote ABOUT the author.
 		@Override
-		protected String doInBackground(Void... params) {
+		protected String doInBackground(String... params) {
 			
 			try{
 				searchType = "aboutAuthor";
@@ -413,11 +425,11 @@ public class SpecificQuote extends Activity {
 				String url = "";
 				if(pageNum == 1) 
 					//http://www.brainyquote.com/quotes/keywords/random.html
-					url = generateKeywordUrl(queryText) + ".html";
+					url = params[0] + ".html";
 				
 				else 
 					//http://www.brainyquote.com/quotes/keywords/random_2.html
-					url = generateKeywordUrl(queryText) + "_" + pageNum + ".html";
+					url = params[0] + "_" + pageNum + ".html";
 				
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 			
