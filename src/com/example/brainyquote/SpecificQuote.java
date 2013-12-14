@@ -27,8 +27,8 @@ import android.support.v4.app.NavUtils;
 public class SpecificQuote extends Activity {
 	
 	TextView textView;
-	ImageButton prevButton;
-	ImageButton nextButton;
+	
+	
 	String queryText;
 	int index = 0;
 	String searchType = null;
@@ -51,55 +51,7 @@ public class SpecificQuote extends Activity {
 		
 		view = (View)findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
-		
 		textView = (TextView)findViewById(R.id.textView);
-		prevButton = (ImageButton)findViewById(R.id.prevButton);
-		nextButton = (ImageButton)findViewById(R.id.nextButton);
-		//onClickListener for nextButton;
-		nextButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				index++;
-				
-				if(searchType.equals("keyword")) 
-					new KeywordSearch().execute();
-				else if(searchType.equals("byAuthor")) 
-					new ByAuthorSearch().execute();
-				else
-					new AboutAuthorSearch().execute();
-			}
-		});
-
-		//onClickListener for prevButton;
-		prevButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-
-				if (index > 0) {
-					index--;
-					
-					if(searchType.equals("keyword")) 
-						new KeywordSearch().execute();
-					else if(searchType.equals("byAuthor")) 
-						new ByAuthorSearch().execute();
-					else
-						new AboutAuthorSearch().execute();
-				}
-				else if(index == 0 && pageNum > 1) {
-					index = quoteNum - 1;
-					pageNum --;
-					
-					if(searchType.equals("keyword")) 
-						new KeywordSearch().execute();
-					else if(searchType.equals("byAuthor")) 
-						new ByAuthorSearch().execute();
-					else
-						new AboutAuthorSearch().execute();
-				}
-			}
-		});
 		
 		//execute the AsyncTask
 		//InitialSearch will determine if we have an author or topic query.
