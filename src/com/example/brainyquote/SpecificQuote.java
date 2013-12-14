@@ -159,7 +159,6 @@ public class SpecificQuote extends Activity {
 	public String generateAuthorUrl(String queryText) {
 		//returns the AuthorUrl without the ".html"
 		String url ="";
-		queryText = queryText.replaceAll("[^a-zA-Z\\s]","");
 		String[] authorName = queryText.split(" ");
 		
 		//VERY RISKY way of checking for searches with intitials such as : JK Rowling, TS Eliot, etc

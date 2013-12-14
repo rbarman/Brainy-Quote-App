@@ -63,8 +63,11 @@ public class MainActivity extends Activity {
 
             	    @Override
             	    public boolean onQueryTextSubmit(String query) {
-            	   
-            	        Toast toast = Toast.makeText(getApplicationContext(), query.replaceAll("[^a-zA-Z\\s]","") + " Quotes coming soon...", Toast.LENGTH_SHORT);
+            	    	
+            	    	query =  query.replaceAll("[^a-zA-Z\\s]","");
+            	    	//regex statement gets rid of all non letter characters.
+            	    	
+            	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
             	        toast.setGravity(Gravity.CENTER, 0, 0);
             	        toast.show();
             	        
@@ -139,8 +142,9 @@ public class MainActivity extends Activity {
     	    @Override
     	    public boolean onQueryTextSubmit(String query) {
     	    	
-    	    	
-    	        Toast toast = Toast.makeText(getApplicationContext(), query.replaceAll("[^a-zA-Z\\s]","") + " Quotes coming soon...", Toast.LENGTH_SHORT);
+    	    	query =  query.replaceAll("[^a-zA-Z\\s]","");
+    	    	//regex statement gets rid of all non letter characters.
+    	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
     	        toast.setGravity(Gravity.CENTER, 0, 0);
     	        toast.show();
     	        
@@ -149,6 +153,7 @@ public class MainActivity extends Activity {
 				
 				//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
 				//so the SpecificQuote activity can use the queryText as the search parameter. 
+				
 				intent.putExtra("queryText", query);
 				startActivity(intent);	
     	        
