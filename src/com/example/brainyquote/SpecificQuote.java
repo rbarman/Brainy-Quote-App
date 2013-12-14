@@ -36,6 +36,8 @@ public class SpecificQuote extends Activity {
 	int pageNum = 0;
 	int quoteNum = 0; //number of quotes
 	View view;
+	boolean twoLetter = false;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -156,34 +158,37 @@ public class SpecificQuote extends Activity {
 		}
 	};
 	
+	public String generateAuthorWithInitialsUrl(String queryText) {
+		
+		String url ="";
+		String[] authorName = queryText.split(" ");
+		url = "http://www.brainyquote.com/quotes/authors/" + 
+				authorName[0].charAt(0) + "/" + authorName[0].charAt(0) + "_" + authorName[0].charAt(1);
+		int i = 1;
+		while(i < authorName.length) {
+			url = url + "_" + authorName[i];
+			i++;
+		}
+		//sample : CS LEWIS
+		//http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
+		return url;
+	}
 	public String generateAuthorUrl(String queryText) {
 		//returns the AuthorUrl without the ".html"
 		String url ="";
 		String[] authorName = queryText.split(" ");
 		
-		//VERY RISKY way of checking for searches with intitials such as : JK Rowling, TS Eliot, etc
-		//first string will be 2 characters of each initial.
+		url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
 		
-		//TODO: Make a more efficient way to check for searches with initials. 
-		if(authorName[0].length() == 2) {
-			//http://www.brainyquote.com/quotes/authors/j/j_k_rowling.html
-			url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" 
-		+ authorName[0].substring(0, 1) + "_" + authorName[0].substring(1,2);
-			
-			for(int i = 1; i < authorName.length; i++){
-				url = url + "_" + authorName[i];
-			}
+		int i = 1;
+		while(i < authorName.length) {
+			url = url + "_" + authorName[i];
+			i++;
 		}
-		else {
-			url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
-			int i = 1;
-			while(i < authorName.length) {
-				url = url + "_" + authorName[i];
-				i++;
-					}
-			}
-		return url;
-		
+
+		if(authorName[0].length() == 2)
+			twoLetter = true;
+		return url;		
 	}
 	
 	public String generateKeywordUrl(String queryText) {
@@ -201,6 +206,49 @@ public class SpecificQuote extends Activity {
 		
 	}
 	
+	private class SearchWithInitials extends AsyncTask<String, Void, String> {
+
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			try {
+				String url = params[0] + ".html";
+				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
+				return "";
+			} catch(IOException ioe) {
+				return "error";
+			}
+		}
+		@Override
+		protected void onPostExecute(String message) {
+			if(message.equals("error"))
+				new KeywordSearch().execute();
+			else {
+
+				textView.setText("You are searching for " + message + " quotes");
+				PopupMenu popup = new PopupMenu(SpecificQuote.this, textView);
+		            //second parameter is the "anchor";
+		            popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu()); 
+		            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() { 
+		            	
+		                public boolean onMenuItemClick(MenuItem item) { 
+		                
+		                	switch(item.getItemId()) {
+		                	case R.id.aboutAuthor:
+		                		new AboutAuthorSearch().execute();
+		                		break;
+		                	case R.id.byAuthor:
+		                		new ByAuthorSearch().execute();
+		                		break;	                	
+		                	}
+		                	return true;
+		                }  
+		               });  	     
+		               popup.show();
+			}	
+		}
+	}
+	
 	private class InitialSearch extends AsyncTask<String, Void, String> {
 
 		@Override
@@ -214,10 +262,12 @@ public class SpecificQuote extends Activity {
 				String url = params[0] + ".html";
 
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-				return queryText;
+				return "";
 				
-			}catch(IOException ioe) {
+			} catch(IOException ioe) {
 				//if queryText gets us an invalid author page with author search, we are put here. 
+				if(twoLetter == true) 
+					return "2";
 				return "error";
 			}			
 		}
@@ -231,6 +281,10 @@ public class SpecificQuote extends Activity {
 				//we can start a new AsyncTask that will run a keyword search on the searchQuery.
 				
 				new KeywordSearch().execute();
+				
+			}
+			else if (message.equals("2")) {
+				new SearchWithInitials().execute(generateAuthorWithInitialsUrl(queryText));
 				
 			}
 			else {
