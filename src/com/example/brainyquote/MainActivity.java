@@ -1,6 +1,7 @@
 package com.example.brainyquote;
 
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
@@ -103,13 +104,11 @@ public class MainActivity extends Activity {
 		});        
       
     }
-    
 
 	@Override
 	public void onBackPressed() {
-
 		
-		 //all below become visible again. 
+		//all below become visible again. 
 	     searchButton.setVisibility(0);
 	     logo.setVisibility(0);
 	     randomButton.setVisibility(0);
@@ -148,7 +147,7 @@ public class MainActivity extends Activity {
     	        toast.setGravity(Gravity.CENTER, 0, 0);
     	        toast.show();
     	        
-    	      //Now a new intent will be created to go to the SpecificQuote.java activity! 
+    	        //Now a new intent will be created to go to the SpecificQuote.java activity! 
 				Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
 				
 				//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
@@ -159,7 +158,6 @@ public class MainActivity extends Activity {
     	        
     	        return true;
     	    }
-    	    
     	};
     	searchView.setOnQueryTextListener(queryTextListener);
         

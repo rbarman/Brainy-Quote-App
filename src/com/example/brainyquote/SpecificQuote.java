@@ -27,8 +27,6 @@ import android.support.v4.app.NavUtils;
 public class SpecificQuote extends Activity {
 	
 	TextView textView;
-	
-	
 	String queryText;
 	int index = 0;
 	String searchType = null;
@@ -427,6 +425,9 @@ public class SpecificQuote extends Activity {
 		getMenuInflater().inflate(R.menu.specific_quote, menu);
 		// Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        
+        
+        
         
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
