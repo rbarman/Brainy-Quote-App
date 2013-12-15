@@ -26,8 +26,14 @@ Current Search can recognize between authors and topics and recognize authors wi
 	With this new Url we will restart the process with an author search (InitialSearch)
 		If running an author search returns a valid html page, queryText is an author
 			We display the user with two options
-				Author Search (ByAuthorSearch)
-				KeyWord Search (AboutAuthorSearch)
+				ByAuthorSearch
+				AboutAuthorSearch
 		If running an author search returns an invalid html page, queryText is not an author. 
 			We are basically in case (a) or case (b)
-6. IF 
+			
+6. IF Query Text is not an author (case (a) or case (b))
+	queryText can either be a keyword or not a valid search query. 
+		We run a keyword search with queryText (KeywordSearch)
+			If running a keyword search returns a valid page, queryText is a keyword
+			If running a keyword search returns a valid page, queryText is not a keyword nor a currently recognizable author
+				Display error message.
