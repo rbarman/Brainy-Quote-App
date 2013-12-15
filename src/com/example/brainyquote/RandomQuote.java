@@ -25,9 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
-public class RandomQuote extends Activity {
-	
-
+public class RandomQuote extends Activity {	
 	//This is the activity launched when the user selects the randomButton on main activity.
 	
 	TextView textView;
@@ -97,8 +95,7 @@ public class RandomQuote extends Activity {
 
 		@Override
 		protected String doInBackground(Void... params) {
-			
-			 
+						 
 			 BufferedReader br = null;
 			    try {
 			        br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
@@ -112,9 +109,7 @@ public class RandomQuote extends Activity {
 			         try {
 			        	 String url = "http://www.brainyquote.com/quotes/topics/topic_" + topic + ".html";
 			        	 //sample url for age quote : http://www.brainyquote.com/quotes/topics/topic_age.html
-			                doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-			                
-			                
+			             doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();			                			                
 			             Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 			             Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 			             
@@ -148,7 +143,6 @@ public class RandomQuote extends Activity {
 	private void setupActionBar() {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-
 	}
 
 	@Override
@@ -174,8 +168,7 @@ public class RandomQuote extends Activity {
     	    }
 
     	    @Override
-    	    public boolean onQueryTextSubmit(String query) {
-    	    	
+    	    public boolean onQueryTextSubmit(String query) {    	    	
    
     	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
     	        toast.setGravity(Gravity.CENTER, 0, 0);

@@ -1,11 +1,9 @@
 package com.example.brainyquote;
 
 import java.io.IOException;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -17,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -36,7 +33,6 @@ public class SpecificQuote extends Activity {
 	View view;
 	boolean twoLetter = false;
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,8 +50,7 @@ public class SpecificQuote extends Activity {
 		//execute the AsyncTask
 		//InitialSearch will determine if we have an author or topic query.
 		//then from InitialSearch we will start other respective AsyncTasks.
-		new InitialSearch().execute((generateAuthorUrl(queryText)));
-		
+		new InitialSearch().execute((generateAuthorUrl(queryText)));	
 	}
 	
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
@@ -121,7 +116,7 @@ public class SpecificQuote extends Activity {
 	};
 	
 	public String generateAuthorWithInitialsUrl(String queryText) {
-		
+		//generates URL for author with initials without ".html"
 		String url ="";
 		String[] authorName = queryText.split(" ");
 		url = "http://www.brainyquote.com/quotes/authors/" + 
@@ -172,7 +167,6 @@ public class SpecificQuote extends Activity {
 
 		@Override
 		protected String doInBackground(String... params) {
-			// TODO Auto-generated method stub
 			try {
 				String url = params[0] + ".html";
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
@@ -277,7 +271,6 @@ public class SpecificQuote extends Activity {
 
 	private class KeywordSearch extends AsyncTask<String, Void, String> {
 		//this method will run a keyword search. 
-
 		@Override
 		protected String doInBackground(String... params) {
 			try{
@@ -298,7 +291,6 @@ public class SpecificQuote extends Activity {
 					url = params[0] + "_" + pageNum + ".html";
 				}
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-			
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");				
 				quoteNum = quote.size() -1;
@@ -350,7 +342,6 @@ public class SpecificQuote extends Activity {
 		@Override
 		protected void onPostExecute(String quote) {
 			textView.setText(quote);
-			
 		}
 	}
 
@@ -377,14 +368,12 @@ public class SpecificQuote extends Activity {
 					//http://www.brainyquote.com/quotes/keywords/random_2.html
 					url = params[0] + "_" + pageNum + ".html";
 				
-				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-			
+				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();			
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 	
 				quoteNum = quote.size() -1;
-				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
-				
+				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;	
 				
 			} catch(IOException exception){
 					return "error";
@@ -420,17 +409,12 @@ public class SpecificQuote extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.specific_quote, menu);
 		// Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        
-        
-        
+        getMenuInflater().inflate(R.menu.main, menu);     
         
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        
-       
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));       
         
         //setting hint value via .java.... should be able to do in .XML....
         searchView.setQueryHint("Search Brainy Quote!");
