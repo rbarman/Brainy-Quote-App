@@ -148,7 +148,7 @@ public class SpecificQuote extends Activity {
 			i++;
 		}
 
-		if(authorName[0].length() == 2)
+		if (authorName[0].length() == 2)
 			twoLetter = true;
 		return url;		
 	}
@@ -184,7 +184,7 @@ public class SpecificQuote extends Activity {
 		@Override
 		protected void onPostExecute(String message) {
 			if(message.equals("error"))
-				new KeywordSearch().execute();
+				new KeywordSearch().execute(generateKeywordUrl(queryText));
 			else {
 
 				textView.setText("You are searching for " + message + " quotes");
@@ -217,12 +217,8 @@ public class SpecificQuote extends Activity {
 		protected String doInBackground(String... params) {
 			
 			try {
-				
-				//we have queryText already.. 
 				//first run an author search...
-				
 				String url = params[0] + ".html";
-
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				return "";
 				
