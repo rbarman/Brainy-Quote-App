@@ -1,0 +1,33 @@
+12-15-13 Search Logic
+Current Search can recognize between authors and topics and recognize authors with 2 initials in the first name (CS Lewis).
+
+1. User enters a search parameter (queryText)
+	This queryText is parsed to remove all non letter characters.
+2. We will run an author search (InitialSearch) with queryText.
+	If running an author search with queryText returns a valid html page, then we can assume that queryText is an author
+	If running an author search with queryText returns an invalid html page, then we can assume that queryText is not initially an author
+3. If queryText is recognized as author, then we present the user with two search choices.
+	ByAuthorSearch
+		Search For Quotes by the author
+	AboutAuthorSearch
+		Search for Quotes about the author
+	We must present these two choices because an author can be used as a keyword in Brainyquote and the user may want to get quotes about the author
+4. If query text is not recognized as an author, there are three possibilities with queryText
+	(a) queryText is a keyword 	
+		ex) trees
+	(b) queryText is neither a keyword nor an author
+		ex) asdfkajdlkf
+	(c) queryText may be an author but the user is is using the author's common initials for first name
+		The first name must have a length of 2 => authorName[0].length() == 2. We will return a specific error message for this.
+		ex) CS Lewis is really : c/c_s_lewis, but the Initial Search reads it as c/cs_lewis which returns invalid page.
+5. If case (c)
+	We have recognized that the first word of queryText has 2 letters and could possibly represent a person's initials
+	We must change the url accordingly => c/cs_lewis TO c/c_s_lewis. THis is done via generateAuthorWithIntialsUrl(String queryText)
+	With this new Url we will restart the process with an author search (InitialSearch)
+		If running an author search returns a valid html page, queryText is an author
+			We display the user with two options
+				Author Search (ByAuthorSearch)
+				KeyWord Search (AboutAuthorSearch)
+		If running an author search returns an invalid html page, queryText is not an author. 
+			We are basically in case (a) or case (b)
+6. IF 
