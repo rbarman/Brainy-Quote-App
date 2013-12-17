@@ -28,7 +28,7 @@ public class SpecificQuote extends Activity {
 	int index = 0;
 	String searchType = null;
 		//possible types are aboutAuthor, byAuthor, keyword
-	int pageNum = 0;
+	int pageNum = -1;
 	int quoteNum = 0; //number of quotes
 	View view;
 	boolean twoLetter = false;
@@ -121,11 +121,14 @@ public class SpecificQuote extends Activity {
 		String[] authorName = queryText.split(" ");
 		url = "http://www.brainyquote.com/quotes/authors/" + 
 				authorName[0].charAt(0) + "/" + authorName[0].charAt(0) + "_" + authorName[0].charAt(1);
-		int i = 1;
-		while(i < authorName.length) {
+		for(int i = 1; i < authorName.length; i++)
 			url = url + "_" + authorName[i];
-			i++;
-		}
+
+		if (pageNum == 1) 
+			url = url + ".html";
+		else 
+			url = url + "_" + pageNum +  ".html";
+	
 		//sample : CS LEWIS
 		//http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
 		return url;
@@ -137,7 +140,16 @@ public class SpecificQuote extends Activity {
 		url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
 		for(int i = 1; i < authorName.length; i++)
 			url = url + "_" + authorName[i];
-
+		if (index > quoteNum -1 ) {
+			pageNum++;
+			index = 0;
+		}
+		else{}
+				
+		if (pageNum == 1) 
+				url = url + ".html";
+		else 
+				url = url + "_" + pageNum +  ".html";
 		if (authorName[0].length() == 2)
 			twoLetter = true;
 		return url;		
@@ -149,9 +161,21 @@ public class SpecificQuote extends Activity {
 		String url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
 		for(int i = 1; i < keywords.length; i++)
 			url = url + "_" + keywords[i];
-
-		return url;
 		
+		if (index > quoteNum -1) {
+			pageNum++;
+			index = 0;
+		}
+		else{}
+		
+		if(pageNum == 1) 
+			//http://www.brainyquote.com/quotes/keywords/random.html
+			url = url + ".html";
+		
+		else 
+			//http://www.brainyquote.com/quotes/keywords/random_2.html
+			url = url + "_" + pageNum + ".html";
+		return url;	
 	}
 	
 	private class SearchWithInitials extends AsyncTask<String, Void, String> {
@@ -159,7 +183,7 @@ public class SpecificQuote extends Activity {
 		@Override
 		protected String doInBackground(String... params) {
 			try {
-				String url = params[0] + ".html";
+				String url = params[0];
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				return "";
 			} catch(IOException ioe) {
@@ -266,21 +290,7 @@ public class SpecificQuote extends Activity {
 		protected String doInBackground(String... params) {
 			try{
 				searchType = "keyword";
-				
-				if (index > quoteNum -1) {
-					pageNum++;
-					index = 0;
-				}
-				else{}
-				String url = "";
-				if(pageNum == 1) {
-					//http://www.brainyquote.com/quotes/keywords/random.html
-					url = params[0] + ".html";
-				}
-				else {
-					//http://www.brainyquote.com/quotes/keywords/random_2.html
-					url = params[0] + "_" + pageNum + ".html";
-				}
+				String url = params[0];
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");				
@@ -307,20 +317,8 @@ public class SpecificQuote extends Activity {
 			//2nd   page : http://www.brainyquote.com/quotes/authors/m/mark_twain_2.html
 			try{
 				searchType = "byAuthor";
-				if (index > quoteNum -1 ) {
-					pageNum++;
-					index = 0;
-				}
-				else{}
-			
-				String url ="";			
-				if (pageNum == 1) 
-						url = params[0] + ".html";
-				else 
-						url = params[0] + "_" + pageNum +  ".html";
-				
+				String url = params[0];
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();				
-					
 				Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				quoteNum = quotes.size() -1 ;
 				return quotes.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
