@@ -154,7 +154,7 @@ public class SpecificQuote extends Activity {
 	}
 	
 	public String generateKeywordUrl(String queryText) {
-
+	
 		String[] keywords = queryText.split(" ");
 		String url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
 		for(int i = 1; i < keywords.length; i++)
@@ -257,7 +257,7 @@ public class SpecificQuote extends Activity {
 				textView.setText("You are searching for " + message + " quotes");
 				
 				//we have determined that the user has entered search query that represents an author
-				//Brainy Quote has 2 possibilites for authors : quotes BY the author and quotes ABOUT the author.
+				//Brainy Quote has 2 possibilities for authors : quotes BY the author and quotes ABOUT the author.
 				//we use the pop up menu to let the user determine which category he wants. 
 				 PopupMenu popup = new PopupMenu(SpecificQuote.this, textView);
 		            //second parameter is the "anchor";
@@ -339,22 +339,7 @@ public class SpecificQuote extends Activity {
 			
 			try{
 				searchType = "aboutAuthor";
-				
-				if (index > quoteNum -1 ) {
-					pageNum++;
-					index = 0;
-				}
-				else{}
-
-				String url = "";
-				if(pageNum == 1) 
-					//http://www.brainyquote.com/quotes/keywords/random.html
-					url = params[0] + ".html";
-				
-				else 
-					//http://www.brainyquote.com/quotes/keywords/random_2.html
-					url = params[0] + "_" + pageNum + ".html";
-				
+				String url = params[0];
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();			
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
