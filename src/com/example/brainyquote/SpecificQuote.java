@@ -57,6 +57,7 @@ public class SpecificQuote extends Activity {
 		//execute the AsyncTask
 		//InitialSearch will determine if we have an author or topic query.
 		//then from InitialSearch we will start other respective AsyncTasks.
+		getTopics();
 		new InitialSearch().execute((generateAuthorUrl(queryText)));	
 	}
 	
@@ -169,14 +170,14 @@ public class SpecificQuote extends Activity {
 	
 		String[] keywords = queryText.split(" ");
 		
-		 BufferedReader br = null;
-		    try {
-		        br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
-		        String word;
-		        while((word=br.readLine()) != null){
-		            topics.add(word); 
-		        } 
-		    } catch (IOException e) {}
+//		 BufferedReader br = null;
+//		    try {
+//		        br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
+//		        String word;
+//		        while((word=br.readLine()) != null){
+//		            topics.add(word); 
+//		        } 
+//		    } catch (IOException e) {}
 		    String url = "";
 		    
 		    for(String s : topics) {
@@ -336,7 +337,7 @@ public class SpecificQuote extends Activity {
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");				
 				quoteNum = quote.size() -1;
 				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " 
-						+ index + "\n\n PAGE : " + pageNum + "\n\n LOcation : ";
+						+ index + "\n\n PAGE : " + pageNum;
 						
 
 			} catch(IOException ioe) {
@@ -411,6 +412,16 @@ public class SpecificQuote extends Activity {
 		}
 	}
 	
+	public void getTopics() {
+		BufferedReader br = null;
+	    try {
+	        br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
+	        String word;
+	        while((word=br.readLine()) != null){
+	            topics.add(word); 
+	        } 
+	    } catch (IOException e) {}
+	}
 	/**
 	 * Set up the {@link android.app.ActionBar}.
 	 */
