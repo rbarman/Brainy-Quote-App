@@ -116,7 +116,6 @@ public class SpecificQuote extends Activity {
 	};
 	
 	public String generateAuthorWithInitialsUrl(String queryText) {
-		//generates URL for author with initials without ".html"
 		String url ="";
 		String[] authorName = queryText.split(" ");
 		url = "http://www.brainyquote.com/quotes/authors/" + 
@@ -134,7 +133,6 @@ public class SpecificQuote extends Activity {
 		return url;
 	}
 	public String generateAuthorUrl(String queryText) {
-		//returns the AuthorUrl without the ".html"
 		String url ="";
 		String[] authorName = queryText.split(" ");
 		url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
@@ -156,7 +154,7 @@ public class SpecificQuote extends Activity {
 	}
 	
 	public String generateKeywordUrl(String queryText) {
-		//returns the KeywordUrl without the ".html"
+
 		String[] keywords = queryText.split(" ");
 		String url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
 		for(int i = 1; i < keywords.length; i++)
