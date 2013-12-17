@@ -1,9 +1,14 @@
 package com.example.brainyquote;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -32,6 +37,8 @@ public class SpecificQuote extends Activity {
 	int quoteNum = 0; //number of quotes
 	View view;
 	boolean foundInitials = false;
+	ArrayList<String> topics = new ArrayList<String>();
+	boolean foundTopic = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -161,23 +168,53 @@ public class SpecificQuote extends Activity {
 	public String generateKeywordUrl(String queryText) {
 	
 		String[] keywords = queryText.split(" ");
-		String url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
-		for(int i = 1; i < keywords.length; i++)
-			url = url + "_" + keywords[i];
 		
-		if (index > quoteNum -1) {
-			pageNum++;
-			index = 0;
-		}
-		else{}
-		
-		if(pageNum == 1) 
-			//http://www.brainyquote.com/quotes/keywords/random.html
-			url = url + ".html";
-		
-		else 
-			//http://www.brainyquote.com/quotes/keywords/random_2.html
-			url = url + "_" + pageNum + ".html";
+		 BufferedReader br = null;
+		    try {
+		        br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
+		        String word;
+		        while((word=br.readLine()) != null){
+		            topics.add(word); 
+		        } 
+		    } catch (IOException e) {}
+		    String url = "";
+		    
+		    for(String s : topics) {
+		    	if(s.equalsIgnoreCase(keywords[0])) {
+		    		foundTopic = true;
+		    		break;
+		    	}
+		    }
+		    
+		    if (foundTopic == true) {
+		    	url = "http://www.brainyquote.com/quotes/topics/topic_" + keywords[0];
+		    	if (index > quoteNum -1) {
+					pageNum++;
+					index = 0;
+				}
+				else{}
+		    	if(pageNum == 1)
+		    		url = url + ".html";
+		    	else
+		    		url = url + pageNum + ".html";
+		    }
+		    else {
+		    	url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
+				for(int i = 1; i < keywords.length; i++)
+					url = url + "_" + keywords[i];
+				
+				if (index > quoteNum -1) {
+					pageNum++;
+					index = 0;
+				}
+				else{}
+				
+				if(pageNum == 1) 
+					url = url + ".html";
+				else 					
+					url = url + "_" + pageNum + ".html";
+		    }
+		        
 		return url;	
 	}
 	
@@ -298,7 +335,9 @@ public class SpecificQuote extends Activity {
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");				
 				quoteNum = quote.size() -1;
-				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;
+				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " 
+						+ index + "\n\n PAGE : " + pageNum + "\n\n LOcation : ";
+						
 
 			} catch(IOException ioe) {
 				
