@@ -134,14 +134,9 @@ public class SpecificQuote extends Activity {
 		//returns the AuthorUrl without the ".html"
 		String url ="";
 		String[] authorName = queryText.split(" ");
-		
 		url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
-		
-		int i = 1;
-		while(i < authorName.length) {
+		for(int i = 1; i < authorName.length; i++)
 			url = url + "_" + authorName[i];
-			i++;
-		}
 
 		if (authorName[0].length() == 2)
 			twoLetter = true;
@@ -151,14 +146,10 @@ public class SpecificQuote extends Activity {
 	public String generateKeywordUrl(String queryText) {
 		//returns the KeywordUrl without the ".html"
 		String[] keywords = queryText.split(" ");
-
 		String url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
-
-		int i = 1;
-		while(i < keywords.length) {
+		for(int i = 1; i < keywords.length; i++)
 			url = url + "_" + keywords[i];
-			i++;
-		}
+
 		return url;
 		
 	}
