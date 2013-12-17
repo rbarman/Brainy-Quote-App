@@ -32,7 +32,7 @@ public class SpecificQuote extends Activity {
 	String queryText;
 	int index = 0;
 	String searchType = null;
-		//possible types are aboutAuthor, byAuthor, keyword
+		//possible types are aboutAuthor, byAuthor, tag
 	int pageNum = -1;
 	int quoteNum = 0; //number of quotes
 	View view;
@@ -69,8 +69,8 @@ public class SpecificQuote extends Activity {
 				Toast.makeText(SpecificQuote.this, "Swipe to Right : Previous Quote Coming!", Toast.LENGTH_SHORT).show();
 				index--;
 				
-				if(searchType.equals("keyword")) 
-					new KeywordSearch().execute(generateKeywordUrl(queryText));
+				if(searchType.equals("tag")) 
+					new TagSearch().execute(generateTagUrl(queryText));
 				else if(searchType.equals("byAuthor") && foundInitials == false) 
 					new ByAuthorSearch().execute(generateAuthorUrl(queryText));
 				else if(searchType.equals("byAuthor") && foundInitials == true)
@@ -85,8 +85,8 @@ public class SpecificQuote extends Activity {
 				index = quoteNum - 1;
 				pageNum --;
 				
-				if(searchType.equals("keyword")) 
-					new KeywordSearch().execute(generateKeywordUrl(queryText));
+				if(searchType.equals("tag")) 
+					new TagSearch().execute(generateTagUrl(queryText));
 				else if(searchType.equals("byAuthor") && foundInitials == false) 
 					new ByAuthorSearch().execute(generateAuthorUrl(queryText));
 				else if(searchType.equals("byAuthor") && foundInitials == true)
@@ -104,8 +104,8 @@ public class SpecificQuote extends Activity {
 			//on every swipe to the left we will get the next quote.
 			index++;
 			Toast.makeText(SpecificQuote.this, "Swipe to Left : Next Quote Coming!", Toast.LENGTH_SHORT).show();
-			if(searchType.equals("keyword")) 
-				new KeywordSearch().execute(generateKeywordUrl(queryText));
+			if(searchType.equals("tag")) 
+				new TagSearch().execute(generateTagUrl(queryText));
 			else if(searchType.equals("byAuthor") && foundInitials == false) 
 				new ByAuthorSearch().execute(generateAuthorUrl(queryText));
 			else if(searchType.equals("byAuthor") && foundInitials == true)
@@ -166,55 +166,46 @@ public class SpecificQuote extends Activity {
 		return url;		
 	}
 	
-	public String generateKeywordUrl(String queryText) {
+	public String generateTagUrl(String queryText) {
 	
 		String[] keywords = queryText.split(" ");
-		
-//		 BufferedReader br = null;
-//		    try {
-//		        br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
-//		        String word;
-//		        while((word=br.readLine()) != null){
-//		            topics.add(word); 
-//		        } 
-//		    } catch (IOException e) {}
-		    String url = "";
+		String url = "";
 		    
-		    for(String s : topics) {
-		    	if(s.equalsIgnoreCase(keywords[0])) {
-		    		foundTopic = true;
-		    		break;
-		    	}
-		    }
+	    for(String s : topics) {
+	    	if(s.equalsIgnoreCase(keywords[0])) {
+	    		foundTopic = true;
+	    		break;
+	    	}
+	    }
 		    
-		    if (foundTopic == true) {
-		    	url = "http://www.brainyquote.com/quotes/topics/topic_" + keywords[0];
-		    	if (index > quoteNum -1) {
-					pageNum++;
-					index = 0;
-				}
-				else{}
-		    	if(pageNum == 1)
-		    		url = url + ".html";
-		    	else
-		    		url = url + pageNum + ".html";
-		    }
-		    else {
-		    	url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
-				for(int i = 1; i < keywords.length; i++)
-					url = url + "_" + keywords[i];
-				
-				if (index > quoteNum -1) {
-					pageNum++;
-					index = 0;
-				}
-				else{}
-				
-				if(pageNum == 1) 
-					url = url + ".html";
-				else 					
-					url = url + "_" + pageNum + ".html";
-		    }
+		   if (foundTopic == true) {
+		   	url = "http://www.brainyquote.com/quotes/topics/topic_" + keywords[0];
+		   	if (index > quoteNum -1) {
+				pageNum++;
+				index = 0;
+			}
+			else{}
+		    if(pageNum == 1)
+		    	url = url + ".html";
+		    else
+		    	url = url + pageNum + ".html";
+		   }
+		   else {
+		   	url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
+			for(int i = 1; i < keywords.length; i++)
+				url = url + "_" + keywords[i];
+			
+			if (index > quoteNum -1) {
+				pageNum++;
+				index = 0;
+			}
+			else{}
+			
+			if(pageNum == 1) 
+				url = url + ".html";
+			else 					
+				url = url + "_" + pageNum + ".html";
+		   }
 		        
 		return url;	
 	}
@@ -234,7 +225,7 @@ public class SpecificQuote extends Activity {
 		@Override
 		protected void onPostExecute(String message) {
 			if(message.equals("error"))
-				new KeywordSearch().execute(generateKeywordUrl(queryText));
+				new TagSearch().execute(generateTagUrl(queryText));
 			else {
 
 				textView.setText("You are searching for " + message + " quotes");
@@ -288,7 +279,7 @@ public class SpecificQuote extends Activity {
 				//the search query entered something that represents a keyword / topic. 
 				//we can start a new AsyncTask that will run a keyword search on the searchQuery.
 				
-				new KeywordSearch().execute(generateKeywordUrl(queryText));
+				new TagSearch().execute(generateTagUrl(queryText));
 				
 			}
 			else if (message.equals("found initials")) {
@@ -325,12 +316,12 @@ public class SpecificQuote extends Activity {
 		}
 	}
 
-	private class KeywordSearch extends AsyncTask<String, Void, String> {
+	private class TagSearch extends AsyncTask<String, Void, String> {
 		//this method will run a keyword search. 
 		@Override
 		protected String doInBackground(String... params) {
 			try{
-				searchType = "keyword";
+				searchType = "tag";
 				String url = params[0];
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
