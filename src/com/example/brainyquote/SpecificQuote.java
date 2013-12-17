@@ -31,7 +31,7 @@ public class SpecificQuote extends Activity {
 	int pageNum = -1;
 	int quoteNum = 0; //number of quotes
 	View view;
-	boolean twoLetter = false;
+	boolean foundInitials = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +63,11 @@ public class SpecificQuote extends Activity {
 				
 				if(searchType.equals("keyword")) 
 					new KeywordSearch().execute(generateKeywordUrl(queryText));
-				else if(searchType.equals("byAuthor") && twoLetter == false) 
+				else if(searchType.equals("byAuthor") && foundInitials == false) 
 					new ByAuthorSearch().execute(generateAuthorUrl(queryText));
-				else if(searchType.equals("byAuthor") && twoLetter == true)
+				else if(searchType.equals("byAuthor") && foundInitials == true)
 					new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
-				else if(searchType.equals("aboutAuthor") && twoLetter == true)
+				else if(searchType.equals("aboutAuthor") && foundInitials == true)
 					new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 				else
 					new AboutAuthorSearch().execute(generateAuthorUrl(queryText));
@@ -79,11 +79,11 @@ public class SpecificQuote extends Activity {
 				
 				if(searchType.equals("keyword")) 
 					new KeywordSearch().execute(generateKeywordUrl(queryText));
-				else if(searchType.equals("byAuthor") && twoLetter == false) 
+				else if(searchType.equals("byAuthor") && foundInitials == false) 
 					new ByAuthorSearch().execute(generateAuthorUrl(queryText));
-				else if(searchType.equals("byAuthor") && twoLetter == true)
+				else if(searchType.equals("byAuthor") && foundInitials == true)
 					new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
-				else if(searchType.equals("aboutAuthor") && twoLetter == true)
+				else if(searchType.equals("aboutAuthor") && foundInitials == true)
 					new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 				else
 					new AboutAuthorSearch().execute(generateAuthorUrl(queryText));
@@ -98,11 +98,11 @@ public class SpecificQuote extends Activity {
 			Toast.makeText(SpecificQuote.this, "Swipe to Left : Next Quote Coming!", Toast.LENGTH_SHORT).show();
 			if(searchType.equals("keyword")) 
 				new KeywordSearch().execute(generateKeywordUrl(queryText));
-			else if(searchType.equals("byAuthor") && twoLetter == false) 
+			else if(searchType.equals("byAuthor") && foundInitials == false) 
 				new ByAuthorSearch().execute(generateAuthorUrl(queryText));
-			else if(searchType.equals("byAuthor") && twoLetter == true)
+			else if(searchType.equals("byAuthor") && foundInitials == true)
 				new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
-			else if(searchType.equals("aboutAuthor") && twoLetter == true)
+			else if(searchType.equals("aboutAuthor") && foundInitials == true)
 				new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 			else
 				new AboutAuthorSearch().execute(generateAuthorUrl(queryText));
@@ -118,8 +118,13 @@ public class SpecificQuote extends Activity {
 	public String generateAuthorWithInitialsUrl(String queryText) {
 		String url ="";
 		String[] authorName = queryText.split(" ");
-		url = "http://www.brainyquote.com/quotes/authors/" + 
-				authorName[0].charAt(0) + "/" + authorName[0].charAt(0) + "_" + authorName[0].charAt(1);
+	
+		if(authorName[0].length() == 2)
+			url = "http://www.brainyquote.com/quotes/authors/" + 
+					authorName[0].charAt(0) + "/" + authorName[0].charAt(0) + "_" + authorName[0].charAt(1);
+		else 
+			url = "http://www.brainyquote.com/quotes/authors/" + 
+					authorName[0].charAt(0) + "/" + authorName[0].charAt(0) + "_" + authorName[0].charAt(1) + "_" + authorName[0].charAt(2);
 		for(int i = 1; i < authorName.length; i++)
 			url = url + "_" + authorName[i];
 
@@ -148,8 +153,8 @@ public class SpecificQuote extends Activity {
 				url = url + ".html";
 		else 
 				url = url + "_" + pageNum +  ".html";
-		if (authorName[0].length() == 2)
-			twoLetter = true;
+		if (authorName[0].length() == 2 || authorName[0].length() == 3)
+			foundInitials = true;
 		return url;		
 	}
 	
@@ -231,8 +236,8 @@ public class SpecificQuote extends Activity {
 				
 			} catch(IOException ioe) {
 				//if queryText gets us an invalid author page with author search, we are put here. 
-				if(twoLetter == true) 
-					return "2";
+				if(foundInitials == true) 
+					return "found initials";
 				return "error";
 			}			
 		}
@@ -248,7 +253,7 @@ public class SpecificQuote extends Activity {
 				new KeywordSearch().execute(generateKeywordUrl(queryText));
 				
 			}
-			else if (message.equals("2")) {
+			else if (message.equals("found initials")) {
 				new SearchWithInitials().execute(generateAuthorWithInitialsUrl(queryText));
 				
 			}
@@ -346,7 +351,7 @@ public class SpecificQuote extends Activity {
 	
 				quoteNum = quote.size() -1;
 				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;	
-				
+										
 			} catch(IOException exception){
 					return "error";
 				}
