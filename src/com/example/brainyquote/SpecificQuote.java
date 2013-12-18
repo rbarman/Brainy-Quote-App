@@ -238,7 +238,9 @@ public class SpecificQuote extends Activity {
 		                
 		                	switch(item.getItemId()) {
 		                	case R.id.aboutAuthor:
-		                		new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
+		                		//new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
+		                		//TODO: temporary fix.
+		                		new AboutAuthorSearch().execute(generateTagUrl(queryText));
 		                		break;
 		                	case R.id.byAuthor:
 		                		new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
@@ -390,16 +392,10 @@ public class SpecificQuote extends Activity {
 		@Override
 		protected void onPostExecute(String quote){
 			
-			if(quote.equals("error") && index == 0) {
+			if(quote.equals("error")) 
 				textView.setText("No available quotes about " + queryText + "!");
-			}
-			else if (quote.equals("error") && index > 0){
-				textView.setText("Sorry there are no more available quotes about " + queryText + "!");
-			}
-			
-			else {
+			else 
 				textView.setText(quote);
-			}
 		}
 	}
 	
