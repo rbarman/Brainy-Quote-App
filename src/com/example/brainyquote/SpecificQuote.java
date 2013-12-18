@@ -180,7 +180,7 @@ public class SpecificQuote extends Activity {
 		    
 		   if (foundTopic == true) {
 		   	url = "http://www.brainyquote.com/quotes/topics/topic_" + keywords[0];
-		   	if (index > quoteNum -1) {
+		   	if (index == quoteNum) {
 				pageNum++;
 				index = 0;
 			}
@@ -195,7 +195,7 @@ public class SpecificQuote extends Activity {
 			for(int i = 1; i < keywords.length; i++)
 				url = url + "_" + keywords[i];
 			
-			if (index > quoteNum -1) {
+			if (index == quoteNum) {
 				pageNum++;
 				index = 0;
 			}
@@ -382,7 +382,7 @@ public class SpecificQuote extends Activity {
 				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 	
-				quoteNum = quote.size() -1;
+				quoteNum = quote.size() ;
 				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;	
 										
 			} catch(IOException exception){
