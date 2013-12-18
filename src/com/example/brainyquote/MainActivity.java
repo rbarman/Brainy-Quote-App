@@ -116,7 +116,7 @@ public class MainActivity extends Activity {
     
     
     
-	@Override
+	/*@Override
 	public void onBackPressed() {
 		
 		 //all below become visible again. 
@@ -127,7 +127,7 @@ public class MainActivity extends Activity {
 	     searchView.setVisibility(4);
 		
 		return;
-	}
+	}*/
 	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -183,6 +183,11 @@ public class MainActivity extends Activity {
     	searchView.setOnQueryTextListener(queryTextListener);
         
         return true;
+    }
+    
+    public void startFavScreen(View view) {
+    	Intent favScreen = new Intent(this, FavQuotesScreen.class);
+    	startActivity(favScreen);
     }
     
 }
