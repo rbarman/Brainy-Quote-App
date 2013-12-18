@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Brainy Quote</string>
+    <string name="app_name">&quot;&quot;</string>
     <string name="action_settings">Settings</string>
-    <string name="search_title">Search Brainy Quote!</string>
-    <string name="search_hint">Search Brainy Quote!</string>
-    <string name="title_activity_random_quote">RandomQuote</string>
+    <string name="search_title">Search Brainy Quote</string>
+    <string name="search_hint">Search Brainy Quote</string>
+    <string name="title_activity_random_quote">Random Quote</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_specific_quote">SpecificQuote</string>
+    <string name="title_activity_specific_quote">Specific Quote</string>
     <string name="title_activity_favourites_quotes">Favourites</string>
     <string name="title_activity_fav_quotes_screen">Favourite Quotes</string>
 

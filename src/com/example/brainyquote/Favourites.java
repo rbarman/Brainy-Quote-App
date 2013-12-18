@@ -22,10 +22,19 @@ public class Favourites {
 		@Override
 		protected Void doInBackground(String... quoteAndDir) {
 	
+			//File will be named using part of or all quote.
+			//If quote is longer than 32 characters, then take a substring
+			//up to 32 characters, and append 3 dots. Else, fileName = quote
+			//This also allows us to check if a quote is already favourited.
+			String fileName;
+			if (quoteAndDir[1].length() < 33) {
+				fileName = quoteAndDir[1];
+			} else {
+				fileName = quoteAndDir[0].substring(0, 33) + "...";
+			}
+			//Create file name and write out contents
 			try {
-				//generate a unique ID for quote file and write quote to it
-				String id = UUID.randomUUID().toString();
-				PrintWriter out = new PrintWriter(quoteAndDir[1] + "/" + id + ".txt");
+				PrintWriter out = new PrintWriter(quoteAndDir[1] + "/" + fileName + ".txt");
 				out.print(quoteAndDir[0]);
 				out.close();
 				

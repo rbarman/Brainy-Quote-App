@@ -501,6 +501,7 @@ public class SpecificQuote extends Activity {
         return true;
 	}
 
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -516,6 +517,12 @@ public class SpecificQuote extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
 	}
 
 }
