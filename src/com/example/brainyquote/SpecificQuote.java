@@ -151,7 +151,7 @@ public class SpecificQuote extends Activity {
 		url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
 		for(int i = 1; i < authorName.length; i++)
 			url = url + "_" + authorName[i];
-		if (index > quoteNum -1 ) {
+		if (index == quoteNum ) {
 			pageNum++;
 			index = 0;
 		}
