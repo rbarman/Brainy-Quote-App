@@ -1,0 +1,9 @@
+BQ_CC="US";
+BQ_RG="";
+BQ_DMA="";
+BQ_CT="";
+BQ_DVC="pc";
+BQ_TBAN="";
+BQ_TTOP="";
+BQ_TMID="";
+BQ_TBOT="";
