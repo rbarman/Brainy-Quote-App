@@ -39,6 +39,10 @@ public class SpecificQuote extends Activity {
 	boolean foundInitials = false;
 	ArrayList<String> topics = new ArrayList<String>();
 	boolean foundTopic = false;
+	boolean nextPage = false;
+	Document doc = null;
+	Elements author = null;
+	Elements quote = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +127,30 @@ public class SpecificQuote extends Activity {
 		}
 	};
 	
+	public Document getDocument(String url) {
+		try{
+			Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();			
+			return doc;
+		}catch(IOException ioe) {
+			return null;
+		}
+	}
+	
+	public void modifyElements(){
+		quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+		author = doc.select(".boxyPaddingBig span.bodybold a");
+		quoteNum = quote.size() ;
+	}
+
+	public void getDocumentAndModifyElements(String url) {
+		if(nextPage = true) {
+			doc = getDocument(url);
+			modifyElements();			
+		}
+		else {}
+		nextPage = false;
+	}
+	
 	public String generateAuthorWithInitialsUrl(String queryText) {
 		String url ="";
 		String[] authorName = queryText.split(" ");
@@ -135,7 +163,12 @@ public class SpecificQuote extends Activity {
 					authorName[0].charAt(0) + "/" + authorName[0].charAt(0) + "_" + authorName[0].charAt(1) + "_" + authorName[0].charAt(2);
 		for(int i = 1; i < authorName.length; i++)
 			url = url + "_" + authorName[i];
-
+		if (index == quoteNum ) {
+			pageNum++;
+			index = 0;
+			nextPage = true;
+		}
+		else{}
 		if (pageNum == 1) 
 			url = url + ".html";
 		else 
@@ -154,6 +187,7 @@ public class SpecificQuote extends Activity {
 		if (index == quoteNum ) {
 			pageNum++;
 			index = 0;
+			nextPage = true;
 		}
 		else{}
 				
@@ -183,6 +217,7 @@ public class SpecificQuote extends Activity {
 		   	if (index == quoteNum) {
 				pageNum++;
 				index = 0;
+				nextPage = true;
 			}
 			else{}
 		    if(pageNum == 1)
@@ -190,6 +225,7 @@ public class SpecificQuote extends Activity {
 		    else
 		    	url = url + pageNum + ".html";
 		   }
+//ELSE STATEMENT=======================================
 		   else {
 		   	url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
 			for(int i = 1; i < keywords.length; i++)
@@ -198,6 +234,7 @@ public class SpecificQuote extends Activity {
 			if (index == quoteNum) {
 				pageNum++;
 				index = 0;
+				nextPage = true;
 			}
 			else{}
 			
@@ -261,7 +298,7 @@ public class SpecificQuote extends Activity {
 			
 			try {
 				//first run an author search...
-				String url = params[0] + ".html";
+				String url = params[0];
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				return "";
 				
@@ -319,24 +356,21 @@ public class SpecificQuote extends Activity {
 	}
 
 	private class TagSearch extends AsyncTask<String, Void, String> {
-		//this method will run a keyword search. 
+		//this method will run a Tag search. 
 		@Override
 		protected String doInBackground(String... params) {
-			try{
+			
 				searchType = "tag";
-				String url = params[0];
-				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
-				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-				Elements author = doc.select(".boxyPaddingBig span.bodybold a");				
-				quoteNum = quote.size() ;
+				String url = params[0];							
+				getDocumentAndModifyElements(url);
+				if(doc == null)
+					return "ERROR!  INVALID SEARCH";
+				else{}
+
 				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " 
 						+ index + "\n\n PAGE : " + pageNum;
-						
-
-			} catch(IOException ioe) {
 				
-				return "ERROR!  INVALID SEARCH";
-				}
+				
 		}
 		@Override
 		protected void onPostExecute(String quote) {
@@ -349,20 +383,16 @@ public class SpecificQuote extends Activity {
 		//this method will return a quote BY the author
 		@Override
 		protected String doInBackground(String... params) {
-			//first page : http://www.brainyquote.com/quotes/authors/m/mark_twain.html
-			//2nd   page : http://www.brainyquote.com/quotes/authors/m/mark_twain_2.html
-			try{
+			
 				searchType = "byAuthor";
 				String url = params[0];
-				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();				
-				Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-				quoteNum = quotes.size()  ;
-				return quotes.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
-					
-		} catch(IOException exception){
+				getDocumentAndModifyElements(url);
+				if(doc == null)
+					return "ERROR!  INVALID SEARCH";
+				else{}				
 				
-				}			
-			return null;
+				return quote.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
+					
 		}
 		@Override
 		protected void onPostExecute(String quote) {
@@ -374,20 +404,15 @@ public class SpecificQuote extends Activity {
 		//this method will return a quote ABOUT the author.
 		@Override
 		protected String doInBackground(String... params) {
-			
-			try{
+				
 				searchType = "aboutAuthor";
 				String url = params[0];
-				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();			
-				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-	
-				quoteNum = quote.size() ;
-				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;	
-										
-			} catch(IOException exception){
-					return "error";
-				}
+				getDocumentAndModifyElements(url);
+				if(doc == null)
+					return "ERROR!  INVALID SEARCH";
+				else{}	
+				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;														
+				
 		}
 		@Override
 		protected void onPostExecute(String quote){
