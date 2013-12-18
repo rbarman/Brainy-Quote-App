@@ -59,7 +59,7 @@ public class SpecificQuote extends Activity {
 		textView = (TextView)findViewById(R.id.textView);
 		
 		//execute the AsyncTask
-		//InitialSearch will determine if we have an author or topic query.
+		//InitialSearch will determine if we have an author or tag query.
 		//then from InitialSearch we will start other respective AsyncTasks.
 		getTopics();
 		new InitialSearch().execute((generateAuthorUrl(queryText)));	
@@ -131,24 +131,27 @@ public class SpecificQuote extends Activity {
 		try{
 			Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();			
 			return doc;
-		}catch(IOException ioe) {
+		} catch(IOException ioe) {
 			return null;
 		}
 	}
 	
 	public void modifyElements(){
-		quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-		author = doc.select(".boxyPaddingBig span.bodybold a");
-		quoteNum = quote.size() ;
+		if(doc != null ) {
+			quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+			author = doc.select(".boxyPaddingBig span.bodybold a");
+			quoteNum = quote.size() ;
+		}
+		else{}
 	}
 
 	public void getDocumentAndModifyElements(String url) {
-		if(nextPage = true) {
-			doc = getDocument(url);
-			modifyElements();			
-		}
-		else {}
-		nextPage = false;
+			if(nextPage = true) {
+				doc = getDocument(url);
+				modifyElements();			
+			}
+			else {}
+			nextPage = false;
 	}
 	
 	public String generateAuthorWithInitialsUrl(String queryText) {
@@ -364,13 +367,10 @@ public class SpecificQuote extends Activity {
 				String url = params[0];							
 				getDocumentAndModifyElements(url);
 				if(doc == null)
-					return "ERROR!  INVALID SEARCH";
-				else{}
-
-				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " 
-						+ index + "\n\n PAGE : " + pageNum;
-				
-				
+					return "ERROR!  INVALID SEARCH" +  "\n\n URL : " + url;
+				else
+					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " 
+						+ index + "\n\n PAGE : " + pageNum;				
 		}
 		@Override
 		protected void onPostExecute(String quote) {
@@ -388,11 +388,9 @@ public class SpecificQuote extends Activity {
 				String url = params[0];
 				getDocumentAndModifyElements(url);
 				if(doc == null)
-					return "ERROR!  INVALID SEARCH";
-				else{}				
-				
-				return quote.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
-					
+					return "ERROR!  INVALID SEARCH" +  "\n\n URL : " + url;
+				else				
+					return quote.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;					
 		}
 		@Override
 		protected void onPostExecute(String quote) {
@@ -409,9 +407,9 @@ public class SpecificQuote extends Activity {
 				String url = params[0];
 				getDocumentAndModifyElements(url);
 				if(doc == null)
-					return "ERROR!  INVALID SEARCH";
-				else{}	
-				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;														
+					return "There are no quotes about " + queryText + ". Sorry!" +  "\n\n URL : " + url;
+				else	
+					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;														
 				
 		}
 		@Override
