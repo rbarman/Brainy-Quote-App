@@ -8,5 +8,7 @@
     <string name="title_activity_random_quote">RandomQuote</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_specific_quote">SpecificQuote</string>
+    <string name="title_activity_favourites_quotes">Favourites</string>
+    <string name="title_activity_fav_quotes_screen">Favourite Quotes</string>
 
 </resources>
