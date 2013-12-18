@@ -3,8 +3,9 @@ package com.example.brainyquote;
 import java.io.IOException;
 import java.io.PrintWriter;
 import android.os.AsyncTask;
-import java.util.UUID;
 
+//helper class with methods used by fav buttons from specific
+//and random quote activity screens
 public class Favourites {
 
 	//starts StartWriteFavQuoteTask
@@ -25,7 +26,7 @@ public class Favourites {
 			//File will be named using part of or all quote.
 			//If quote is longer than 32 characters, then take a substring
 			//up to 32 characters, and append 3 dots. Else, fileName = quote
-			//This also allows us to check if a quote is already favourited.
+			//This also prevents duplicate favourites by simply overwriting them.
 			String fileName;
 			if (quoteAndDir[1].length() < 33) {
 				fileName = quoteAndDir[1];
@@ -45,11 +46,4 @@ public class Favourites {
 		}
 		
 	}
-	
-	//returns a string array of fav quotes to be used with a listview
-	public String[] getFavQuote() {
-		
-		return null;
-	}
-
 }

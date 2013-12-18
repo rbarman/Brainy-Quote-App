@@ -1,5 +1,12 @@
 package com.example.brainyquote;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FilenameFilter;
+import java.io.IOException;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -14,8 +21,51 @@ public class FavQuotesScreen extends Activity {
 		setContentView(R.layout.activity_fav_quotes_screen);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		
+		GetFavQuoteTask favQuoteTask = new GetFavQuoteTask();
+		favQuoteTask.execute();
 	}
 
+	//returns a string array of fav quotes to be used with some view
+	private class GetFavQuoteTask extends AsyncTask<Void, Void, String[]> {
+
+		@Override
+		protected String[] doInBackground(Void... params) {
+			try {
+				//get directory of fav files and list the interior files
+				File dir = new File(getFilesDir().getAbsolutePath());
+				File[] dirFiles = dir.listFiles(new FilenameFilter() {
+				    public boolean accept(File dir, String name) {
+				        return name.endsWith(".txt");
+				    }
+				});
+				
+				String[] quotes = new String[dirFiles.length];
+				
+				for (File item : dirFiles) {
+					FileReader fr = new FileReader(item.getAbsolutePath());
+					BufferedReader textReader = new BufferedReader(fr);
+					String line = textReader.readLine();
+					
+					while (line != null) {
+						line += textReader.readLine();
+					}
+					textReader.close();
+				}
+				return quotes;
+			} catch (IOException e){
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String[] result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+		}
+		
+	}
 	/**
 	 * Set up the {@link android.app.ActionBar}.
 	 */
