@@ -391,8 +391,8 @@ public class SpecificQuote extends Activity {
 				if(doc == null)
 					return "ERROR!  INVALID SEARCH" +  "\n\n URL : " + url;
 				else				
-					return quote.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " 
-					+ "\n\n quoteNum : " + quoteNum + index + "\n\n PAGE : " + pageNum +  "\n\n URL : " + url;
+					return quote.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index
+					+ "\n\n quoteNum : " + quoteNum + "\n\n PAGE : " + pageNum +  "\n\n URL : " + url;
 		}
 		@Override
 		protected void onPostExecute(String quote) {
