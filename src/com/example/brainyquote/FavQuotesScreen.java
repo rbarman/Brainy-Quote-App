@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.support.v4.app.NavUtils;
 
 public class FavQuotesScreen extends Activity {
@@ -22,17 +24,17 @@ public class FavQuotesScreen extends Activity {
 		// Show the Up button in the action bar.
 		setupActionBar();
 		
-		GetFavQuoteTask favQuoteTask = new GetFavQuoteTask();
+		GetFavQuotesTask favQuoteTask = new GetFavQuotesTask();
 		favQuoteTask.execute();
 	}
 
 	//returns a string array of fav quotes to be used with some view
-	private class GetFavQuoteTask extends AsyncTask<Void, Void, String[]> {
+	private class GetFavQuotesTask extends AsyncTask<Void, Void, String[]> {
 
 		@Override
 		protected String[] doInBackground(Void... params) {
 			try {
-				//get directory of fav files and list the interior files
+				//get directory of fav files and list the interior files ending with ".txt"
 				File dir = new File(getFilesDir().getAbsolutePath());
 				File[] dirFiles = dir.listFiles(new FilenameFilter() {
 				    public boolean accept(File dir, String name) {
@@ -42,17 +44,24 @@ public class FavQuotesScreen extends Activity {
 				
 				String[] quotes = new String[dirFiles.length];
 				
-				for (File item : dirFiles) {
-					FileReader fr = new FileReader(item.getAbsolutePath());
+				//For each file in dirFiles, get the text String and
+				//assign it to an index of quote array.
+				for (int i = 0; i < dirFiles.length; i++) {
+					StringBuilder fullQuote = new StringBuilder();
+					FileReader fr = new FileReader(dirFiles[i].getAbsolutePath());
 					BufferedReader textReader = new BufferedReader(fr);
 					String line = textReader.readLine();
 					
 					while (line != null) {
-						line += textReader.readLine();
+						fullQuote.append(line);
+						fullQuote.append("\n");
+						line = textReader.readLine();
 					}
+					quotes[i] = fullQuote.toString();
 					textReader.close();
 				}
 				return quotes;
+				
 			} catch (IOException e){
 				e.printStackTrace();
 			}
@@ -60,12 +69,23 @@ public class FavQuotesScreen extends Activity {
 		}
 
 		@Override
-		protected void onPostExecute(String[] result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
+		protected void onPostExecute(String[] quotes) {
+			super.onPostExecute(quotes);
+			
+			populateView(quotes);
 		}
 		
 	}
+	
+	private void populateView(String[] quotes) {
+		//build adapter
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_view_box, quotes);
+				
+		//configure list view
+		ListView list = (ListView) findViewById(R.id.listViewMain);
+		list.setAdapter(adapter);
+	}
+	
 	/**
 	 * Set up the {@link android.app.ActionBar}.
 	 */
