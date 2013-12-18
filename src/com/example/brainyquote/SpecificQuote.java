@@ -40,6 +40,7 @@ public class SpecificQuote extends Activity {
 	ArrayList<String> topics = new ArrayList<String>();
 	boolean foundTopic = false;
 	boolean nextPage = false;
+	boolean first = false;
 	Document doc = null;
 	Elements author = null;
 	Elements quote = null;
@@ -157,7 +158,11 @@ public class SpecificQuote extends Activity {
 	public String generateAuthorWithInitialsUrl(String queryText) {
 		String url ="";
 		String[] authorName = queryText.split(" ");
-	
+		if(first == true)
+			pageNum--;
+		else{}
+		first = false;
+		
 		if(authorName[0].length() == 2)
 			url = "http://www.brainyquote.com/quotes/authors/" + 
 					authorName[0].charAt(0) + "/" + authorName[0].charAt(0) + "_" + authorName[0].charAt(1);
@@ -204,7 +209,7 @@ public class SpecificQuote extends Activity {
 	}
 	
 	public String generateTagUrl(String queryText) {
-	
+		
 		String[] keywords = queryText.split(" ");
 		String url = "";
 		    
@@ -214,17 +219,21 @@ public class SpecificQuote extends Activity {
 	    		break;
 	    	}
 	    }
-		    
+		   if(first == true && foundTopic == true)
+			   pageNum--;
+		   else {}
+		   first = false;
+		   
 		   if (foundTopic == true) {
 		   	url = "http://www.brainyquote.com/quotes/topics/topic_" + keywords[0];
 		   	if (index == quoteNum) {
 				pageNum++;
 				index = 0;
-				nextPage = true;
+				nextPage = true;				
 			}
 			else{}
 		   	
-		    if(pageNum == 1)
+		    if(pageNum == 1 || pageNum == 0)
 		    	url = url + ".html";
 		    else
 		    	url = url + pageNum + ".html";
@@ -242,7 +251,7 @@ public class SpecificQuote extends Activity {
 			}
 			else{}
 			
-			if(pageNum == 1) 
+			if(pageNum == 1 || pageNum == 0) 
 				url = url + ".html";
 			else 					
 				url = url + "_" + pageNum + ".html";
@@ -307,7 +316,8 @@ public class SpecificQuote extends Activity {
 				return "";
 				
 			} catch(IOException ioe) {
-				//if queryText gets us an invalid author page with author search, we are put here. 
+				//if queryText gets us an invalid author page with author search, we are put here.
+				first = true;
 				if(foundInitials == true) 
 					return "found initials";
 				return "error";
@@ -321,7 +331,7 @@ public class SpecificQuote extends Activity {
 				//we now know that the search query the user entered does NOT represent an author
 				//the search query entered something that represents a keyword / topic. 
 				//we can start a new AsyncTask that will run a keyword search on the searchQuery.
-				
+	
 				new TagSearch().execute(generateTagUrl(queryText));
 				
 			}
