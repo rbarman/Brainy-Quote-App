@@ -137,20 +137,21 @@ public class SpecificQuote extends Activity {
 	}
 	
 	public void modifyElements(){
-		quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-		author = doc.select(".boxyPaddingBig span.bodybold a");
-		quoteNum = quote.size() ;
+		if(doc != null ) {
+			quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+			author = doc.select(".boxyPaddingBig span.bodybold a");
+			quoteNum = quote.size() ;
+		}
+		else{}
 	}
 
 	public void getDocumentAndModifyElements(String url) {
-		if(doc != null) {
 			if(nextPage = true) {
 				doc = getDocument(url);
 				modifyElements();			
 			}
 			else {}
 			nextPage = false;
-		}
 	}
 	
 	public String generateAuthorWithInitialsUrl(String queryText) {
@@ -366,10 +367,9 @@ public class SpecificQuote extends Activity {
 				String url = params[0];							
 				getDocumentAndModifyElements(url);
 				if(doc == null)
-					return "ERROR!  INVALID SEARCH";
-				else{}
-
-				return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " 
+					return "ERROR!  INVALID SEARCH" +  "\n\n URL : " + url;
+				else
+					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " 
 						+ index + "\n\n PAGE : " + pageNum;				
 		}
 		@Override
@@ -388,11 +388,9 @@ public class SpecificQuote extends Activity {
 				String url = params[0];
 				getDocumentAndModifyElements(url);
 				if(doc == null)
-					return "ERROR!  INVALID SEARCH";
-				else{}				
-				
-				return quote.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
-					
+					return "ERROR!  INVALID SEARCH" +  "\n\n URL : " + url;
+				else				
+					return quote.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;					
 		}
 		@Override
 		protected void onPostExecute(String quote) {
@@ -409,7 +407,7 @@ public class SpecificQuote extends Activity {
 				String url = params[0];
 				getDocumentAndModifyElements(url);
 				if(doc == null)
-					return "There are no quotes about " + queryText + ". Sorry!";
+					return "There are no quotes about " + queryText + ". Sorry!" +  "\n\n URL : " + url;
 				else	
 					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;														
 				
