@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
             	
             	
             	//OnQueryTextListener created for SearchView
-            	//this will track when the user either enters text or submits inputted text!. 
+            	//this will track when the user either enters text or submits inputed text!. 
             	final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
             	    @Override
             	    public boolean onQueryTextChange(String newText) {
@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
             	    	query =  query.replaceAll("[^a-zA-Z\\s]","");
             	    	//regex statement gets rid of all non letter characters.
             	    	
-            	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
+            	        Toast toast = Toast.makeText(getApplicationContext(), "Searching for " + query + "...", Toast.LENGTH_SHORT);
             	        toast.setGravity(Gravity.CENTER, 0, 0);
             	        toast.show();
             	        
@@ -95,7 +95,8 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(), "Random Quote Will be Generated...", Toast.LENGTH_SHORT).show();				//
+				//May seem a little redundant, since user knows that he/she requested random quote
+				//Toast.makeText(getApplicationContext(), "Random Quote Will be Generated...", Toast.LENGTH_SHORT).show();				//
 
 				//Now a new intent will be created to go to the RandomQuote.java activity! 
 				Intent intent = new Intent(getBaseContext(), RandomQuote.class);
@@ -108,7 +109,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onBackPressed() {
 		
-		//all below become visible again. 
+		 //all below become visible again. 
 	     searchButton.setVisibility(0);
 	     logo.setVisibility(0);
 	     randomButton.setVisibility(0);
@@ -129,7 +130,7 @@ public class MainActivity extends Activity {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         
         //setting hint value via .java.... should be able to do in .XML....
-        searchView.setQueryHint("Search Brainy Quote!");
+        searchView.setQueryHint("Search Brainy Quote");
         
         final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
     	    @Override
@@ -143,7 +144,7 @@ public class MainActivity extends Activity {
     	    	
     	    	query =  query.replaceAll("[^a-zA-Z\\s]","");
     	    	//regex statement gets rid of all non letter characters.
-    	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
+    	        Toast toast = Toast.makeText(getApplicationContext(), "Searching for " + query + "...", Toast.LENGTH_SHORT);
     	        toast.setGravity(Gravity.CENTER, 0, 0);
     	        toast.show();
     	        
