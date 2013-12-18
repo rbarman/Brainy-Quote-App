@@ -119,9 +119,9 @@ public class RandomQuote extends Activity {
 					             + author.get(randIndex).text());
 			             currentIndex ++;
 			             quotePlaceHolder ++;
+			             String formattedQuote = String.format("\"%s\" \n\n - %s", quote.get(randIndex).text(), author.get(randIndex).text());
 			             
-			             return quote.get(randIndex).text() +"\n\n - "
-			             + author.get(randIndex).text();
+			             return formattedQuote;
 			         } catch (IOException e) {
 			                return null;
 			            }
