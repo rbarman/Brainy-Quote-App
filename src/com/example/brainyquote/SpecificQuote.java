@@ -370,7 +370,7 @@ public class SpecificQuote extends Activity {
 					return "ERROR!  INVALID SEARCH" +  "\n\n URL : " + url;
 				else
 					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " 
-						+ index + "\n\n PAGE : " + pageNum;				
+						+ index + "\n\n PAGE : " + pageNum +  "\n\n URL : " + url;			
 		}
 		@Override
 		protected void onPostExecute(String quote) {
@@ -390,7 +390,8 @@ public class SpecificQuote extends Activity {
 				if(doc == null)
 					return "ERROR!  INVALID SEARCH" +  "\n\n URL : " + url;
 				else				
-					return quote.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;					
+					return quote.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum
+							+  "\n\n URL : " + url;
 		}
 		@Override
 		protected void onPostExecute(String quote) {
@@ -409,7 +410,8 @@ public class SpecificQuote extends Activity {
 				if(doc == null)
 					return "There are no quotes about " + queryText + ". Sorry!" +  "\n\n URL : " + url;
 				else	
-					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index;														
+					return quote.get(index).text() + "\n\n--" + author.get(index).text() + "\n\n INDEX : " + index
+							+  "\n\n URL : " + url;
 				
 		}
 		@Override
