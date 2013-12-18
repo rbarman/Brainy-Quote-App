@@ -41,7 +41,7 @@
         android:layout_alignBottom="@+id/randomButton"
         android:layout_alignLeft="@+id/logo"
         android:layout_marginLeft="40dp"
-        android:text="Random"
+        android:text="Search"
         android:textSize="21sp" />
 
     <Button
@@ -52,7 +52,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="40dp"
         android:layout_toRightOf="@+id/searchButton"
-        android:text="Search"
+        android:text="Random"
         android:textSize="21sp" />
 
 </RelativeLayout>
