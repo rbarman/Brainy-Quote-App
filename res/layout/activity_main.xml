@@ -48,4 +48,17 @@
         android:textColor="#ffffff"
         android:textSize="21sp" />
 
+    <Button
+        android:id="@+id/favScreen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/searchButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:background="#516fd2"
+        android:onClick="startFavScreen"
+        android:text="Favourites"
+        android:textColor="#ffffff"
+        android:textSize="21sp" />
+
 </RelativeLayout>

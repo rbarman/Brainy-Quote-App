@@ -19,4 +19,16 @@
         android:text=""
         android:textSize="20sp" />
 
+    <Button
+        android:id="@+id/favButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:onClick="startWriteFavQuoteTask"
+        android:text="Fav!"
+        android:background="#516fd2"
+        android:textColor="#ffffff"
+        android:textSize="21sp" />
+
 </RelativeLayout>
