@@ -78,7 +78,7 @@ public class SpecificQuote extends Activity {
 				else if(searchType.equals("aboutAuthor") && foundInitials == true)
 					new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 				else
-					new AboutAuthorSearch().execute(generateAuthorUrl(queryText));
+					new AboutAuthorSearch().execute(generateTagUrl(queryText));
 			}
 			else if(index == 0 && pageNum > 1) {
 				Toast.makeText(SpecificQuote.this, "Swipe to Right : Previous Quote Coming!", Toast.LENGTH_SHORT).show();
@@ -94,7 +94,7 @@ public class SpecificQuote extends Activity {
 				else if(searchType.equals("aboutAuthor") && foundInitials == true)
 					new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 				else
-					new AboutAuthorSearch().execute(generateAuthorUrl(queryText));
+					new AboutAuthorSearch().execute(generateTagUrl(queryText));
 			}
 			else {
 				Toast.makeText(SpecificQuote.this, "Swipe to Right : No more previous Quotes :(",Toast.LENGTH_SHORT).show();
@@ -113,7 +113,7 @@ public class SpecificQuote extends Activity {
 			else if(searchType.equals("aboutAuthor") && foundInitials == true)
 				new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 			else
-				new AboutAuthorSearch().execute(generateAuthorUrl(queryText));
+				new AboutAuthorSearch().execute(generateTagUrl(queryText));
 		}
 		public void onSwipeBottom() {
 			
@@ -302,7 +302,7 @@ public class SpecificQuote extends Activity {
 		                
 		                	switch(item.getItemId()) {
 		                	case R.id.aboutAuthor:
-		                		new AboutAuthorSearch().execute(generateAuthorUrl(queryText));
+		                		new AboutAuthorSearch().execute(generateTagUrl(queryText));
 		                		break;
 		                	case R.id.byAuthor:
 		                		new ByAuthorSearch().execute(generateAuthorUrl(queryText));
