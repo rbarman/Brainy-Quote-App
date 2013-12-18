@@ -37,10 +37,10 @@
         <activity
             android:name="com.example.brainyquote.RandomQuote"
             android:label="@string/title_activity_random_quote"
-            android:parentActivityName="com.example.brainyquote" >
+            android:parentActivityName="com.example.brainyquote.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.brainyquote" />
+                android:value="com.example.brainyquote.MainActivity" />
         </activity>
         
         <!-- Specific Quote Activity -->

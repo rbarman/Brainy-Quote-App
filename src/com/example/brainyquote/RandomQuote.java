@@ -25,8 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
+//This is the activity launched when the user selects the randomButton on main activity.
 public class RandomQuote extends Activity {	
-	//This is the activity launched when the user selects the randomButton on main activity.
 	
 	TextView textView;
 	ArrayList<String> categories = new ArrayList<String>();
@@ -37,6 +37,7 @@ public class RandomQuote extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_random_quote);
 		// Show the Up button in the action bar.
@@ -49,33 +50,28 @@ public class RandomQuote extends Activity {
 		//execute the async task
 		new GetQuote().execute();		
 	}
-	
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
-		public void onSwipeRight(){
-			 
-			//on every swipe to the left we will get the next random quote. 
+		
+		//on every swipe to the left we will get the next random quote. 
+		public void onSwipeRight() {
 			
-			//textView.setText()
 			if(currentIndex > 0) {
 				currentIndex--;
 				Toast.makeText(RandomQuote.this, "Swipe to Right : Previous Random Quote Coming!", Toast.LENGTH_SHORT).show();
-				
 				textView.setText(randomQuotes.get(currentIndex));
-			}
-			else {
+			} else {
 				Toast.makeText(RandomQuote.this, "Swipe to Right : No more previous Quotes :(", Toast.LENGTH_SHORT).show();
 			}
-			
 		}
+		//on every swipe to the left we will get the next random quote.
 		public void onSwipeLeft(){
-			//on every swipe to the left we will get the next random quote.
+			
 			if(currentIndex < quotePlaceHolder) {
 				currentIndex ++;
 				Toast.makeText(RandomQuote.this, "Swipe to Left : Next Random Quote Coming!", Toast.LENGTH_SHORT).show();
 				
 				textView.setText(randomQuotes.get(currentIndex));
-			}
-			else {
+			} else {
 				Toast.makeText(RandomQuote.this, "Swipe to Left : New Random Quote Coming!", Toast.LENGTH_SHORT).show();
 				new GetQuote().execute();
 			}	
@@ -95,44 +91,45 @@ public class RandomQuote extends Activity {
 
 		@Override
 		protected String doInBackground(Void... params) {
-						 
+			
 			 BufferedReader br = null;
-			    try {
-			        br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
-			        String word;
-			        while((word=br.readLine()) != null){
-			            categories.add(word); 
-			        }
-			        //categories ArrayList now has all of the different categories within categories.txt
-			        String topic = categories.get((int) (Math.random() * (categories.size() -1)));
-			        Document doc;
-			         try {
-			        	 String url = "http://www.brainyquote.com/quotes/topics/topic_" + topic + ".html";
-			        	 //sample url for age quote : http://www.brainyquote.com/quotes/topics/topic_age.html
-			             doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();			                			                
-			             Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-			             Elements author = doc.select(".boxyPaddingBig span.bodybold a");
+			 try {
+				 br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
+				 String word;
+				 while((word=br.readLine()) != null) {
+					 categories.add(word); 
+				 }
+				 //categories ArrayList now has all of the different categories within categories.txt
+				 String topic = categories.get((int) (Math.random() * (categories.size() -1)));
+				 Document doc;
+				 try {
+					 String url = "http://www.brainyquote.com/quotes/topics/topic_" + topic + ".html";
+					 //sample url for age quote : http://www.brainyquote.com/quotes/topics/topic_age.html
+					 doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();			                			                
+					 Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+					 Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 			             
-			             int randIndex = (int) (Math.random()*quote.size()-1);
+					 int randIndex = (int) (Math.random()*quote.size()-1);
+			        	
+					 randomQuotes.add(quote.get(randIndex).text() +"\n\n - "
+							 + author.get(randIndex).text());
+					 currentIndex ++;
+					 quotePlaceHolder ++;
+					 String formattedQuote = String.format("\"%s\" \n\n      - %s",
+							 quote.get(randIndex).text(), author.get(randIndex).text());
 			             
-			             randomQuotes.add(quote.get(randIndex).text() +"\n\n - "
-					             + author.get(randIndex).text());
-			             currentIndex ++;
-			             quotePlaceHolder ++;
-			             String formattedQuote = String.format("\"%s\" \n\n      - %s",
-			            		 quote.get(randIndex).text(), author.get(randIndex).text());
-			             
-			             return formattedQuote;
-			         } catch (IOException e) {
-			                return null;
-			            }
-			    }
-			    catch(IOException e) {
-			        return null;
-			    }
+					 return formattedQuote;
+				 } catch (IOException e) {
+					 return null;
+				 }
+			 }
+			 catch(IOException e) {
+				 return null;
+			 }
 		}
 		@Override
 		protected void onPostExecute(String title){
+			
 			TextView textView = (TextView)findViewById(R.id.textView);
 			textView.setText(title);
 		}
@@ -142,12 +139,13 @@ public class RandomQuote extends Activity {
 	 * Set up the {@link android.app.ActionBar}.
 	 */
 	private void setupActionBar() {
-
+		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.random_quote, menu);
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -162,8 +160,10 @@ public class RandomQuote extends Activity {
         searchView.setQueryHint("Search Brainy Quote!");
         
         final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+        	
     	    @Override
     	    public boolean onQueryTextChange(String newText) {
+    	    	
     	        // Do something
     	        return true;
     	    }
@@ -185,15 +185,15 @@ public class RandomQuote extends Activity {
     	        
     	        return true;
     	    }
-    	    
     	};
     	searchView.setOnQueryTextListener(queryTextListener);
-        
+    	
         return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// This ID represents the Home or Up button. In the case of this
