@@ -356,7 +356,7 @@ public class SpecificQuote extends Activity {
 				String url = params[0];
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();				
 				Elements quotes = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-				quoteNum = quotes.size() -1 ;
+				quoteNum = quotes.size()  ;
 				return quotes.get(index).text() + "\n\n--" + queryText + "\n\n INDEX : " + index + "\n\n PAGE : " + pageNum;
 					
 		} catch(IOException exception){
