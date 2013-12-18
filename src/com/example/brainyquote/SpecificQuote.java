@@ -223,7 +223,7 @@ public class SpecificQuote extends Activity {
 				nextPage = true;
 			}
 			else{}
-		   	pageNum--;
+		   	
 		    if(pageNum == 1)
 		    	url = url + ".html";
 		    else
