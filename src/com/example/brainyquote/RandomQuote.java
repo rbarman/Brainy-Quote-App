@@ -103,41 +103,42 @@ public class RandomQuote extends Activity {
 	//need to create an AsyncTask so that the UI thread does not have to do extra work
 	//if we make the UI thread to the Jsoup.connect, the application will crash.
 	
+	public void getCategories() {
+		BufferedReader br = null;
+		 try {
+			 br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
+			 String word;
+			 while((word=br.readLine()) != null) {
+				 categories.add(word); 
+			 } 
+		 }catch(IOException ioe) {}
+	}
+	
 	private class GetQuote extends AsyncTask<Void, Void, String> {
 
 		@Override
 		protected String doInBackground(Void... params) {
 			
-			 BufferedReader br = null;
-			 try {
-				 br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
-				 String word;
-				 while((word=br.readLine()) != null) {
-					 categories.add(word); 
-				 }
-				 //categories ArrayList now has all of the different categories within categories.txt
-				 String topic = categories.get((int) (Math.random() * (categories.size() -1)));
-				 Document doc;
-				 try {
-					 String url = "http://www.brainyquote.com/quotes/topics/topic_" + topic + ".html";
-					 //sample url for age quote : http://www.brainyquote.com/quotes/topics/topic_age.html
-					 doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();			                			                
-					 Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
-					 Elements author = doc.select(".boxyPaddingBig span.bodybold a");
+			getCategories();
+			String topic = categories.get((int) (Math.random() * (categories.size() -1)));
+			Document doc;
+			try {
+				String url = "http://www.brainyquote.com/quotes/topics/topic_" + topic + ".html";
+				//sample url for age quote : http://www.brainyquote.com/quotes/topics/topic_age.html
+				doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();			                			                
+				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
 			             
-					 int randIndex = (int) (Math.random()*quote.size()-1);
+				int randIndex = (int) (Math.random()*quote.size()-1);
 			        	
-					 randomQuotes.add(quote.get(randIndex).text() +"\n\n - "
-							 + author.get(randIndex).text());
-					 currentIndex ++;
-					 quotePlaceHolder ++;
-					 String formattedQuote = String.format("\"%s\" \n\n      - %s",
-							 quote.get(randIndex).text(), author.get(randIndex).text());
-			             
-					 return formattedQuote;
-				 } catch (IOException e) {
-					 return null;
-				 }
+				randomQuotes.add(quote.get(randIndex).text() +"\n\n - "
+					 + author.get(randIndex).text());
+				currentIndex ++;
+				quotePlaceHolder ++;
+				String formattedQuote = String.format("\"%s\" \n\n      - %s",
+						quote.get(randIndex).text(), author.get(randIndex).text());
+			           
+				return formattedQuote;
 			 }
 			 catch(IOException e) {
 				 return null;
