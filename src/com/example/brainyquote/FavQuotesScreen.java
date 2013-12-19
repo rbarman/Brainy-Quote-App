@@ -64,7 +64,7 @@ public class FavQuotesScreen extends Activity {
 						fullQuote.append(line);
 						fullQuote.append("\n");
 						line = textReader.readLine();
-					}
+					}					
 					quotes[i] = fullQuote.toString();
 					textReader.close();
 				}
