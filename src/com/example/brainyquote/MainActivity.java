@@ -190,4 +190,16 @@ public class MainActivity extends Activity {
     	startActivity(favScreen);
     }
     
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch(item.getItemId()) {
+    	//as we add more action elements in the actionbar, we will have more things in the switch case. 
+    	case R.id.launch_fav_activity:
+    		Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+			startActivity(intent);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+    	}
+    }
 }
