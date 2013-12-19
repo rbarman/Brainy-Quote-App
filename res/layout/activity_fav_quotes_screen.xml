@@ -12,9 +12,19 @@
         android:id="@+id/listViewMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:stackFromBottom="false" >
     </ListView>
+
+    <TextView
+        android:id="@+id/noQuoteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/listViewMain"
+        android:visibility="gone"
+        android:text="You have no favorites :-("
+        android:textSize="20sp" />
 
 </RelativeLayout>

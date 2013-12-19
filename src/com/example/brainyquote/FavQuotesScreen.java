@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -52,25 +53,28 @@ public class FavQuotesScreen extends Activity {
 				
 				String[] quotes = new String[dirFiles.length];
 				
-				//For each file in dirFiles, get the text String and
-				//assign it to an index of quote array.
-				for (int i = 0; i < dirFiles.length; i++) {
-					StringBuilder fullQuote = new StringBuilder();
-					FileReader fr = new FileReader(dirFiles[i].getAbsolutePath());
-					BufferedReader textReader = new BufferedReader(fr);
-					String line = textReader.readLine();
-					
-					while (line != null) {
-						fullQuote.append(line);
-						fullQuote.append("\n");
-						line = textReader.readLine();
-					}					
-					quotes[i] = fullQuote.toString();
-					textReader.close();
+				if (quotes.length == 0) {
+					return quotes;
+				} else {
+					//For each file in dirFiles, get the text String and
+					//assign it to an index of quote array.
+					for (int i = 0; i < dirFiles.length; i++) {
+						StringBuilder fullQuote = new StringBuilder();
+						FileReader fr = new FileReader(dirFiles[i].getAbsolutePath());
+						BufferedReader textReader = new BufferedReader(fr);
+						String line = textReader.readLine();
+						
+						while (line != null) {
+							fullQuote.append(line);
+							fullQuote.append("\n");
+							line = textReader.readLine();
+						}					
+						quotes[i] = fullQuote.toString();
+						textReader.close();
+					}
+					Collections.reverse(Arrays.asList(quotes));
+					return quotes;
 				}
-				Collections.reverse(Arrays.asList(quotes));
-				return quotes;
-				
 			} catch (IOException e){
 				e.printStackTrace();
 			}
@@ -87,12 +91,17 @@ public class FavQuotesScreen extends Activity {
 	}
 	
 	private void populateView(String[] quotes) {
-		//build adapter
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_view_box, quotes);
-				
-		//configure list view
-		ListView list = (ListView) findViewById(R.id.listViewMain);
-		list.setAdapter(adapter);
+		if (quotes.length == 0) {
+			View noQuoteTextView = (View) findViewById(R.id.noQuoteTextView);
+			noQuoteTextView.setVisibility(View.VISIBLE);
+		} else {
+			//build adapter
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_view_box, quotes);
+					
+			//configure list view
+			ListView list = (ListView) findViewById(R.id.listViewMain);
+			list.setAdapter(adapter);
+		}
 	}
 	
 	/**
@@ -107,49 +116,46 @@ public class FavQuotesScreen extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.fav_quotes_screen, menu);
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
 		
-		// Inflate the menu; this adds items to the action bar if it is present.
-			getMenuInflater().inflate(R.menu.fav_quotes_screen, menu);
-		// Inflate the menu; this adds items to the action bar if it is present.
-		        getMenuInflater().inflate(R.menu.main, menu);
+		// Associate searchable configuration with the SearchView
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+		searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 		        
-		        // Associate searchable configuration with the SearchView
-		        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-		        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		//setting hint value via .java.... should be able to do in .XML....
+		searchView.setQueryHint("Search Brainy Quote!");
 		        
-		        //setting hint value via .java.... should be able to do in .XML....
-		        searchView.setQueryHint("Search Brainy Quote!");
-		        
-		        final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+		final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 		        	
-		    	    @Override
-		    	    public boolean onQueryTextChange(String newText) {
-		    	    	
-		    	        // Do something
-		    	        return true;
-		    	    }
-
-		    	    @Override
-		    	    public boolean onQueryTextSubmit(String query) {    	    	
-		   
-		    	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
-		    	        toast.setGravity(Gravity.CENTER, 0, 0);
-		    	        toast.show();
+			@Override
+			public boolean onQueryTextChange(String newText) {	    	    	
+				// Do something
+				return true;
+			}
+			
+			@Override
+			public boolean onQueryTextSubmit(String query) {    	    	
+				
+				Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
 		    	        
-		    	      //Now a new intent will be created to go to the SpecificQuote.java activity! 
-						Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
+				//Now a new intent will be created to go to the SpecificQuote.java activity! 
+				Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
 						
-						//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
-						//so the SpecificQuote activity can use the queryText as the search parameter. 
-						intent.putExtra("queryText", query);
-						startActivity(intent);	
+				//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
+				//so the SpecificQuote activity can use the queryText as the search parameter. 
+				intent.putExtra("queryText", query);
+				startActivity(intent);	
 		    	        
-		    	        return true;
-		    	    }
-		    	};
-		    	searchView.setOnQueryTextListener(queryTextListener);
-		
+				return true;
+			}
+		};
+		searchView.setOnQueryTextListener(queryTextListener);
 		
 		return true;
 	}

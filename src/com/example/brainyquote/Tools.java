@@ -7,12 +7,12 @@ import java.io.PrintWriter;
 
 import android.os.AsyncTask;
 
-//Helper class with useful methods to reduce redundancy
-//Must be instantiated to function properly (can't use static methods).
+//Houses common methods used by other activities for
+//background work.
 public class Tools {
 	
 	//deletes all favorited quotes
-	public static class DeleteFavsTask extends AsyncTask<String, Void, Void> {
+	protected static class DeleteFavsTask extends AsyncTask<String, Void, Void> {
 
 		@Override
 		protected Void doInBackground(String... params) {
@@ -33,7 +33,7 @@ public class Tools {
 	}
 	
 	// Writes the quote currently on screen to a file
-	public static class WriteFavQuoteTask extends AsyncTask<String, Void, Void> {
+	protected static class WriteFavQuoteTask extends AsyncTask<String, Void, Void> {
 
 		@Override
 		protected Void doInBackground(String... quoteAndDir) {
