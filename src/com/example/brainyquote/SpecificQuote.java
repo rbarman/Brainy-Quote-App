@@ -561,6 +561,10 @@ public class SpecificQuote extends Activity {
 			//
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
+		case R.id.launch_fav_activity:
+    		Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+			startActivity(intent);
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
