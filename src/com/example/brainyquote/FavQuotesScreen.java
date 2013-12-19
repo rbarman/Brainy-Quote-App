@@ -166,11 +166,7 @@ public class FavQuotesScreen extends Activity {
 			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
 			//
 			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		case R.id.launch_fav_activity:
-    		Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-			startActivity(intent);
-			return true;
+			return true;    		
 		}
 		return super.onOptionsItemSelected(item);
 	}
