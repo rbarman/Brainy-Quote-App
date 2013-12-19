@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -66,6 +68,7 @@ public class FavQuotesScreen extends Activity {
 					quotes[i] = fullQuote.toString();
 					textReader.close();
 				}
+				Collections.reverse(Arrays.asList(quotes));
 				return quotes;
 				
 			} catch (IOException e){
