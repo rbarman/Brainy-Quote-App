@@ -60,14 +60,12 @@ public class SpecificQuote extends Activity {
 		
 		Intent intent = getIntent();
 		queryText = intent.getExtras().getString("queryText");
-		
 		view = (View)findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView)findViewById(R.id.textView);
-		
 		starOn = (ImageButton)findViewById(R.id.starOn);
 		starOff = (ImageButton)findViewById(R.id.starOff);
-		
+
 		starOff.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -360,7 +358,7 @@ public class SpecificQuote extends Activity {
 			else {
 
 				textView.setText("You are searching for " + message + " quotes");
-				
+		
 				//we have determined that the user has entered search query that represents an author
 				//Brainy Quote has 2 possibilities for authors : quotes BY the author and quotes ABOUT the author.
 				//we use the pop up menu to let the user determine which category he wants. 
@@ -403,7 +401,7 @@ public class SpecificQuote extends Activity {
 		}
 		@Override
 		protected void onPostExecute(String quote) {
-			
+				starOff.setVisibility(0);
 				textView.setText(quote);
 		}
 	}
@@ -424,6 +422,7 @@ public class SpecificQuote extends Activity {
 		}
 		@Override
 		protected void onPostExecute(String quote) {
+			starOff.setVisibility(0);
 			textView.setText(quote);
 		}
 	}
@@ -448,8 +447,10 @@ public class SpecificQuote extends Activity {
 			
 			if(quote.equals("error")) 
 				textView.setText("No available quotes about " + queryText + "!");
-			else 
+			else {
+				starOff.setVisibility(0);
 				textView.setText(quote);
+			}
 		}
 	}
 	
