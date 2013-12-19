@@ -23,19 +23,20 @@
         android:id="@+id/starOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="138dp"
-        android:src="@android:drawable/star_big_off" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="#ffffff"
+        android:src="@android:drawable/star_big_off"
+         />
 
     <ImageButton
         android:id="@+id/starOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="138dp"
-        android:src="@android:drawable/btn_star_big_on"
-        android:visibility="gone" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="#ffffff"
+        android:visibility="gone"
+        android:src="@android:drawable/btn_star_big_on" />
 
 </RelativeLayout>
