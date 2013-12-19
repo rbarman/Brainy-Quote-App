@@ -52,7 +52,7 @@ public class RandomQuote extends Activity {
 		view.setOnTouchListener(viewSwiped);
 		starOn = (ImageButton)findViewById(R.id.starOn);
 		starOff = (ImageButton)findViewById(R.id.starOff);
-		
+		getCategories();
 		starOff.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -119,7 +119,6 @@ public class RandomQuote extends Activity {
 		@Override
 		protected String doInBackground(Void... params) {
 			
-			getCategories();
 			String topic = categories.get((int) (Math.random() * (categories.size() -1)));
 			Document doc;
 			try {
