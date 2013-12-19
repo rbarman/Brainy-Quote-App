@@ -185,11 +185,6 @@ public class MainActivity extends Activity {
         return true;
     }
     
-    public void startFavScreen(View view) {
-    	Intent favScreen = new Intent(this, FavQuotesScreen.class);
-    	startActivity(favScreen);
-    }
-    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch(item.getItemId()) {
