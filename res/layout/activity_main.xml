@@ -57,7 +57,7 @@
         android:layout_marginTop="16dp"
         android:background="#516fd2"
         android:onClick="startFavScreen"
-        android:text="Favourites"
+        android:text="Favorites"
         android:textColor="#ffffff"
         android:textSize="21sp" />
 
