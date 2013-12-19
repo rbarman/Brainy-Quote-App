@@ -143,7 +143,7 @@ public class MainActivity extends Activity {
         searchView.setQueryHint("Search Brainy Quote");
         searchButton = (Button) findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
-			
+		
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
