@@ -10,7 +10,7 @@ import android.os.AsyncTask;
 //Houses common methods used by other activities for
 //background work.
 public class Tools {
-
+	
 	//checks if a given quote exists
 	protected static class CheckQuoteTask extends AsyncTask<String, Void, Boolean> {
 
@@ -42,28 +42,10 @@ public class Tools {
 		}
 	}
 	
-	//deletes all favorited quotes
-	protected static class DeleteFavsTask extends AsyncTask<String, Void, Void> {
-
-		@Override
-		protected Void doInBackground(String... params) {
-			//get directory of fav files and list the interior files ending with ".txt"
-			File dir = new File(params[0]);
-			File[] dirFiles = dir.listFiles(new FilenameFilter() {
-			    public boolean accept(File dir, String name) {
-			        return name.endsWith(".txt");
-			    }
-			});
-			
-			for (File item : dirFiles) {
-				//delete each quote file
-				item.delete();
-			}
-			return null;
-		}
-	}
-	
-	// Writes the quote currently on screen to a file
+	// Writes the quote currently on screen to a file.
+	//Takes a String array of length 2. Index 0 stores text of textview
+	//which contains quote. Next index stores a location of where to write the file.
+	//In this case, its the app's installation directory.
 	protected static class WriteFavQuoteTask extends AsyncTask<String, Void, Void> {
 
 		@Override
@@ -91,5 +73,45 @@ public class Tools {
 			return null;
 		}
 
+	}
+	
+	//deletes all favorited quotes
+	protected static class DeleteAllFavsTask extends AsyncTask<String, Void, Void> {
+
+		@Override
+		protected Void doInBackground(String... params) {
+			//get directory of fav files and list the interior files ending with ".txt"
+			File dir = new File(params[0]);
+			File[] dirFiles = dir.listFiles(new FilenameFilter() {
+			    public boolean accept(File dir, String name) {
+			        return name.endsWith(".txt");
+			    }
+			});
+			
+			for (File item : dirFiles) {
+				//delete each quote file
+				item.delete();
+			}
+			return null;
+		}
+	}
+	
+	protected static class DeleteFavTask extends AsyncTask<String, Void, Void> {
+
+		@Override
+		protected Void doInBackground(String... quoteAndDir) {
+			//create a test quote file to compare with other files in dir
+			String filePath;
+			if (quoteAndDir[0].length() < 33) {
+				filePath = quoteAndDir[1] + "/" + quoteAndDir[0] + ".txt";
+			} else {
+				filePath = quoteAndDir[1] + "/" + quoteAndDir[0].substring(0, 33) + ".txt";
+			}
+			
+			File file = new File(filePath);
+			file.delete();
+			
+			return null;
+		}
 	}
 }
