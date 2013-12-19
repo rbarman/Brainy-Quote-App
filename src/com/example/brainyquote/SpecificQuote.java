@@ -526,13 +526,13 @@ public class SpecificQuote extends Activity {
 		
 				//File will be named using part of or all quote.
 				//If quote is longer than 32 characters, then take a substring
-				//up to 32 characters, and append 3 dots. Else, fileName = quote
-				//This also prevents duplicate favourites by simply overwriting them.
+				//up to 32 characters. Else, fileName = quote
+				//This also prevents duplicate favorites by simply overwriting them.
 				String fileName;
 				if (quoteAndDir[1].length() < 33) {
 					fileName = quoteAndDir[1];
 				} else {
-					fileName = quoteAndDir[0].substring(0, 33) + "...";
+					fileName = quoteAndDir[0].substring(0, 33);
 				}
 				//Create file name and write out contents
 				try {
