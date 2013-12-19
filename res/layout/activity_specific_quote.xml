@@ -37,5 +37,24 @@
         android:textSize="21sp"
         android:text="Fav!"
         android:onClick="startWriteFavQuoteTask" />
+    
+     <ImageButton
+        android:id="@+id/starOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="138dp"
+        android:src="@android:drawable/star_big_off" />
+
+    <ImageButton
+        android:id="@+id/starOn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="138dp"
+        android:src="@android:drawable/btn_star_big_on"
+        android:visibility="gone" />
 
 </RelativeLayout>

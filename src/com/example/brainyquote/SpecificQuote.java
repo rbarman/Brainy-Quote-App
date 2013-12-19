@@ -23,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -47,6 +48,8 @@ public class SpecificQuote extends Activity {
 	Document doc = null;
 	Elements author = null;
 	Elements quote = null;
+	ImageButton starOn;
+	ImageButton starOff;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,18 @@ public class SpecificQuote extends Activity {
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView)findViewById(R.id.textView);
 		
+		starOn = (ImageButton)findViewById(R.id.starOn);
+		starOff = (ImageButton)findViewById(R.id.starOff);
+		
+		starOff.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				starOn.setVisibility(0);
+				starOff.setVisibility(4);
+				startWriteFavQuoteTask(view);
+			}
+		});
 		//execute the AsyncTask
 		//InitialSearch will determine if we have an author or tag query.
 		//then from InitialSearch we will start other respective AsyncTasks.
@@ -292,11 +307,11 @@ public class SpecificQuote extends Activity {
 		                	switch(item.getItemId()) {
 		                	case R.id.aboutAuthor:
 		                		//new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
-		                		//TODO: temporary fix.
+		                		//TODO: temporary fix.		             
 		                		new AboutAuthorSearch().execute(generateTagUrl(queryText));
 		                		break;
-		                	case R.id.byAuthor:
-		                		new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
+		                	case R.id.byAuthor:		                		
+		                		new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));		                		
 		                		break;	                	
 		                	}
 		                	return true;
