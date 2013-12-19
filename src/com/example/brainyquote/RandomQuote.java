@@ -5,11 +5,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.example.brainyquote.Tools.CheckQuoteTask;
 import com.example.brainyquote.Tools.WriteFavQuoteTask;
 
 import android.os.AsyncTask;
@@ -36,10 +38,13 @@ public class RandomQuote extends Activity {
 	ArrayList<String> categories = new ArrayList<String>();
 	ArrayList<String> randomQuotes = new ArrayList<String>();
 	View view;
+	int toggle2 = 0;
 	int currentIndex = -1;
 	int quotePlaceHolder = -1;
-	ImageButton starOn;
-	ImageButton starOff;
+	ImageButton star;
+	//create objects to access helper methods in Tools class
+	WriteFavQuoteTask quoteTaskObject = new WriteFavQuoteTask();
+	CheckQuoteTask checkQuoteObject = new CheckQuoteTask();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,35 +53,64 @@ public class RandomQuote extends Activity {
 		setContentView(R.layout.activity_random_quote);
 		// Show the Up button in the action bar.
 		setupActionBar();		
-		textView = (TextView)findViewById(R.id.textView);
 		
+		textView = (TextView)findViewById(R.id.textView);
 		view = (View)findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
-		starOn = (ImageButton)findViewById(R.id.starOn);
-		starOff = (ImageButton)findViewById(R.id.starOff);
+		star = (ImageButton)findViewById(R.id.star);
 		getCategories();
-		starOff.setOnClickListener(new View.OnClickListener() {
-			
+		
+		//Star is initially off. Pressing it will toggle it 
+		//on or off (0 is off, 1 is on)
+		star.setOnClickListener(new View.OnClickListener() {
+			int toggle = 0;
 			@Override
 			public void onClick(View v) {
-				starOn.setVisibility(0);
-				starOff.setVisibility(4);
-				startWriteFavQuoteTask(view);
+				if (toggle == 0) {
+					star.setImageResource(R.drawable.btn_star_big_on);
+					startWriteFavQuoteTask(view);
+					toggle = 1;
+					toggle2 = toggle;
+				} else if (toggle == 1){
+					star.setImageResource(R.drawable.btn_star_big_off);
+					toggle = 0;
+					toggle2 = toggle;
+				}
 			}
 		});
 
 		//execute the async task
 		new GetQuote().execute();		
 	}
+	
+	public void updateFavButton() {
+		String[] quoteAndDir = {textView.getText().toString(), getFilesDir().getAbsolutePath().toString()};
+		try {
+			if (checkQuoteObject.execute(quoteAndDir).get()) {
+				quoteTaskObject.execute(quoteAndDir);
+			} else {
+				
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 		
-		//on every swipe to the left we will get the next random quote. 
+		//on every swipe to the right we will get the next random quote. 
 		public void onSwipeRight() {
 			
 			if(currentIndex > 0) {
 				currentIndex--;
 				Toast.makeText(RandomQuote.this, "Swipe to Right : Previous Random Quote Coming!", Toast.LENGTH_SHORT).show();
 				textView.setText(randomQuotes.get(currentIndex));
+				
 			} else {
 				Toast.makeText(RandomQuote.this, "Swipe to Right : No more previous Quotes :(", Toast.LENGTH_SHORT).show();
 			}
@@ -219,8 +253,7 @@ public class RandomQuote extends Activity {
 		//In this case, its the app's installation directory.
 		String[] quoteAndDir = {quoteText, getFilesDir().getAbsolutePath().toString()};
 		
-		WriteFavQuoteTask quoteTask = new WriteFavQuoteTask();
-		quoteTask.execute(quoteAndDir);
+		quoteTaskObject.execute(quoteAndDir);
 	}
 	
 	@Override

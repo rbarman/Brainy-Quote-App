@@ -10,6 +10,37 @@ import android.os.AsyncTask;
 //Houses common methods used by other activities for
 //background work.
 public class Tools {
+
+	//checks if a given quote exists
+	protected static class CheckQuoteTask extends AsyncTask<String, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(String... quoteAndDir) {
+			//create a test quote file to compare with other files in dir
+			String filePath;
+			if (quoteAndDir[0].length() < 33) {
+				filePath = quoteAndDir[1] + "/" + quoteAndDir[0] + ".txt";
+			} else {
+				filePath = quoteAndDir[1] + "/" + quoteAndDir[0].substring(0, 33) + ".txt";
+			}
+			
+			//get directory of fav files and list the interior files ending with ".txt"
+			File dir = new File(quoteAndDir[1]);
+			File[] dirFiles = dir.listFiles(new FilenameFilter() {
+			    public boolean accept(File dir, String name) {
+			        return name.endsWith(".txt");
+			    }
+			});
+			
+			//
+			for (File item : dirFiles) {
+				if (filePath.equals(item.getAbsolutePath().toString())) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 	
 	//deletes all favorited quotes
 	protected static class DeleteFavsTask extends AsyncTask<String, Void, Void> {
@@ -42,15 +73,15 @@ public class Tools {
 			// up to 32 characters. Else, fileName = quote
 			// This also prevents duplicate favorites by simply overwriting
 			// them.
-			String fileName;
-			if (quoteAndDir[1].length() < 33) {
-				fileName = quoteAndDir[1];
+			String filePath;
+			if (quoteAndDir[0].length() < 33) {
+				filePath = quoteAndDir[1] + "/" + quoteAndDir[0] + ".txt";
 			} else {
-				fileName = quoteAndDir[0].substring(0, 33);
+				filePath = quoteAndDir[1] + "/" + quoteAndDir[0].substring(0, 33) + ".txt";
 			}
 			// Create file name and write out contents
 			try {
-				PrintWriter out = new PrintWriter(quoteAndDir[1] + "/" + fileName + ".txt");
+				PrintWriter out = new PrintWriter(filePath);
 				out.print(quoteAndDir[0]);
 				out.close();
 
