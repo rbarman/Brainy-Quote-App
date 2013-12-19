@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,8 @@ public class RandomQuote extends Activity {
 	View view;
 	int currentIndex = -1;
 	int quotePlaceHolder = -1;
+	ImageButton starOn;
+	ImageButton starOff;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,18 @@ public class RandomQuote extends Activity {
 		
 		view = (View)findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
+		starOn = (ImageButton)findViewById(R.id.starOn);
+		starOff = (ImageButton)findViewById(R.id.starOff);
+		
+		starOff.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				starOn.setVisibility(0);
+				starOff.setVisibility(4);
+				startWriteFavQuoteTask(view);
+			}
+		});
 
 		//execute the async task
 		new GetQuote().execute();		
