@@ -3,6 +3,7 @@ package com.example.brainyquote;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import android.os.AsyncTask;
 
@@ -10,13 +11,8 @@ import android.os.AsyncTask;
 //Must be instantiated to function properly (can't use static methods).
 public class Tools {
 	
-	public void startDeleteFavsTask(String dir) {
-		DeleteFavsTask deleteFavs = new DeleteFavsTask();
-		deleteFavs.execute(dir);
-	}
-	
 	//deletes all favorited quotes
-	private class DeleteFavsTask extends AsyncTask<String, Void, Void> {
+	public static class DeleteFavsTask extends AsyncTask<String, Void, Void> {
 
 		@Override
 		protected Void doInBackground(String... params) {
@@ -36,6 +32,33 @@ public class Tools {
 		}
 	}
 	
-	//will add IO write methods and remove the other
-	//write methods from Random and Specific quote activities
+	// Writes the quote currently on screen to a file
+	public static class WriteFavQuoteTask extends AsyncTask<String, Void, Void> {
+
+		@Override
+		protected Void doInBackground(String... quoteAndDir) {
+			// File will be named using part of or all quote.
+			// If quote is longer than 32 characters, then take a substring
+			// up to 32 characters. Else, fileName = quote
+			// This also prevents duplicate favorites by simply overwriting
+			// them.
+			String fileName;
+			if (quoteAndDir[1].length() < 33) {
+				fileName = quoteAndDir[1];
+			} else {
+				fileName = quoteAndDir[0].substring(0, 33);
+			}
+			// Create file name and write out contents
+			try {
+				PrintWriter out = new PrintWriter(quoteAndDir[1] + "/" + fileName + ".txt");
+				out.print(quoteAndDir[0]);
+				out.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+	}
 }

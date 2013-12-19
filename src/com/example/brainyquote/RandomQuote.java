@@ -10,6 +10,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.example.brainyquote.Tools.WriteFavQuoteTask;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -211,44 +213,14 @@ public class RandomQuote extends Activity {
 	public void startWriteFavQuoteTask(View view) {
 		TextView text = (TextView) findViewById(R.id.textView);
 		String quoteText = text.getText() + "";
-		
+			
 		//Create a String array of length 2. Index 0 stores text of textview
-		//which contains quote. Next index stores a locatino of where to write the file.
+		//which contains quote. Next index stores a location of where to write the file.
 		//In this case, its the app's installation directory.
 		String[] quoteAndDir = {quoteText, getFilesDir().getAbsolutePath().toString()};
 		
 		WriteFavQuoteTask quoteTask = new WriteFavQuoteTask();
 		quoteTask.execute(quoteAndDir);
-	}
-	
-	//Writes the quote currently on screen to a file
-	public class WriteFavQuoteTask extends AsyncTask<String, Void, Void> {
-
-		@Override
-		protected Void doInBackground(String... quoteAndDir) {
-	
-			//File will be named using part of or all quote.
-			//If quote is longer than 32 characters, then take a substring
-			//up to 32 characters. Else, fileName = quote
-			//This also prevents duplicate favorites by simply overwriting them.
-			String fileName;
-			if (quoteAndDir[1].length() < 33) {
-				fileName = quoteAndDir[1];
-			} else {
-				fileName = quoteAndDir[0].substring(0, 33);
-			}
-			//Create file name and write out contents
-			try {
-				PrintWriter out = new PrintWriter(quoteAndDir[1] + "/" + fileName + ".txt");
-				out.print(quoteAndDir[0]);
-				out.close();
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-		
 	}
 	
 	@Override
