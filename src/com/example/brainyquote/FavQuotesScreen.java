@@ -7,6 +7,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import com.example.brainyquote.Tools.DeleteAllFavsTask;
 
@@ -28,10 +29,10 @@ import android.support.v4.app.NavUtils;
 
 public class FavQuotesScreen extends Activity {
 	
-	private String quotesDir = getFilesDir().getAbsolutePath().toString();
-	private ArrayList<String> quotes = new ArrayList<String>();
-	private ArrayAdapter<String> adapter;
-	private ListView list;
+	String quotesDir = "";
+	ArrayList<String> quotes = new ArrayList<String>();
+	ArrayAdapter<String> adapter;
+	ListView list;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public class FavQuotesScreen extends Activity {
 		setContentView(R.layout.activity_fav_quotes_screen);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		quotesDir = getFilesDir().getAbsolutePath().toString();
 		
 		new GetFavQuotesTask().execute();
 	}
@@ -78,6 +80,7 @@ public class FavQuotesScreen extends Activity {
 						quotes.add(fullQuote.toString());
 						textReader.close();
 					}
+					Collections.reverse(quotes);
 					return quotes;
 				}
 			} catch (IOException e){
@@ -176,7 +179,6 @@ public class FavQuotesScreen extends Activity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// This ID represents the Home or Up button. In the case of this
