@@ -4,11 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import com.example.brainyquote.Tools.CheckQuoteTask;
+import com.example.brainyquote.Tools.DeleteFavTask;
 import com.example.brainyquote.Tools.WriteFavQuoteTask;
 
 
@@ -35,10 +38,12 @@ public class SpecificQuote extends Activity {
 	TextView textView;
 	String queryText;
 	int index = 0;
+	String appDir;
 	String searchType = null;
 		//possible types are aboutAuthor, byAuthor, tag
 	int pageNum = -1;
 	int quoteNum = 0; //number of quotes
+	int toggle = 0;
 	View view;
 	boolean foundInitials = false;
 	ArrayList<String> topics = new ArrayList<String>();
@@ -48,8 +53,7 @@ public class SpecificQuote extends Activity {
 	Document doc = null;
 	Elements author = null;
 	Elements quote = null;
-	ImageButton starOn;
-	ImageButton starOff;
+	ImageButton star;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,16 +67,26 @@ public class SpecificQuote extends Activity {
 		view = (View)findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView)findViewById(R.id.textView);
-		starOn = (ImageButton)findViewById(R.id.starOn);
-		starOff = (ImageButton)findViewById(R.id.starOff);
+		star = (ImageButton)findViewById(R.id.star);
+		appDir = getFilesDir().getAbsolutePath().toString();
 
-		starOff.setOnClickListener(new View.OnClickListener() {
+		//Star is initially off. Pressing it will toggle it 
+		//on or off (0 is off, 1 is on)
+		star.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				starOn.setVisibility(0);
-				starOff.setVisibility(4);
-				startWriteFavQuoteTask(view);
+				if (toggle == 0) {
+					String[] quoteAndDir = {textView.getText().toString(), appDir};
+					star.setImageResource(R.drawable.btn_star_big_on);					
+					new WriteFavQuoteTask().execute(quoteAndDir);
+					toggle = 1;
+				} else if (toggle == 1){
+					String[] quoteAndDir = {textView.getText().toString(), appDir};
+					star.setImageResource(R.drawable.btn_star_big_off);
+					new DeleteFavTask().execute(quoteAndDir);
+					toggle = 0;
+				}
 			}
 		});
 		//execute the AsyncTask
@@ -80,6 +94,26 @@ public class SpecificQuote extends Activity {
 		//then from InitialSearch we will start other respective AsyncTasks.
 		getTopics();
 		new InitialSearch().execute((generateAuthorUrl(queryText)));	
+	}
+	
+	public void updateFavButton() {
+		
+		String[] quoteAndDir = {textView.getText().toString(), appDir};
+		try {
+			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
+				star.setImageResource(R.drawable.btn_star_big_on);
+				toggle = 1;
+			} else {
+				star.setImageResource(R.drawable.btn_star_big_off);
+				toggle = 0;
+			}
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
@@ -401,8 +435,9 @@ public class SpecificQuote extends Activity {
 		}
 		@Override
 		protected void onPostExecute(String quote) {
-				starOff.setVisibility(0);
+				star.setVisibility(0);
 				textView.setText(quote);
+				updateFavButton();
 		}
 	}
 	
@@ -422,8 +457,9 @@ public class SpecificQuote extends Activity {
 		}
 		@Override
 		protected void onPostExecute(String quote) {
-			starOff.setVisibility(0);
+			star.setVisibility(0);
 			textView.setText(quote);
+			updateFavButton();
 		}
 	}
 
@@ -445,11 +481,13 @@ public class SpecificQuote extends Activity {
 		@Override
 		protected void onPostExecute(String quote){
 			
-			if(quote.equals("error")) 
+			if(quote.equals("error")) {
 				textView.setText("No available quotes about " + queryText + "!");
-			else {
-				starOff.setVisibility(0);
+				updateFavButton();
+			} else {
+				star.setVisibility(0);
 				textView.setText(quote);
+				updateFavButton();
 			}
 		}
 	}
@@ -518,19 +556,6 @@ public class SpecificQuote extends Activity {
     	searchView.setOnQueryTextListener(queryTextListener);
         
         return true;
-	}
-
-	public void startWriteFavQuoteTask(View view) {
-		TextView text = (TextView) findViewById(R.id.textView);
-		String quoteText = text.getText() + "";
-			
-		//Create a String array of length 2. Index 0 stores text of textview
-		//which contains quote. Next index stores a location of where to write the file.
-		//In this case, its the app's installation directory.
-		String[] quoteAndDir = {quoteText, getFilesDir().getAbsolutePath().toString()};
-		
-		WriteFavQuoteTask quoteTask = new WriteFavQuoteTask();
-		quoteTask.execute(quoteAndDir);
 	}
 	
 	@Override

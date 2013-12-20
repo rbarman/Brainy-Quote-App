@@ -27,17 +27,7 @@
     </LinearLayout>
 
     <ImageButton
-        android:id="@+id/starOn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="#ffffff"
-        android:visibility="gone"
-        android:src="@android:drawable/btn_star_big_on" />
-
-    <ImageButton
-        android:id="@+id/starOff"
+        android:id="@+id/star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
