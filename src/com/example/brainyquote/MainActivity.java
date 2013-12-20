@@ -29,7 +29,8 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupActionBar();
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
         
         searchButton = (Button) findViewById(R.id.searchButton);
         randomButton = (Button) findViewById(R.id.randomButton);
