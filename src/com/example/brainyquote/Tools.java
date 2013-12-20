@@ -7,8 +7,13 @@ import java.io.PrintWriter;
 
 import android.os.AsyncTask;
 
-//Houses common methods used by other activities for
-//background work.
+/**Houses AsyncTask classes with common methods
+ *used by other activities for background work.
+ *Most background methods take an array of 2 strings.
+ *Index 0 stores text of textview which contains quote.
+ *Next index stores a location of where to write the file.
+ *In this case, its the app's installation directory.
+ */
 public class Tools {
 	
 	//checks if a given quote exists
@@ -42,10 +47,7 @@ public class Tools {
 		}
 	}
 	
-	// Writes the quote currently on screen to a file.
-	//Takes a String array of length 2. Index 0 stores text of textview
-	//which contains quote. Next index stores a location of where to write the file.
-	//In this case, its the app's installation directory.
+	//Writes the quote currently on screen to a file.
 	protected static class WriteFavQuoteTask extends AsyncTask<String, Void, Void> {
 
 		@Override
@@ -96,6 +98,8 @@ public class Tools {
 		}
 	}
 	
+	//takes a single string of the directory to delete all
+	//favorite files
 	protected static class DeleteFavTask extends AsyncTask<String, Void, Void> {
 
 		@Override
