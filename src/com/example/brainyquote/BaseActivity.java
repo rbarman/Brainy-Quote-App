@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.NavUtils;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -62,6 +64,27 @@ public abstract class BaseActivity extends Activity {
     	searchView.setOnQueryTextListener(queryTextListener);
     	
         return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown.
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		case R.id.launch_fav_activity:
+    		Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+			startActivity(intent);
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	public void setupActionBar() {
+
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 }

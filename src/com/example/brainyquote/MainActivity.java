@@ -18,7 +18,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 import java.io.File;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 
 	Button searchButton;
 	Button randomButton;
@@ -29,12 +29,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //creates an action bar. 
-        ActionBar actionBar = getActionBar();
-        
-        //sets the home button. 
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        setupActionBar();
         
         searchButton = (Button) findViewById(R.id.searchButton);
         randomButton = (Button) findViewById(R.id.randomButton);

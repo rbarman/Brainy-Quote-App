@@ -112,14 +112,6 @@ public class FavQuotesScreen extends BaseActivity {
 			list.setAdapter(adapter);
 		}
 	}
-	
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
-	private void setupActionBar() {
-
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-	}
 
 	//deletes all favorites stored in quotesDir
 	//and refreshes listView

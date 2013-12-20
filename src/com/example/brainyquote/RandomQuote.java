@@ -189,29 +189,4 @@ public class RandomQuote extends BaseActivity {
 			updateFavButton();
 		}
 	}
-
-	/**
-	 * Set up the {@link android.app.ActionBar}.
-	 */
-	private void setupActionBar() {
-		
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown.
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		case R.id.launch_fav_activity:
-    		Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-			startActivity(intent);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 }
