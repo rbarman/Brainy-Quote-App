@@ -72,6 +72,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brainyquote.MainActivity" />
         </activity>
+        <activity
+            android:name="com.example.brainyquote.BaseActivity"
+            android:label="@string/title_activity_base" >
+        </activity>
     </application>
 
 </manifest>
