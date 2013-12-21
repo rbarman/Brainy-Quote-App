@@ -55,6 +55,8 @@ public class SpecificQuote extends BaseActivity {
 	Elements quote = null;
 	ImageButton star;
 	String url ="";
+	String [] queryTextSplit;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class SpecificQuote extends BaseActivity {
 		
 		Intent intent = getIntent();
 		queryText = intent.getExtras().getString("queryText");
+		queryTextSplit = queryText.split(" ");
 		view = (View)findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView)findViewById(R.id.textView);
@@ -190,20 +193,19 @@ public class SpecificQuote extends BaseActivity {
 	
 	public String generateAuthorWithInitialsUrl(String queryText) {
 
-		String[] authorName = queryText.split(" ");
 		if(first == true)
 			pageNum--;
 		else{}
 		first = false;
 		
-		if(authorName[0].length() == 2)
+		if(queryTextSplit[0].length() == 2)
 			url = "http://www.brainyquote.com/quotes/authors/" + 
-					authorName[0].charAt(0) + "/" + authorName[0].charAt(0) + "_" + authorName[0].charAt(1);
+					queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0].charAt(0) + "_" + queryTextSplit[0].charAt(1);
 		else 
 			url = "http://www.brainyquote.com/quotes/authors/" + 
-					authorName[0].charAt(0) + "/" + authorName[0].charAt(0) + "_" + authorName[0].charAt(1) + "_" + authorName[0].charAt(2);
-		for(int i = 1; i < authorName.length; i++)
-			url = url + "_" + authorName[i];
+					queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0].charAt(0) + "_" + queryTextSplit[0].charAt(1) + "_" + queryTextSplit[0].charAt(2);
+		for(int i = 1; i < queryTextSplit.length; i++)
+			url = url + "_" + queryTextSplit[i];
 		if (index == quoteNum ) {
 			pageNum++;
 			index = 0;
@@ -221,10 +223,9 @@ public class SpecificQuote extends BaseActivity {
 	}
 	public String generateAuthorUrl(String queryText) {
 
-		String[] authorName = queryText.split(" ");
-		url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
-		for(int i = 1; i < authorName.length; i++)
-			url = url + "_" + authorName[i];
+		url = "http://www.brainyquote.com/quotes/authors/" + queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
+		for(int i = 1; i < queryTextSplit.length; i++)
+			url = url + "_" + queryTextSplit[i];
 		if (index == quoteNum ) {
 			pageNum++;
 			index = 0;
@@ -236,21 +237,20 @@ public class SpecificQuote extends BaseActivity {
 				url = url + ".html";
 		else 
 				url = url + "_" + pageNum +  ".html";
-		if (authorName[0].length() == 2 || authorName[0].length() == 3)
+		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3)
 			foundInitials = true;
 		return url;		
 	}
 	
 	public String generateTagUrl(String queryText) {
 		
-		String[] keywords = queryText.split(" ");
 		   if(first == true && foundTopic == true)
 			   pageNum--;
 		   else {}
 		   first = false;
 		   
 		   if (foundTopic == true) {
-		   	url = "http://www.brainyquote.com/quotes/topics/topic_" + keywords[0];
+		   	url = "http://www.brainyquote.com/quotes/topics/topic_" + queryTextSplit[0];
 		   	if (index == quoteNum) {
 				pageNum++;
 				index = 0;
@@ -265,9 +265,9 @@ public class SpecificQuote extends BaseActivity {
 		   }
 //ELSE STATEMENT=======================================
 		   else {
-		   	url = "http://www.brainyquote.com/quotes/keywords/" + keywords[0];
-			for(int i = 1; i < keywords.length; i++)
-				url = url + "_" + keywords[i];
+		   	url = "http://www.brainyquote.com/quotes/keywords/" + queryTextSplit[0];
+			for(int i = 1; i < queryTextSplit.length; i++)
+				url = url + "_" + queryTextSplit[i];
 			
 			if (index == quoteNum) {
 				pageNum++;
@@ -358,8 +358,7 @@ public class SpecificQuote extends BaseActivity {
 				//we can start a new AsyncTask that will run a keyword search on the searchQuery.
 	
 				new TagSearch().execute(generateTagUrl(queryText));
-				String[] tagText = queryText.split(" ");
-				checkIfTopic(tagText[0]);
+				checkIfTopic(queryTextSplit[0]);
 				
 			}
 			else if (message.equals("found initials")) {
