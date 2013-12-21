@@ -214,7 +214,7 @@ public class SpecificQuote extends BaseActivity {
 		else {
 		}
 		first = false;
-
+		
 		if (queryTextSplit[0].length() == 2)
 			url = "http://www.brainyquote.com/quotes/authors/"
 					+ queryTextSplit[0].charAt(0) + "/"
@@ -234,16 +234,19 @@ public class SpecificQuote extends BaseActivity {
 			nextPage = true;
 		} else {
 		}
-		if (pageNum == 1)
-			url = url + ".html";
-		else
-			url = url + "_" + pageNum + ".html";
+		addHTMLtoUrl(url);
 
 		// sample : CS LEWIS
 		// http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
 		return url;
 	}
 
+	public void addHTMLtoUrl(String url) {
+		if (pageNum == 1)
+			url = url + ".html";
+		else
+			url = url + "_" + pageNum + ".html";
+	}
 	public String generateAuthorUrl() {
 
 		url = "http://www.brainyquote.com/quotes/authors/"
@@ -257,10 +260,7 @@ public class SpecificQuote extends BaseActivity {
 		} else {
 		}
 
-		if (pageNum == 1)
-			url = url + ".html";
-		else
-			url = url + "_" + pageNum + ".html";
+		addHTMLtoUrl(url);
 		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3)
 			foundInitials = true;
 		return url;
@@ -284,10 +284,7 @@ public class SpecificQuote extends BaseActivity {
 			} else {
 			}
 
-			if (pageNum == 1 || pageNum == 0)
-				url = url + ".html";
-			else
-				url = url + pageNum + ".html";
+			addHTMLtoUrl(url);
 		}
 		// ELSE STATEMENT=======================================
 		else {
@@ -303,10 +300,7 @@ public class SpecificQuote extends BaseActivity {
 			} else {
 			}
 
-			if (pageNum == 1 || pageNum == 0)
-				url = url + ".html";
-			else
-				url = url + "_" + pageNum + ".html";
+			addHTMLtoUrl(url);
 		}
 
 		return url;
