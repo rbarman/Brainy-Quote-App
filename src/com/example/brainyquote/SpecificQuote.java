@@ -271,7 +271,7 @@ public class SpecificQuote extends BaseActivity {
 	}
 
 	public String generateTagUrl() {
-		checkIfTopic(queryTextSplit[0]);
+
 		if (first == true && foundTopic == true)
 			pageNum--;
 		else {}
@@ -371,7 +371,9 @@ public class SpecificQuote extends BaseActivity {
 			} catch (IOException ioe) {
 				// if queryText gets us an invalid author page with author
 				// search, we are put here.
+				//queryText can be a tag or an author with initials in the first name. 
 				first = true;
+				checkIfTopic(queryTextSplit[0]);
 				if (foundInitials == true)
 					return "found initials";
 				return "error";
@@ -388,7 +390,6 @@ public class SpecificQuote extends BaseActivity {
 				// / topic.
 				// we can start a new AsyncTask that will run a keyword search
 				// on the searchQuery.
-//				checkIfTopic(queryTextSplit[0]);
 				new TagSearch().execute(generateTagUrl());
 				
 
