@@ -242,7 +242,11 @@ public class SpecificQuote extends BaseActivity {
 		if (pageNum == 1)
 			url = url + ".html";
 		else
-			url = url + "_" + pageNum + ".html";
+			if(foundTopic == true)
+				//topic urls are slightly different for pages > 1
+				url = url + pageNum + ".html";
+			else
+				url = url + "_" + pageNum + ".html";
 		return url;
 	}
 	public String generateAuthorUrl() {
@@ -267,35 +271,32 @@ public class SpecificQuote extends BaseActivity {
 	}
 
 	public String generateTagUrl() {
-
+		checkIfTopic(queryTextSplit[0]);
 		if (first == true && foundTopic == true)
 			pageNum--;
 		else {}
 		first = false;
-
+		
+		if(index == quoteNum) {
+		pageNum++;
+		index = 0;
+		nextPage = true;
 		if (foundTopic == true) {
+			//tag is a topic
 			url = "http://www.brainyquote.com/quotes/topics/topic_"
 					+ queryTextSplit[0];
-			if (index == quoteNum) {
-				pageNum++;
-				index = 0;
-				nextPage = true;
-			} else {}
+			return addHTMLtoUrl(url);
 		}
-		// ELSE STATEMENT=======================================
 		else {
+			//tag is a keyword
 			url = "http://www.brainyquote.com/quotes/keywords/"
-					+ queryTextSplit[0];
+			+ queryTextSplit[0];
 			for (int i = 1; i < queryTextSplit.length; i++)
 				url = url + "_" + queryTextSplit[i];
-
-			if (index == quoteNum) {
-				pageNum++;
-				index = 0;
-				nextPage = true;
-			} else {}
+			return addHTMLtoUrl(url);
 		}
-		addHTMLtoUrl(url);
+	}
+	else
 		return url;
 	}
 
@@ -387,9 +388,9 @@ public class SpecificQuote extends BaseActivity {
 				// / topic.
 				// we can start a new AsyncTask that will run a keyword search
 				// on the searchQuery.
-
+//				checkIfTopic(queryTextSplit[0]);
 				new TagSearch().execute(generateTagUrl());
-				checkIfTopic(queryTextSplit[0]);
+				
 
 			} else if (message.equals("found initials")) {
 				new SearchWithInitials()
