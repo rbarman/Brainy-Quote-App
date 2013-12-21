@@ -132,4 +132,18 @@ public class FavQuotesScreen extends BaseActivity {
 		adapter.notifyDataSetChanged();
 		noQuoteTextView.setVisibility(View.VISIBLE);
 	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown.
+			NavUtils.navigateUpFromSameTask(this);
+			return true;
+		case R.id.launch_fav_activity:
+			return true;
+		}
+		
+		return super.onOptionsItemSelected(item);
+	}
 }
