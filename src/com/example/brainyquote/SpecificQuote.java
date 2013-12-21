@@ -54,6 +54,7 @@ public class SpecificQuote extends BaseActivity {
 	Elements author = null;
 	Elements quote = null;
 	ImageButton star;
+	String url ="";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -188,7 +189,7 @@ public class SpecificQuote extends BaseActivity {
 	}
 	
 	public String generateAuthorWithInitialsUrl(String queryText) {
-		String url ="";
+
 		String[] authorName = queryText.split(" ");
 		if(first == true)
 			pageNum--;
@@ -219,7 +220,7 @@ public class SpecificQuote extends BaseActivity {
 		return url;
 	}
 	public String generateAuthorUrl(String queryText) {
-		String url ="";
+
 		String[] authorName = queryText.split(" ");
 		url = "http://www.brainyquote.com/quotes/authors/" + authorName[0].charAt(0) + "/" + authorName[0];
 		for(int i = 1; i < authorName.length; i++)
@@ -243,7 +244,6 @@ public class SpecificQuote extends BaseActivity {
 	public String generateTagUrl(String queryText) {
 		
 		String[] keywords = queryText.split(" ");
-		String url = "";
 		   if(first == true && foundTopic == true)
 			   pageNum--;
 		   else {}
@@ -290,7 +290,7 @@ public class SpecificQuote extends BaseActivity {
 		@Override
 		protected String doInBackground(String... params) {
 			try {
-				String url = params[0];
+				url = params[0];
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				return "";
 			} catch(IOException ioe) {
@@ -336,7 +336,7 @@ public class SpecificQuote extends BaseActivity {
 			
 			try {
 				//first run an author search...
-				String url = params[0];
+				url = params[0];
 				Document doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();
 				return "";
 				
@@ -402,7 +402,7 @@ public class SpecificQuote extends BaseActivity {
 		protected String doInBackground(String... params) {
 			
 				searchType = "tag";
-				String url = params[0];							
+				url = params[0];							
 				getDocumentAndModifyElements(url);
 				if(doc == null)
 					return "ERROR!  INVALID SEARCH" +  "\n\n URL : " + url;
@@ -424,7 +424,7 @@ public class SpecificQuote extends BaseActivity {
 		protected String doInBackground(String... params) {
 			
 				searchType = "byAuthor";
-				String url = params[0];
+				url = params[0];
 				getDocumentAndModifyElements(url);
 				if(doc == null)
 					return "ERROR!  INVALID SEARCH" +  "\n\n URL : " + url;
@@ -446,7 +446,7 @@ public class SpecificQuote extends BaseActivity {
 		protected String doInBackground(String... params) {
 				
 				searchType = "aboutAuthor";
-				String url = params[0];
+				url = params[0];
 				getDocumentAndModifyElements(url);
 				if(doc == null)
 					return "There are no quotes about " + queryText + ". Sorry!" +  "\n\n URL : " + url;
