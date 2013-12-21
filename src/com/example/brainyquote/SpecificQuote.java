@@ -21,11 +21,14 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -455,6 +458,8 @@ public class SpecificQuote extends BaseActivity {
 			star.setVisibility(0);
 			textView.setText(quote);
 			updateFavButton();
+			if((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
+				showCustomToast(index);
 		}
 	}
 
@@ -480,6 +485,9 @@ public class SpecificQuote extends BaseActivity {
 			star.setVisibility(0);
 			textView.setText(quote);
 			updateFavButton();
+			
+			if((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
+				showCustomToast(index);
 		}
 	}
 
@@ -511,6 +519,8 @@ public class SpecificQuote extends BaseActivity {
 				star.setVisibility(0);
 				textView.setText(quote);
 				updateFavButton();
+				if((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
+					showCustomToast(index);
 			}
 		}
 	}
