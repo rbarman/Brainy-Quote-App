@@ -215,6 +215,16 @@ public class RandomQuote extends BaseActivity {
 			TextView textView = (TextView) findViewById(R.id.textView);
 			textView.setText(title);
 			updateFavButton();
+			if(quotePlaceHolder == 0) {
+				Toast toast = Toast.makeText(getApplicationContext(), "message", Toast.LENGTH_LONG);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
+			}
+			else if (quotePlaceHolder == 1) {
+				Toast toast = Toast.makeText(getApplicationContext(), "message", Toast.LENGTH_LONG);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
+			}
 		}
 	}
 }
