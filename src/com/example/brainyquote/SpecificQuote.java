@@ -98,7 +98,7 @@ public class SpecificQuote extends BaseActivity {
 		// InitialSearch will determine if we have an author or tag query.
 		// then from InitialSearch we will start other respective AsyncTasks.
 		getTopics();
-		new InitialSearch().execute((generateAuthorUrl(queryText)));
+		new InitialSearch().execute((generateAuthorUrl()));
 	}
 
 	public void updateFavButton() {
@@ -121,17 +121,17 @@ public class SpecificQuote extends BaseActivity {
 
 	public void startTaskOnSwipe() {
 		if (searchType.equals("tag"))
-			new TagSearch().execute(generateTagUrl(queryText));
+			new TagSearch().execute(generateTagUrl());
 		else if (searchType.equals("byAuthor") && foundInitials == false)
-			new ByAuthorSearch().execute(generateAuthorUrl(queryText));
+			new ByAuthorSearch().execute(generateAuthorUrl());
 		else if (searchType.equals("byAuthor") && foundInitials == true)
 			new ByAuthorSearch()
-					.execute(generateAuthorWithInitialsUrl(queryText));
+					.execute(generateAuthorWithInitialsUrl());
 		else if (searchType.equals("aboutAuthor") && foundInitials == true)
 			new AboutAuthorSearch()
-					.execute(generateAuthorWithInitialsUrl(queryText));
+					.execute(generateAuthorWithInitialsUrl());
 		else
-			new AboutAuthorSearch().execute(generateTagUrl(queryText));
+			new AboutAuthorSearch().execute(generateTagUrl());
 	}
 
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
@@ -207,7 +207,7 @@ public class SpecificQuote extends BaseActivity {
 		nextPage = false;
 	}
 
-	public String generateAuthorWithInitialsUrl(String queryText) {
+	public String generateAuthorWithInitialsUrl() {
 
 		if (first == true)
 			pageNum--;
@@ -244,7 +244,7 @@ public class SpecificQuote extends BaseActivity {
 		return url;
 	}
 
-	public String generateAuthorUrl(String queryText) {
+	public String generateAuthorUrl() {
 
 		url = "http://www.brainyquote.com/quotes/authors/"
 				+ queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
@@ -266,7 +266,7 @@ public class SpecificQuote extends BaseActivity {
 		return url;
 	}
 
-	public String generateTagUrl(String queryText) {
+	public String generateTagUrl() {
 
 		if (first == true && foundTopic == true)
 			pageNum--;
@@ -332,7 +332,7 @@ public class SpecificQuote extends BaseActivity {
 		@Override
 		protected void onPostExecute(String message) {
 			if (message.equals("error"))
-				new TagSearch().execute(generateTagUrl(queryText));
+				new TagSearch().execute(generateTagUrl());
 			else {
 
 				textView.setText("You are searching for " + message + " quotes");
@@ -350,11 +350,11 @@ public class SpecificQuote extends BaseActivity {
 							// AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 							// TODO: temporary fix.
 							new AboutAuthorSearch()
-									.execute(generateTagUrl(queryText));
+									.execute(generateTagUrl());
 							break;
 						case R.id.byAuthor:
 							new ByAuthorSearch()
-									.execute(generateAuthorWithInitialsUrl(queryText));
+									.execute(generateAuthorWithInitialsUrl());
 							break;
 						}
 						return true;
@@ -401,12 +401,12 @@ public class SpecificQuote extends BaseActivity {
 				// we can start a new AsyncTask that will run a keyword search
 				// on the searchQuery.
 
-				new TagSearch().execute(generateTagUrl(queryText));
+				new TagSearch().execute(generateTagUrl());
 				checkIfTopic(queryTextSplit[0]);
 
 			} else if (message.equals("found initials")) {
 				new SearchWithInitials()
-						.execute(generateAuthorWithInitialsUrl(queryText));
+						.execute(generateAuthorWithInitialsUrl());
 
 			} else {
 
@@ -429,11 +429,11 @@ public class SpecificQuote extends BaseActivity {
 						switch (item.getItemId()) {
 						case R.id.aboutAuthor:
 							new AboutAuthorSearch()
-									.execute(generateTagUrl(queryText));
+									.execute(generateTagUrl());
 							break;
 						case R.id.byAuthor:
 							new ByAuthorSearch()
-									.execute(generateAuthorUrl(queryText));
+									.execute(generateAuthorUrl());
 							break;
 						}
 						return true;
