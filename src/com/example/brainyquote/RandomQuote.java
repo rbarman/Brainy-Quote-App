@@ -79,9 +79,16 @@ public class RandomQuote extends BaseActivity {
 		});	
 		//execute the async task
 		new GetQuote().execute();
-		
+		showCustomToast();
 	}
 	
+	public void showCustomToast() {
+		if(quotePlaceHolder == 1) {
+			Toast toast = Toast.makeText(getApplicationContext(), "MESSAGE", Toast.LENGTH_LONG);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+		}
+	}
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -100,10 +107,8 @@ public class RandomQuote extends BaseActivity {
 				toggle = 0;
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
