@@ -27,6 +27,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ActionBar actionBar = getActionBar();
@@ -36,65 +37,9 @@ public class MainActivity extends BaseActivity {
         randomButton = (Button) findViewById(R.id.randomButton);
         searchView = (SearchView) findViewById(R.id.searchView);
         logo = (ImageView)findViewById(R.id.logo);
-       
-        //onClickListener for searchButton...
-//        searchButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//            	Toast.makeText(getApplicationContext(), "WE CLICKED", Toast.LENGTH_SHORT).show();
-            	           
-            	
-//            	//logo, searchButton, and randomButton will become invisible.
-//            	logo.setVisibility(4);
-//            	searchButton.setVisibility(4);
-//            	randomButton.setVisibility(4);
-//            	
-//            	//search dialog will become visible and expanded and will have a :hint value. 
-//            	searchView.setVisibility(0);
-//            	searchView.setQueryHint("Search Brainy Quote");
-//            	//searchView.setSubmitButtonEnabled(true);
-//            	searchView.setIconified(false); 
-//            	
-//            	
-//            	//OnQueryTextListener created for SearchView
-//            	//this will track when the user either enters text or submits inputed text!. 
-//            	final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-//            	    @Override
-//            	    public boolean onQueryTextChange(String newText) {
-//            	        // Do something
-//            	        return true;
-//            	    }
-//
-//            	    @Override
-//            	    public boolean onQueryTextSubmit(String query) {
-//            	    	
-//            	    	query =  query.replaceAll("[^a-zA-Z\\s]","");
-//            	    	//regex statement gets rid of all non letter characters.
-//            	    	
-//            	        Toast toast = Toast.makeText(getApplicationContext(), "Searching for " + query + "...", Toast.LENGTH_SHORT);
-//            	        toast.setGravity(Gravity.CENTER, 0, 0);
-//            	        toast.show();
-//            	        
-//            	      //Now a new intent will be created to go to the SpecificQuote.java activity! 
-//        				Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
-//        				
-//        				//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
-//        				//so the SpecificQuote activity can use the queryText as the search parameter. 
-//        				intent.putExtra("queryText", query);
-//        				startActivity(intent);	
-//            	        
-//            	        return true;
-//            	    }
-//            	};
-//
-//            	searchView.setOnQueryTextListener(queryTextListener);            		
-//            }
-//        });
-        //end of searchButton onClickListener...
-        
-        //onClickListener for randomButton....
+
         randomButton.setOnClickListener(new View.OnClickListener() {
 
-			
 			@Override
 			public void onClick(View v) {
 				//May seem a little redundant, since user knows that he/she requested random quote
@@ -105,28 +50,11 @@ public class MainActivity extends BaseActivity {
 				startActivity(intent);				 
 			}
 		});        
-      
     }
 
-    
-    
-    
-    
-	/*@Override
-	public void onBackPressed() {
-		
-		 //all below become visible again. 
-	     searchButton.setVisibility(0);
-	     logo.setVisibility(0);
-	     randomButton.setVisibility(0);
-	     //searchView becomes invisible.
-	     searchView.setVisibility(4);
-		
-		return;
-	}*/
-	
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+    	
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         
@@ -142,13 +70,15 @@ public class MainActivity extends BaseActivity {
 		
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				
 				Toast.makeText(getApplicationContext(), "WE CLICKED", Toast.LENGTH_SHORT).show();
 				searchView.setIconified(false);
 				
 			}
 		});
+        
         final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+        	
     	    @Override
     	    public boolean onQueryTextChange(String newText) {
     	        // Do something
@@ -158,7 +88,7 @@ public class MainActivity extends BaseActivity {
     	    @Override
     	    public boolean onQueryTextSubmit(String query) {
     	    	
-    	    	query =  query.replaceAll("[^a-zA-Z\\s]","");
+    	    	query = query.replaceAll("[^a-zA-Z\\s]","");
     	    	//regex statement gets rid of all non letter characters.
     	        Toast toast = Toast.makeText(getApplicationContext(), "Searching for " + query + "...", Toast.LENGTH_SHORT);
     	        toast.setGravity(Gravity.CENTER, 0, 0);
@@ -179,18 +109,5 @@ public class MainActivity extends BaseActivity {
     	searchView.setOnQueryTextListener(queryTextListener);
         
         return true;
-    }
-    
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-    	switch(item.getItemId()) {
-    	//as we add more action elements in the actionbar, we will have more things in the switch case. 
-    	case R.id.launch_fav_activity:
-    		Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-			startActivity(intent);
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-    	}
     }
 }
