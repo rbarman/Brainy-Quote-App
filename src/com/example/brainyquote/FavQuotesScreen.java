@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ public class FavQuotesScreen extends BaseActivity {
 	private ArrayList<String> quotes = new ArrayList<String>();
 	private ArrayAdapter<String> adapter;
 	private ListView list;
+	View noQuoteTextView;
+	Button clearButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +44,18 @@ public class FavQuotesScreen extends BaseActivity {
 		setContentView(R.layout.activity_fav_quotes_screen);
 		// Show the Up button in the action bar.
 		setupActionBar();
-		quotesDir = getFilesDir().getAbsolutePath().toString();
 		
+		list = (ListView) findViewById(R.id.listViewMain);
+		quotesDir = getFilesDir().getAbsolutePath().toString();
+		noQuoteTextView = (View) findViewById(R.id.noQuoteTextView);
+		
+		new GetFavQuotesTask().execute();
+	}
+	
+	@Override
+	public void onResume() {
+		
+		super.onResume();
 		new GetFavQuotesTask().execute();
 	}
 
@@ -51,6 +64,7 @@ public class FavQuotesScreen extends BaseActivity {
 
 		@Override
 		protected ArrayList<String> doInBackground(Void... params) {
+			quotes.clear();
 			
 			try {
 				//get directory of fav files and list the interior files ending with ".txt"
@@ -95,21 +109,17 @@ public class FavQuotesScreen extends BaseActivity {
 			super.onPostExecute(quotes);
 			populateView(quotes);
 		}
-		
 	}
 	
 	private void populateView(ArrayList<String> quotes) {
-		
-		if (quotes.isEmpty()) {
-			View noQuoteTextView = (View) findViewById(R.id.noQuoteTextView);
-			noQuoteTextView.setVisibility(View.VISIBLE);
-		} else {
-			//build adapter using the quotes array list
-			adapter = new ArrayAdapter<String>(this, R.layout.list_view_box, quotes);
+		noQuoteTextView.setVisibility(View.INVISIBLE);
+		//build adapter using the quotes array list
+		adapter = new ArrayAdapter<String>(this, R.layout.list_view_box, quotes);
 					
-			//configure list view
-			list = (ListView) findViewById(R.id.listViewMain);
-			list.setAdapter(adapter);
+		//configure list view		
+		list.setAdapter(adapter);
+		if (quotes.isEmpty()) {
+			noQuoteTextView.setVisibility(View.VISIBLE);
 		}
 	}
 
@@ -120,18 +130,6 @@ public class FavQuotesScreen extends BaseActivity {
 		new DeleteAllFavsTask().execute(quotesDir);
 		quotes.clear();
 		adapter.notifyDataSetChanged();
+		noQuoteTextView.setVisibility(View.VISIBLE);
 	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown.
-			NavUtils.navigateUpFromSameTask(this);
-			return true;    		
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 }

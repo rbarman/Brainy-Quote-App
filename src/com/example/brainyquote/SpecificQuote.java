@@ -492,6 +492,12 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 	
+	@Override
+	public void onResume() {
+		super.onResume();
+		updateFavButton();
+	}
+	
 	public void getTopics() {
 		BufferedReader br = null;
 	    try {

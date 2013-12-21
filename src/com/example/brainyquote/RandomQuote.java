@@ -76,10 +76,15 @@ public class RandomQuote extends BaseActivity {
 					toggle = 0;
 				}
 			}
-		});
-
+		});	
 		//execute the async task
-		new GetQuote().execute();		
+		new GetQuote().execute();	
+	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		updateFavButton();
 	}
 	
 	public void updateFavButton() {
