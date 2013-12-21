@@ -7,10 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NavUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -99,5 +104,25 @@ public abstract class BaseActivity extends Activity {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
+	public void showCustomToast(int quotePlaceHolder) {
+		LayoutInflater inflater = getLayoutInflater();
+		 
+		View layout = inflater.inflate(R.layout.custom_toast,
+		  (ViewGroup) findViewById(R.id.custom_toast_layout_id));
 
+		ImageView image = (ImageView) layout.findViewById(R.id.image);
+		TextView text = (TextView) layout.findViewById(R.id.text);
+		if(quotePlaceHolder == 0) {
+			text.setText("Swipe left to see the next quote");
+			image.setImageResource(R.drawable.arrow_left);
+		}
+		else {
+			text.setText("Swipe right to see the previous quote");
+			image.setImageResource(R.drawable.arrow_right);
+		}
+		Toast toast = new Toast(getApplicationContext());
+		toast.setDuration(Toast.LENGTH_SHORT);
+		toast.setView(layout);
+		toast.show();	
+	}
 }

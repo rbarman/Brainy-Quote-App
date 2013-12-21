@@ -225,25 +225,4 @@ public class RandomQuote extends BaseActivity {
 			}
 		}
 	}
-	public void showCustomToast(int quotePlaceHolder) {
-		LayoutInflater inflater = getLayoutInflater();
-		 
-		View layout = inflater.inflate(R.layout.custom_toast,
-		  (ViewGroup) findViewById(R.id.custom_toast_layout_id));
-
-		ImageView image = (ImageView) layout.findViewById(R.id.image);
-		TextView text = (TextView) layout.findViewById(R.id.text);
-		if(quotePlaceHolder == 0) {
-			text.setText("Swipe left to see the next quote");
-			image.setImageResource(R.drawable.arrow_left);
-		}
-		else {
-			text.setText("Swipe right to see the previous quote");
-			image.setImageResource(R.drawable.arrow_right);
-		}
-		Toast toast = new Toast(getApplicationContext());
-		toast.setDuration(Toast.LENGTH_SHORT);
-		toast.setView(layout);
-		toast.show();	
-	}
 }
