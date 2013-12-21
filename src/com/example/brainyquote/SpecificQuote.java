@@ -21,11 +21,14 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -455,6 +458,8 @@ public class SpecificQuote extends BaseActivity {
 			star.setVisibility(0);
 			textView.setText(quote);
 			updateFavButton();
+			if((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
+				showCustomToast(index);
 		}
 	}
 
@@ -480,6 +485,9 @@ public class SpecificQuote extends BaseActivity {
 			star.setVisibility(0);
 			textView.setText(quote);
 			updateFavButton();
+			
+			if((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
+				showCustomToast(index);
 		}
 	}
 
@@ -511,6 +519,8 @@ public class SpecificQuote extends BaseActivity {
 				star.setVisibility(0);
 				textView.setText(quote);
 				updateFavButton();
+				if((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
+					showCustomToast(index);
 			}
 		}
 	}
@@ -542,4 +552,26 @@ public class SpecificQuote extends BaseActivity {
 			}
 		}
 	}
+	public void showCustomToast(int index) {
+		LayoutInflater inflater = getLayoutInflater();
+		 
+		View layout = inflater.inflate(R.layout.custom_toast,
+		  (ViewGroup) findViewById(R.id.custom_toast_layout_id));
+
+		ImageView image = (ImageView) layout.findViewById(R.id.image);
+		TextView text = (TextView) layout.findViewById(R.id.text);
+		if(index == 0) {
+			text.setText("Swipe left to see the next quote");
+			image.setImageResource(R.drawable.arrow_left);
+		}
+		else {
+			text.setText("Swipe right to see the previous quote");
+			image.setImageResource(R.drawable.arrow_right);
+		}
+		Toast toast = new Toast(getApplicationContext());
+		toast.setDuration(Toast.LENGTH_SHORT);
+		toast.setView(layout);
+		toast.show();	
+	}
+	
 }
