@@ -89,6 +89,7 @@ public class MainActivity extends BaseActivity {
     	    public boolean onQueryTextSubmit(String query) {
     	    	
     	    	query = query.replaceAll("[^a-zA-Z\\s]","");
+    	    	String [] queryTextSplit = query.split(" ");
     	    	//regex statement gets rid of all non letter characters.
     	        Toast toast = Toast.makeText(getApplicationContext(), "Searching for " + query + "...", Toast.LENGTH_SHORT);
     	        toast.setGravity(Gravity.CENTER, 0, 0);
@@ -99,7 +100,7 @@ public class MainActivity extends BaseActivity {
 				
 				//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
 				//so the SpecificQuote activity can use the queryText as the search parameter. 
-				
+				intent.putExtra("queryTextSplit", queryTextSplit);
 				intent.putExtra("queryText", query);
 				startActivity(intent);	
     	        

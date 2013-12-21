@@ -67,7 +67,8 @@ public class SpecificQuote extends BaseActivity {
 		
 		Intent intent = getIntent();
 		queryText = intent.getExtras().getString("queryText");
-		queryTextSplit = queryText.split(" ");
+		queryTextSplit = intent.getExtras().getStringArray("queryTextSplit");
+
 		view = (View)findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView)findViewById(R.id.textView);

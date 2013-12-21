@@ -55,6 +55,9 @@ public abstract class BaseActivity extends Activity {
 				
 				//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
 				//so the SpecificQuote activity can use the queryText as the search parameter. 
+				query = query.replaceAll("[^a-zA-Z\\s]","");
+    	    	String [] queryTextSplit = query.split(" ");
+    	    	intent.putExtra("queryTextSplit", queryTextSplit);
 				intent.putExtra("queryText", query);
 				startActivity(intent);	
     	        
