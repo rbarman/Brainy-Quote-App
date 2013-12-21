@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 
@@ -25,6 +26,9 @@ public abstract class BaseActivity extends Activity {
 		getMenuInflater().inflate(R.menu.base, menu);
 		// Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        
+        MenuItem item = menu.findItem(R.id.menu_share);
+        ShareActionProvider mShareActionProvider = (ShareActionProvider) item.getActionProvider();
         
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -72,15 +76,21 @@ public abstract class BaseActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown.
-			NavUtils.navigateUpFromSameTask(this);
-			return true;
-		case R.id.launch_fav_activity:
-    		Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-			startActivity(intent);
-			return true;
+			case android.R.id.home:
+				// This ID represents the Home or Up button. In the case of this
+				// activity, the Up button is shown.
+				NavUtils.navigateUpFromSameTask(this);
+				return true;
+			case R.id.launch_fav_activity:
+				Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+				startActivity(intent);
+				return true;
+			case R.id.menu_share:
+				Intent shareIntent = new Intent();
+		        shareIntent.setAction(Intent.ACTION_SEND);
+		        shareIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+		        shareIntent.setType("text/plain");
+		        startActivity(Intent.createChooser(shareIntent, "share using"));
 		}
 		return super.onOptionsItemSelected(item);
 	}
