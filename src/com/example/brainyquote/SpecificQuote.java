@@ -257,8 +257,7 @@ public class SpecificQuote extends BaseActivity {
 			pageNum++;
 			index = 0;
 			nextPage = true;
-		} else {
-		}
+		} else {}
 
 		addHTMLtoUrl(url);
 		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3)
@@ -270,8 +269,7 @@ public class SpecificQuote extends BaseActivity {
 
 		if (first == true && foundTopic == true)
 			pageNum--;
-		else {
-		}
+		else {}
 		first = false;
 
 		if (foundTopic == true) {
@@ -281,10 +279,7 @@ public class SpecificQuote extends BaseActivity {
 				pageNum++;
 				index = 0;
 				nextPage = true;
-			} else {
-			}
-
-			addHTMLtoUrl(url);
+			} else {}
 		}
 		// ELSE STATEMENT=======================================
 		else {
@@ -297,12 +292,9 @@ public class SpecificQuote extends BaseActivity {
 				pageNum++;
 				index = 0;
 				nextPage = true;
-			} else {
-			}
-
-			addHTMLtoUrl(url);
+			} else {}
 		}
-
+		addHTMLtoUrl(url);
 		return url;
 	}
 
