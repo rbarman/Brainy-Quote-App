@@ -31,8 +31,8 @@ import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
 //This is the activity launched when the user selects the randomButton on main activity.
-public class RandomQuote extends BaseActivity {	
-	
+public class RandomQuote extends BaseActivity {
+
 	ArrayList<String> categories = new ArrayList<String>();
 	ArrayList<String> randomQuotes = new ArrayList<String>();
 	TextView textView;
@@ -42,62 +42,56 @@ public class RandomQuote extends BaseActivity {
 	int currentIndex = -1;
 	int quotePlaceHolder = -1;
 	String appDir;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_random_quote);
 		// Show the Up button in the action bar.
-		setupActionBar();		
-		
-		textView = (TextView)findViewById(R.id.textView);
-		view = (View)findViewById(R.id.view);
+		setupActionBar();
+
+		textView = (TextView) findViewById(R.id.textView);
+		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
-		star = (ImageButton)findViewById(R.id.star);
+		star = (ImageButton) findViewById(R.id.star);
 		appDir = getFilesDir().getAbsolutePath().toString();
 		getCategories();
-		
-		//Star is initially off. Pressing it will toggle it 
-		//on or off (0 is off, 1 is on)
+
+		// Star is initially off. Pressing it will toggle it
+		// on or off (0 is off, 1 is on)
 		star.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				if (toggle == 0) {
-					String[] quoteAndDir = {textView.getText().toString(), appDir};
-					star.setImageResource(R.drawable.btn_star_big_on);					
+					String[] quoteAndDir = { textView.getText().toString(),
+							appDir };
+					star.setImageResource(R.drawable.btn_star_big_on);
 					new WriteFavQuoteTask().execute(quoteAndDir);
 					toggle = 1;
-				} else if (toggle == 1){
-					String[] quoteAndDir = {textView.getText().toString(), appDir};
+				} else if (toggle == 1) {
+					String[] quoteAndDir = { textView.getText().toString(),
+							appDir };
 					star.setImageResource(R.drawable.btn_star_big_off);
 					new DeleteFavTask().execute(quoteAndDir);
 					toggle = 0;
 				}
 			}
-		});	
-		//execute the async task
+		});
+		// execute the async task
 		new GetQuote().execute();
-		showCustomToast();
 	}
-	
-	public void showCustomToast() {
-		if(quotePlaceHolder == 1) {
-			Toast toast = Toast.makeText(getApplicationContext(), "MESSAGE", Toast.LENGTH_LONG);
-			toast.setGravity(Gravity.CENTER, 0, 0);
-			toast.show();
-		}
-	}
+
 	@Override
 	public void onResume() {
 		super.onResume();
 		updateFavButton();
 	}
-	
+
 	public void updateFavButton() {
-		
-		String[] quoteAndDir = {textView.getText().toString(), appDir};
+
+		String[] quoteAndDir = { textView.getText().toString(), appDir };
 		try {
 			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
 				star.setImageResource(R.drawable.btn_star_big_on);
@@ -112,90 +106,113 @@ public class RandomQuote extends BaseActivity {
 			e.printStackTrace();
 		}
 	}
-	
 
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
-		
-		//on every swipe to the right we will get the next random quote. 
+
+		// on every swipe to the right we will get the next random quote.
 		public void onSwipeRight() {
-			
-			if(currentIndex > 0) {
+
+			if (currentIndex > 0) {
 				currentIndex--;
-				Toast.makeText(RandomQuote.this, "Swipe to Right : Previous Random Quote Coming!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(RandomQuote.this,
+						"Swipe to Right : Previous Random Quote Coming!",
+						Toast.LENGTH_SHORT).show();
 				textView.setText(randomQuotes.get(currentIndex));
 				updateFavButton();
 			} else {
-				Toast.makeText(RandomQuote.this, "Swipe to Right : No more previous Quotes :(", Toast.LENGTH_SHORT).show();
+				Toast.makeText(RandomQuote.this,
+						"Swipe to Right : No more previous Quotes :(",
+						Toast.LENGTH_SHORT).show();
 			}
 		}
-		//on every swipe to the left we will get the next random quote.
-		public void onSwipeLeft(){
-			
-			if(currentIndex < quotePlaceHolder) {
-				currentIndex ++;
-				Toast.makeText(RandomQuote.this, "Swipe to Left : Next Random Quote Coming!", Toast.LENGTH_SHORT).show();
+
+		// on every swipe to the left we will get the next random quote.
+		public void onSwipeLeft() {
+
+			if (currentIndex < quotePlaceHolder) {
+				currentIndex++;
+				Toast.makeText(RandomQuote.this,
+						"Swipe to Left : Next Random Quote Coming!",
+						Toast.LENGTH_SHORT).show();
 				textView.setText(randomQuotes.get(currentIndex));
 				updateFavButton();
 			} else {
-				Toast.makeText(RandomQuote.this, "Swipe to Left : New Random Quote Coming!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(RandomQuote.this,
+						"Swipe to Left : New Random Quote Coming!",
+						Toast.LENGTH_SHORT).show();
 				new GetQuote().execute();
-			}	
+			}
 		}
+
 		public void onSwipeBottom() {
-			
+
 		}
+
 		public void onSwipeTop() {
-			
+
 		}
 	};
-	
-	//need to create an AsyncTask so that the UI thread does not have to do extra work
-	//if we make the UI thread to the Jsoup.connect, the application will crash.
-	
+
+	// need to create an AsyncTask so that the UI thread does not have to do
+	// extra work
+	// if we make the UI thread to the Jsoup.connect, the application will
+	// crash.
+
 	public void getCategories() {
 		BufferedReader br = null;
-		 try {
-			 br = new BufferedReader(new InputStreamReader(getAssets().open("categories.txt")));
-			 String word;
-			 while((word=br.readLine()) != null) {
-				 categories.add(word); 
-			 } 
-		 }catch(IOException ioe) {}
+		try {
+			br = new BufferedReader(new InputStreamReader(getAssets().open(
+					"categories.txt")));
+			String word;
+			while ((word = br.readLine()) != null) {
+				categories.add(word);
+			}
+		} catch (IOException ioe) {
+		}
 	}
-	
+
 	private class GetQuote extends AsyncTask<Void, Void, String> {
 
 		@Override
 		protected String doInBackground(Void... params) {
-			
-			String topic = categories.get((int) (Math.random() * (categories.size() -1)));
+
+			String topic = categories.get((int) (Math.random() * (categories
+					.size() - 1)));
 			Document doc;
 			try {
-				String url = "http://www.brainyquote.com/quotes/topics/topic_" + topic + ".html";
-				//sample url for age quote : http://www.brainyquote.com/quotes/topics/topic_age.html
-				doc = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6").get();			                			                
-				Elements quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
+				String url = "http://www.brainyquote.com/quotes/topics/topic_"
+						+ topic + ".html";
+				// sample url for age quote :
+				// http://www.brainyquote.com/quotes/topics/topic_age.html
+				doc = Jsoup
+						.connect(url)
+						.userAgent(
+								"Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+						.get();
+				Elements quote = doc
+						.select(".boxyPaddingBig span.bqQuoteLink a");
 				Elements author = doc.select(".boxyPaddingBig span.bodybold a");
-			             
-				int randIndex = (int) (Math.random()*quote.size()-1);
-			        	
-				randomQuotes.add("\"" + quote.get(randIndex).text() + "\"" +"\n\n      - "
-					 + author.get(randIndex).text());
-				currentIndex ++;
-				quotePlaceHolder ++;
+
+				int randIndex = (int) (Math.random() * quote.size() - 1);
+
+				randomQuotes.add("\"" + quote.get(randIndex).text() + "\""
+						+ "\n\n      - " + author.get(randIndex).text());
+				currentIndex++;
+				quotePlaceHolder++;
 				String formattedQuote = String.format("\"%s\" \n\n      - %s",
-						quote.get(randIndex).text(), author.get(randIndex).text());
-			           
+						quote.get(randIndex).text(), author.get(randIndex)
+								.text());
+
 				return formattedQuote;
-			 }
-			 catch(IOException e) {
-				 return null;
-			 }
+			} catch (IOException e) {
+				return null;
+			}
 		}
+
 		@Override
-		protected void onPostExecute(String title){
-			
-			TextView textView = (TextView)findViewById(R.id.textView);
+		protected void onPostExecute(String title) {
+
+			TextView textView = (TextView) findViewById(R.id.textView);
 			textView.setText(title);
 			updateFavButton();
 		}
