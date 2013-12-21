@@ -238,7 +238,7 @@ public class RandomQuote extends BaseActivity {
 			image.setImageResource(R.drawable.arrow_left);
 		}
 		else {
-			text.setText("Swipe right to see the next quote");
+			text.setText("Swipe right to see the previous quote");
 			image.setImageResource(R.drawable.arrow_right);
 		}
 		Toast toast = new Toast(getApplicationContext());
