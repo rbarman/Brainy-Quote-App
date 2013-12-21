@@ -108,12 +108,23 @@ public class SpecificQuote extends BaseActivity {
 				toggle = 0;
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void startTaskOnSwipe() { 
+		if(searchType.equals("tag")) 
+			new TagSearch().execute(generateTagUrl(queryText));
+		else if(searchType.equals("byAuthor") && foundInitials == false) 
+			new ByAuthorSearch().execute(generateAuthorUrl(queryText));
+		else if(searchType.equals("byAuthor") && foundInitials == true)
+			new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
+		else if(searchType.equals("aboutAuthor") && foundInitials == true)
+			new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
+		else
+			new AboutAuthorSearch().execute(generateTagUrl(queryText));
 	}
 	
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
@@ -123,33 +134,13 @@ public class SpecificQuote extends BaseActivity {
 			if (index > 0) {
 				Toast.makeText(SpecificQuote.this, "Swipe to Right : Previous Quote Coming!", Toast.LENGTH_SHORT).show();
 				index--;
-				
-				if(searchType.equals("tag")) 
-					new TagSearch().execute(generateTagUrl(queryText));
-				else if(searchType.equals("byAuthor") && foundInitials == false) 
-					new ByAuthorSearch().execute(generateAuthorUrl(queryText));
-				else if(searchType.equals("byAuthor") && foundInitials == true)
-					new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
-				else if(searchType.equals("aboutAuthor") && foundInitials == true)
-					new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
-				else
-					new AboutAuthorSearch().execute(generateTagUrl(queryText));
+				startTaskOnSwipe();
 			}
 			else if(index == 0 && pageNum > 1) {
 				Toast.makeText(SpecificQuote.this, "Swipe to Right : Previous Quote Coming!", Toast.LENGTH_SHORT).show();
 				index = quoteNum - 1;
 				pageNum --;
-				
-				if(searchType.equals("tag")) 
-					new TagSearch().execute(generateTagUrl(queryText));
-				else if(searchType.equals("byAuthor") && foundInitials == false) 
-					new ByAuthorSearch().execute(generateAuthorUrl(queryText));
-				else if(searchType.equals("byAuthor") && foundInitials == true)
-					new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
-				else if(searchType.equals("aboutAuthor") && foundInitials == true)
-					new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
-				else
-					new AboutAuthorSearch().execute(generateTagUrl(queryText));
+				startTaskOnSwipe();
 			}
 			else {
 				Toast.makeText(SpecificQuote.this, "Swipe to Right : No more previous Quotes :(",Toast.LENGTH_SHORT).show();
@@ -159,16 +150,7 @@ public class SpecificQuote extends BaseActivity {
 			//on every swipe to the left we will get the next quote.
 			index++;
 			Toast.makeText(SpecificQuote.this, "Swipe to Left : Next Quote Coming!", Toast.LENGTH_SHORT).show();
-			if(searchType.equals("tag")) 
-				new TagSearch().execute(generateTagUrl(queryText));
-			else if(searchType.equals("byAuthor") && foundInitials == false) 
-				new ByAuthorSearch().execute(generateAuthorUrl(queryText));
-			else if(searchType.equals("byAuthor") && foundInitials == true)
-				new ByAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
-			else if(searchType.equals("aboutAuthor") && foundInitials == true)
-				new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
-			else
-				new AboutAuthorSearch().execute(generateTagUrl(queryText));
+			startTaskOnSwipe();
 		}
 		public void onSwipeBottom() {
 			
