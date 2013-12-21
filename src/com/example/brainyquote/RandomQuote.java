@@ -13,6 +13,7 @@ import org.jsoup.select.Elements;
 import com.example.brainyquote.Tools.CheckQuoteTask;
 import com.example.brainyquote.Tools.WriteFavQuoteTask;
 import com.example.brainyquote.Tools.DeleteFavTask;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
@@ -20,11 +21,14 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -214,17 +218,32 @@ public class RandomQuote extends BaseActivity {
 
 			TextView textView = (TextView) findViewById(R.id.textView);
 			textView.setText(title);
-			updateFavButton();
-			if(quotePlaceHolder == 0) {
-				Toast toast = Toast.makeText(getApplicationContext(), "message", Toast.LENGTH_LONG);
-				toast.setGravity(Gravity.CENTER, 0, 0);
-				toast.show();
-			}
-			else if (quotePlaceHolder == 1) {
-				Toast toast = Toast.makeText(getApplicationContext(), "message", Toast.LENGTH_LONG);
-				toast.setGravity(Gravity.CENTER, 0, 0);
-				toast.show();
+			updateFavButton();		
+			
+			if(quotePlaceHolder == 0 || quotePlaceHolder == 1) {
+				showCustomToast(quotePlaceHolder);
 			}
 		}
+	}
+	public void showCustomToast(int quotePlaceHolder) {
+		LayoutInflater inflater = getLayoutInflater();
+		 
+		View layout = inflater.inflate(R.layout.custom_toast,
+		  (ViewGroup) findViewById(R.id.custom_toast_layout_id));
+
+		ImageView image = (ImageView) layout.findViewById(R.id.image);
+		TextView text = (TextView) layout.findViewById(R.id.text);
+		if(quotePlaceHolder == 0) {
+			text.setText("Swipe left to see the next quote");
+			image.setImageResource(R.drawable.arrow_left);
+		}
+		else {
+			text.setText("Swipe right to see the next quote");
+			image.setImageResource(R.drawable.arrow_right);
+		}
+		Toast toast = new Toast(getApplicationContext());
+		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setView(layout);
+		toast.show();	
 	}
 }
