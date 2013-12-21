@@ -214,31 +214,28 @@ public class SpecificQuote extends BaseActivity {
 		else {
 		}
 		first = false;
-		
-		if (queryTextSplit[0].length() == 2)
-			url = "http://www.brainyquote.com/quotes/authors/"
-					+ queryTextSplit[0].charAt(0) + "/"
-					+ queryTextSplit[0].charAt(0) + "_"
-					+ queryTextSplit[0].charAt(1);
-		else
-			url = "http://www.brainyquote.com/quotes/authors/"
-					+ queryTextSplit[0].charAt(0) + "/"
-					+ queryTextSplit[0].charAt(0) + "_"
-					+ queryTextSplit[0].charAt(1) + "_"
-					+ queryTextSplit[0].charAt(2);
-		for (int i = 1; i < queryTextSplit.length; i++)
-			url = url + "_" + queryTextSplit[i];
 		if (index == quoteNum) {
+			//we are here if we go to a new page of quotes. 
 			pageNum++;
 			index = 0;
 			nextPage = true;
-		} else {
-		}
-		addHTMLtoUrl(url);
-
-		// sample : CS LEWIS
-		// http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
-		return url;
+			if (queryTextSplit[0].length() == 2)
+				// http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
+				url = "http://www.brainyquote.com/quotes/authors/"
+						+ queryTextSplit[0].charAt(0) + "/"
+						+ queryTextSplit[0].charAt(0) + "_"
+						+ queryTextSplit[0].charAt(1);
+			else
+				url = "http://www.brainyquote.com/quotes/authors/"
+						+ queryTextSplit[0].charAt(0) + "/"
+						+ queryTextSplit[0].charAt(0) + "_"
+						+ queryTextSplit[0].charAt(1) + "_"
+						+ queryTextSplit[0].charAt(2);
+			for (int i = 1; i < queryTextSplit.length; i++)
+				url = url + "_" + queryTextSplit[i];
+			return addHTMLtoUrl(url);
+		} else 
+			return url;
 	}
 
 	public String addHTMLtoUrl(String url) {
@@ -255,7 +252,7 @@ public class SpecificQuote extends BaseActivity {
 		else {}
 		
 		if (index == quoteNum) {
-			//we are here if we go to a new page of quotes. 
+			//we are here if we go to a new page of quotes. g
 			pageNum++;
 			index = 0;
 			nextPage = true;
