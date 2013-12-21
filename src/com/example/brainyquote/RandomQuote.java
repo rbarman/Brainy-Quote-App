@@ -122,6 +122,7 @@ public class RandomQuote extends BaseActivity {
 						"Swipe to Right : Previous Random Quote Coming!",
 						Toast.LENGTH_SHORT).show();
 				textView.setText(randomQuotes.get(currentIndex));
+				Tools.setShareQuote(textView.getText().toString());
 				updateFavButton();
 			} else {
 				Toast.makeText(RandomQuote.this,
@@ -139,6 +140,7 @@ public class RandomQuote extends BaseActivity {
 						"Swipe to Left : Next Random Quote Coming!",
 						Toast.LENGTH_SHORT).show();
 				textView.setText(randomQuotes.get(currentIndex));
+				Tools.setShareQuote(textView.getText().toString());
 				updateFavButton();
 			} else {
 				Toast.makeText(RandomQuote.this,
@@ -218,6 +220,7 @@ public class RandomQuote extends BaseActivity {
 
 			TextView textView = (TextView) findViewById(R.id.textView);
 			textView.setText(title);
+			Tools.setShareQuote(textView.getText().toString());
 			updateFavButton();		
 			
 			if(quotePlaceHolder == 0 || quotePlaceHolder == 1) {

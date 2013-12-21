@@ -14,11 +14,15 @@ import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 
-//Base class for common UI features such as
-//menus, search bars, settings. Eliminates
-//redundant code.
+//Base class for common variables and UI
+//features such as menus, search bars, settings. 
+//Eliminates redundant code.
 public abstract class BaseActivity extends Activity {
-
+	
+	//quote used for sharing on google+, texting, etc.
+	//Modified by subclasses
+	protected static String sharingQuote = "";
+		
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		
@@ -88,7 +92,7 @@ public abstract class BaseActivity extends Activity {
 			case R.id.menu_share:
 				Intent shareIntent = new Intent();
 		        shareIntent.setAction(Intent.ACTION_SEND);
-		        shareIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.");
+		        shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
 		        shareIntent.setType("text/plain");
 		        startActivity(Intent.createChooser(shareIntent, "share using"));
 		}

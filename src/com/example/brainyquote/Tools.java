@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 
 import android.os.AsyncTask;
 
-/**Houses AsyncTask classes with common methods
+/**Houses many AsyncTask classes with common methods
  *used by other activities for background work.
  *Most background methods take an array of 2 strings.
  *Index 0 stores text of textview which contains quote.
@@ -117,5 +117,9 @@ public class Tools {
 			
 			return null;
 		}
+	}
+	
+	public static void setShareQuote(String quote) {
+		BaseActivity.sharingQuote = quote;
 	}
 }
