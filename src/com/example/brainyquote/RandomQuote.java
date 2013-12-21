@@ -242,7 +242,7 @@ public class RandomQuote extends BaseActivity {
 			image.setImageResource(R.drawable.arrow_right);
 		}
 		Toast toast = new Toast(getApplicationContext());
-		toast.setDuration(Toast.LENGTH_LONG);
+		toast.setDuration(Toast.LENGTH_SHORT);
 		toast.setView(layout);
 		toast.show();	
 	}
