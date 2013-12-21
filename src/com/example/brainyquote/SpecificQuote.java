@@ -244,13 +244,6 @@ public class SpecificQuote extends BaseActivity {
 		
 		String[] keywords = queryText.split(" ");
 		String url = "";
-		    
-	    for(String s : topics) {
-	    	if(s.equalsIgnoreCase(keywords[0])) {
-	    		foundTopic = true;
-	    		break;
-	    	}
-	    }
 		   if(first == true && foundTopic == true)
 			   pageNum--;
 		   else {}
@@ -365,6 +358,8 @@ public class SpecificQuote extends BaseActivity {
 				//we can start a new AsyncTask that will run a keyword search on the searchQuery.
 	
 				new TagSearch().execute(generateTagUrl(queryText));
+				String[] tagText = queryText.split(" ");
+				checkIfTopic(tagText[0]);
 				
 			}
 			else if (message.equals("found initials")) {
@@ -489,5 +484,14 @@ public class SpecificQuote extends BaseActivity {
 	            topics.add(word); 
 	        } 
 	    } catch (IOException e) {}
+	}
+	
+	public void checkIfTopic(String str) {
+	    for(String s : topics) {
+	    	if(s.equalsIgnoreCase(str)) {
+	    		foundTopic = true;
+	    		break;
+	    	}
+	    }
 	}
 }
