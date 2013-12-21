@@ -37,16 +37,16 @@ public class SpecificQuote extends BaseActivity {
 	
 	TextView textView;
 	String queryText;
-	int index = 0;
 	String appDir;
+	String url ="";
 	String searchType = null;
 		//possible types are aboutAuthor, byAuthor, tag
+	int index = 0;
 	int pageNum = -1;
 	int quoteNum = 0; //number of quotes
 	int toggle = 0;
 	View view;
 	boolean foundInitials = false;
-	ArrayList<String> topics = new ArrayList<String>();
 	boolean foundTopic = false;
 	boolean nextPage = false;
 	boolean first = false;
@@ -54,7 +54,7 @@ public class SpecificQuote extends BaseActivity {
 	Elements author = null;
 	Elements quote = null;
 	ImageButton star;
-	String url ="";
+	ArrayList<String> topics = new ArrayList<String>();
 	String [] queryTextSplit;
 	
 	
