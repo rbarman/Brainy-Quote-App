@@ -78,7 +78,8 @@ public class RandomQuote extends BaseActivity {
 			}
 		});	
 		//execute the async task
-		new GetQuote().execute();	
+		new GetQuote().execute();
+		
 	}
 	
 	@Override
