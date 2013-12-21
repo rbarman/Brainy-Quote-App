@@ -241,28 +241,32 @@ public class SpecificQuote extends BaseActivity {
 		return url;
 	}
 
-	public void addHTMLtoUrl(String url) {
+	public String addHTMLtoUrl(String url) {
 		if (pageNum == 1)
 			url = url + ".html";
 		else
 			url = url + "_" + pageNum + ".html";
+		return url;
 	}
 	public String generateAuthorUrl() {
 
-		url = "http://www.brainyquote.com/quotes/authors/"
-				+ queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
-		for (int i = 1; i < queryTextSplit.length; i++)
-			url = url + "_" + queryTextSplit[i];
+		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3)
+			foundInitials = true;
+		else {}
+		
 		if (index == quoteNum) {
+			//we are here if we go to a new page of quotes. 
 			pageNum++;
 			index = 0;
 			nextPage = true;
-		} else {}
-
-		addHTMLtoUrl(url);
-		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3)
-			foundInitials = true;
-		return url;
+			url = "http://www.brainyquote.com/quotes/authors/"
+					+ queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
+			for (int i = 1; i < queryTextSplit.length; i++)
+				url = url + "_" + queryTextSplit[i];
+			return addHTMLtoUrl(url);
+		} else 
+			return url;
+		
 	}
 
 	public String generateTagUrl() {
