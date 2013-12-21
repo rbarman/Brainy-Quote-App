@@ -69,11 +69,8 @@ public class MainActivity extends BaseActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
 		
 			@Override
-			public void onClick(View v) {
-				
-				Toast.makeText(getApplicationContext(), "WE CLICKED", Toast.LENGTH_SHORT).show();
-				searchView.setIconified(false);
-				
+			public void onClick(View v) {				
+				searchView.setIconified(false);				
 			}
 		});
         
