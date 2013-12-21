@@ -119,6 +119,8 @@ public class Tools {
 		}
 	}
 	
+	//sets the quote to be shared when the user
+	//selects the sharing button
 	public static void setShareQuote(String quote) {
 		BaseActivity.sharingQuote = quote;
 	}

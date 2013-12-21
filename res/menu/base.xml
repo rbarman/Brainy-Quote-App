@@ -1,5 +1,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    
+    <item android:id="@+id/search"
+          android:title="@string/search_title"
+          android:icon="@drawable/ic_search"
+          android:showAsAction="always"
+          android:actionViewClass="android.widget.SearchView" 
+          android:hint="search (in main.xml)"
+          android:textColorHint= "#FF0000"      
+          />
+    <item android:id = "@+id/launch_fav_activity"
+          android:icon="@drawable/star"
+          android:title="@string/fav_launcher_title"
+          android:showAsAction="always"
+        />
+    
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

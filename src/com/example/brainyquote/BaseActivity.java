@@ -24,8 +24,9 @@ import android.widget.Toast;
 //Eliminates redundant code.
 public abstract class BaseActivity extends Activity {
 	
+	ShareActionProvider shareActionProvider;
 	//quote used for sharing on google+, texting, etc.
-	//Modified by subclasses
+	//Modified by subclasses once a quote is shown on screen
 	protected static String sharingQuote = "";
 		
 	@Override
@@ -33,11 +34,9 @@ public abstract class BaseActivity extends Activity {
 		
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.base, menu);
-		// Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
         
         MenuItem item = menu.findItem(R.id.menu_share);
-        ShareActionProvider mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+        shareActionProvider = (ShareActionProvider) item.getActionProvider();
         
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -99,7 +98,7 @@ public abstract class BaseActivity extends Activity {
 		        shareIntent.setAction(Intent.ACTION_SEND);
 		        shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
 		        shareIntent.setType("text/plain");
-		        startActivity(Intent.createChooser(shareIntent, "share using"));
+		        shareActionProvider.setShareIntent(shareIntent);
 		}
 		return super.onOptionsItemSelected(item);
 	}
