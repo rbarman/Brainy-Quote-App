@@ -24,6 +24,8 @@ public class MainActivity extends BaseActivity {
 	Button randomButton;
 	SearchView searchView;
 	ImageView logo;
+	String queryText = null;
+	boolean textChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,10 @@ public class MainActivity extends BaseActivity {
 		
 			@Override
 			public void onClick(View v) {				
-				searchView.setIconified(false);				
+				searchView.setIconified(false);		
+				if(textChanged == true) {
+					 launchSpecificQuoteActivity(queryText);
+				}
 			}
 		});
         
@@ -78,34 +83,37 @@ public class MainActivity extends BaseActivity {
         	
     	    @Override
     	    public boolean onQueryTextChange(String newText) {
-    	        // Do something
+    	    	textChanged = true;
+    	        queryText = newText;
     	        return true;
     	    }
 
     	    @Override
-    	    public boolean onQueryTextSubmit(String query) {
-    	    	
-    	    	query = query.replaceAll("[^a-zA-Z\\s]","");
-    	    	String [] queryTextSplit = query.split(" ");
-    	    	//regex statement gets rid of all non letter characters.
-    	        Toast toast = Toast.makeText(getApplicationContext(), "Searching for " + query + "...", Toast.LENGTH_SHORT);
-    	        toast.setGravity(Gravity.CENTER, 0, 0);
-    	        toast.show();
-    	        
-    	        //Now a new intent will be created to go to the SpecificQuote.java activity! 
-				Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
-				
-				//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
-				//so the SpecificQuote activity can use the queryText as the search parameter. 
-				intent.putExtra("queryTextSplit", queryTextSplit);
-				intent.putExtra("queryText", query);
-				startActivity(intent);	
-    	        
+    	    public boolean onQueryTextSubmit(String query) {    	    		
+    	        launchSpecificQuoteActivity(query);
     	        return true;
     	    }
     	};
     	searchView.setOnQueryTextListener(queryTextListener);
         
         return true;
+    }
+    public void launchSpecificQuoteActivity(String queryText) {
+    	
+    	queryText = queryText.replaceAll("[^a-zA-Z\\s]","");
+    	String [] queryTextSplit = queryText.split(" ");
+    	//regex statement gets rid of all non letter characters.
+        Toast toast = Toast.makeText(getApplicationContext(), "Searching for " + queryText + "...", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+        
+        //Now a new intent will be created to go to the SpecificQuote.java activity! 
+		Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
+		
+		//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
+		//so the SpecificQuote activity can use the queryText as the search parameter. 
+		intent.putExtra("queryTextSplit", queryTextSplit);
+		intent.putExtra("queryText", queryText);
+		startActivity(intent);	
     }
 }
