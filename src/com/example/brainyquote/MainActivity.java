@@ -22,7 +22,7 @@ public class MainActivity extends BaseActivity {
 
 	Button searchButton;
 	Button randomButton;
-	SearchView searchView;
+//	SearchView searchView;
 	ImageView logo;
 	String queryText = null;
 	boolean textChanged = false;
@@ -37,7 +37,7 @@ public class MainActivity extends BaseActivity {
         
         searchButton = (Button) findViewById(R.id.searchButton);
         randomButton = (Button) findViewById(R.id.randomButton);
-        searchView = (SearchView) findViewById(R.id.searchView);
+//        searchView = (SearchView) findViewById(R.id.searchView);
         logo = (ImageView)findViewById(R.id.logo);
 
         randomButton.setOnClickListener(new View.OnClickListener() {
