@@ -52,6 +52,7 @@ public class SpecificQuote extends BaseActivity {
 	boolean foundTopic = false;
 	boolean nextPage = false;
 	boolean first = false;
+	boolean wentPreviousPage = false;
 	Document doc = null;
 	Elements author = null;
 	Elements quote = null;
@@ -153,6 +154,7 @@ public class SpecificQuote extends BaseActivity {
 						Toast.LENGTH_SHORT).show();
 				index = quotesOnPage - 1;
 				pageNum--;
+				wentPreviousPage = true;
 				startTaskOnSwipe();
 			} else {
 				Toast.makeText(SpecificQuote.this,
@@ -214,33 +216,41 @@ public class SpecificQuote extends BaseActivity {
 
 		if (first == true)
 			pageNum--;
-		else {
-		}
+		else {}
+		
 		first = false;
 		if (index == quotesOnPage) {
 			//we are here if we go to a new page of quotes. 
 			pageNum++;
 			index = 0;
 			nextPage = true;
-			if (queryTextSplit[0].length() == 2)
-				// http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
-				url = "http://www.brainyquote.com/quotes/authors/"
-						+ queryTextSplit[0].charAt(0) + "/"
-						+ queryTextSplit[0].charAt(0) + "_"
-						+ queryTextSplit[0].charAt(1);
-			else
-				url = "http://www.brainyquote.com/quotes/authors/"
-						+ queryTextSplit[0].charAt(0) + "/"
-						+ queryTextSplit[0].charAt(0) + "_"
-						+ queryTextSplit[0].charAt(1) + "_"
-						+ queryTextSplit[0].charAt(2);
-			for (int i = 1; i < queryTextSplit.length; i++)
-				url = url + "_" + queryTextSplit[i];
-			return addHTMLtoUrl(url);
-		} else 
+			return writeAuthorWithInitialsUrl();
+		} 
+		else if(wentPreviousPage == true) {
+			wentPreviousPage = false;
+			return writeAuthorWithInitialsUrl();
+		}
+		else 
 			return url;
 	}
-
+	
+	public String writeAuthorWithInitialsUrl() {
+		if (queryTextSplit[0].length() == 2)
+			// http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
+			url = "http://www.brainyquote.com/quotes/authors/"
+					+ queryTextSplit[0].charAt(0) + "/"
+					+ queryTextSplit[0].charAt(0) + "_"
+					+ queryTextSplit[0].charAt(1);
+		else
+			url = "http://www.brainyquote.com/quotes/authors/"
+					+ queryTextSplit[0].charAt(0) + "/"
+					+ queryTextSplit[0].charAt(0) + "_"
+					+ queryTextSplit[0].charAt(1) + "_"
+					+ queryTextSplit[0].charAt(2);
+		for (int i = 1; i < queryTextSplit.length; i++)
+			url = url + "_" + queryTextSplit[i];
+		return addHTMLtoUrl(url);
+	}
 	public String addHTMLtoUrl(String url) {
 		if (pageNum == 1)
 			url = url + ".html";
@@ -253,6 +263,15 @@ public class SpecificQuote extends BaseActivity {
 		}
 		return url;
 	}
+	
+	public String writeAuthorUrl() {
+		url = "http://www.brainyquote.com/quotes/authors/"
+				+ queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
+		for (int i = 1; i < queryTextSplit.length; i++)
+			url = url + "_" + queryTextSplit[i];
+		return addHTMLtoUrl(url);
+	}
+	
 	public String generateAuthorUrl() {
 
 		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3)
@@ -264,14 +283,14 @@ public class SpecificQuote extends BaseActivity {
 			pageNum++;
 			index = 0;
 			nextPage = true;
-			url = "http://www.brainyquote.com/quotes/authors/"
-					+ queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
-			for (int i = 1; i < queryTextSplit.length; i++)
-				url = url + "_" + queryTextSplit[i];
-			return addHTMLtoUrl(url);
-		} else 
+			return writeAuthorUrl();
+		} 
+		else if(wentPreviousPage == true) {
+			wentPreviousPage = false;
+			return writeAuthorUrl();	
+		}
+		else 
 			return url;
-		
 	}
 
 	public String generateTagUrl() {
@@ -285,6 +304,16 @@ public class SpecificQuote extends BaseActivity {
 		pageNum++;
 		index = 0;
 		nextPage = true;
+		return writeTagUrl();
+	} 
+		else if (wentPreviousPage == true) {
+			wentPreviousPage = false;
+			return writeTagUrl();
+		}
+		else
+			return url;
+	}
+	public String writeTagUrl() {
 		if (foundTopic == true) {
 			//tag is a topic
 			url = "http://www.brainyquote.com/quotes/topics/topic_"
@@ -300,10 +329,6 @@ public class SpecificQuote extends BaseActivity {
 			return addHTMLtoUrl(url);
 		}
 	}
-	else
-		return url;
-	}
-
 	private class SearchWithInitials extends AsyncTask<String, Void, String> {
 
 		@Override
