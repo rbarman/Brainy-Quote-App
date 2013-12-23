@@ -181,7 +181,17 @@ public class SpecificQuote extends BaseActivity {
 		}
 	};
 
+	public void getDocumentAndModifyElements(String url) {
+		//this method wil get a new Document and modify author + quote only when we are on a New Page (nextPage == true)
+		if (nextPage == true) {
+			doc = getDocument(url);
+			modifyElements();
+		} else {}
+		nextPage = false;
+	}
+	
 	public Document getDocument(String url) {
+		//connects to a url and returns a Document. 
 		try {
 			Document doc = Jsoup
 					.connect(url)
@@ -195,25 +205,31 @@ public class SpecificQuote extends BaseActivity {
 	}
 
 	public void modifyElements() {
+		//if there is a document then we select elements from the document.
+		//quote and author will take these elements. 
 		if (doc != null) {
 			quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 			author = doc.select(".boxyPaddingBig span.bodybold a");
 			quotesOnPage = quote.size();
-		} else {
-		}
+		} else {}
 	}
 
-	public void getDocumentAndModifyElements(String url) {
-		if (nextPage = true) {
-			doc = getDocument(url);
-			modifyElements();
-		} else {
+	public String addHTMLtoUrl(String url) {
+		//this method will add ".html" to url added based on the page number. 
+		if (pageNum == 1)
+			url = url + ".html";
+		else {
+			if(foundTopic == true)
+				//topic urls are slightly different for pages > 1
+				url = url + pageNum + ".html";
+			else
+				url = url + "_" + pageNum + ".html";
 		}
-		nextPage = false;
+		return url;
 	}
-
+	
 	public String generateAuthorWithInitialsUrl() {
-
+		//generates and returns an url for Author with Initials
 		if (first == true)
 			pageNum--;
 		else {}
@@ -235,6 +251,7 @@ public class SpecificQuote extends BaseActivity {
 	}
 	
 	public String writeAuthorWithInitialsUrl() {
+		//writes a url without ".html" for authors with initials based on how many initials are in the first name. 
 		if (queryTextSplit[0].length() == 2)
 			// http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
 			url = "http://www.brainyquote.com/quotes/authors/"
@@ -251,29 +268,9 @@ public class SpecificQuote extends BaseActivity {
 			url = url + "_" + queryTextSplit[i];
 		return addHTMLtoUrl(url);
 	}
-	public String addHTMLtoUrl(String url) {
-		if (pageNum == 1)
-			url = url + ".html";
-		else {
-			if(foundTopic == true)
-				//topic urls are slightly different for pages > 1
-				url = url + pageNum + ".html";
-			else
-				url = url + "_" + pageNum + ".html";
-		}
-		return url;
-	}
-	
-	public String writeAuthorUrl() {
-		url = "http://www.brainyquote.com/quotes/authors/"
-				+ queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
-		for (int i = 1; i < queryTextSplit.length; i++)
-			url = url + "_" + queryTextSplit[i];
-		return addHTMLtoUrl(url);
-	}
-	
-	public String generateAuthorUrl() {
 
+	public String generateAuthorUrl() {
+		//generates and returns a url for Authors. 
 		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3)
 			foundInitials = true;
 		else {}
@@ -292,9 +289,18 @@ public class SpecificQuote extends BaseActivity {
 		else 
 			return url;
 	}
+	
+	public String writeAuthorUrl() {
+		//writes a url without ".html" for authors
+		url = "http://www.brainyquote.com/quotes/authors/"
+				+ queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
+		for (int i = 1; i < queryTextSplit.length; i++)
+			url = url + "_" + queryTextSplit[i];
+		return addHTMLtoUrl(url);
+	}
 
 	public String generateTagUrl() {
-
+		//generates and returns a url for Authors.
 		if (first == true && foundTopic == true)
 			pageNum--;
 		else {}
@@ -314,6 +320,7 @@ public class SpecificQuote extends BaseActivity {
 			return url;
 	}
 	public String writeTagUrl() {
+		//writes a tag url based on if the tag is a keyword or topic. 
 		if (foundTopic == true) {
 			//tag is a topic
 			url = "http://www.brainyquote.com/quotes/topics/topic_"
