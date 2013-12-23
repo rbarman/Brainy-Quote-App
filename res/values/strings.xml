@@ -9,8 +9,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_specific_quote">Specific Quote</string>
     <string name="title_activity_favourites_quotes">Favourites</string>
-    <string name="title_activity_fav_quotes_screen">Favourite Quotes</string>
+    <string name="title_activity_fav_quotes_screen">Favorite Quotes</string>
     <string name="fav_launcher_title">Launch Fav Activity</string>
     <string name="title_activity_base">BaseActivity</string>
+    <string name="title_activity_selected_quote">Favorited Quote</string>
 
 </resources>

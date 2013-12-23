@@ -25,6 +25,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -35,6 +36,7 @@ import android.support.v4.app.NavUtils;
 
 public class FavQuotesScreen extends BaseActivity {
 	
+	public final static String QUOTE_MESSAGE = "com.example.brainyquote.MESSAGE";
 	private String quotesDir = "";
 	private ArrayList<String> quotes = new ArrayList<String>();
 	private ArrayAdapter<String> adapter;
@@ -55,6 +57,20 @@ public class FavQuotesScreen extends BaseActivity {
 		noQuoteTextView = (View) findViewById(R.id.noQuoteTextView);
 		
 		new GetFavQuotesTask().execute();
+		
+		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
+				TextView noteClicked = (TextView) viewClicked;
+				String message = noteClicked.getText().toString();
+				
+				Intent intent = new Intent(FavQuotesScreen.this, SelectedQuote.class);
+				intent.putExtra(QUOTE_MESSAGE, message);
+				
+			    startActivity(intent);
+			}
+		});
 		
 		list.setChoiceMode(list.CHOICE_MODE_MULTIPLE_MODAL);
 		list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
