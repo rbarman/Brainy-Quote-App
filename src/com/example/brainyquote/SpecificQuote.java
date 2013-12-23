@@ -45,7 +45,7 @@ public class SpecificQuote extends BaseActivity {
 	// possible types are aboutAuthor, byAuthor, tag
 	int index = 0;
 	int pageNum = -1;
-	int quoteNum = 0; // number of quotes
+	int quotesOnPage = 0; // number of quotes on page
 	int toggle = 0;
 	View view;
 	boolean foundInitials = false;
@@ -151,7 +151,7 @@ public class SpecificQuote extends BaseActivity {
 				Toast.makeText(SpecificQuote.this,
 						"Swipe to Right : Previous Quote Coming!",
 						Toast.LENGTH_SHORT).show();
-				index = quoteNum - 1;
+				index = quotesOnPage - 1;
 				pageNum--;
 				startTaskOnSwipe();
 			} else {
@@ -196,7 +196,7 @@ public class SpecificQuote extends BaseActivity {
 		if (doc != null) {
 			quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 			author = doc.select(".boxyPaddingBig span.bodybold a");
-			quoteNum = quote.size();
+			quotesOnPage = quote.size();
 		} else {
 		}
 	}
@@ -217,7 +217,7 @@ public class SpecificQuote extends BaseActivity {
 		else {
 		}
 		first = false;
-		if (index == quoteNum) {
+		if (index == quotesOnPage) {
 			//we are here if we go to a new page of quotes. 
 			pageNum++;
 			index = 0;
@@ -259,7 +259,7 @@ public class SpecificQuote extends BaseActivity {
 			foundInitials = true;
 		else {}
 		
-		if (index == quoteNum) {
+		if (index == quotesOnPage) {
 			//we are here if we go to a new page of quotes. g
 			pageNum++;
 			index = 0;
@@ -281,7 +281,7 @@ public class SpecificQuote extends BaseActivity {
 		else {}
 		first = false;
 		
-		if(index == quoteNum) {
+		if(index == quotesOnPage) {
 		pageNum++;
 		index = 0;
 		nextPage = true;
@@ -450,7 +450,7 @@ public class SpecificQuote extends BaseActivity {
 			else
 				return quote.get(index).text() + "\n\n--"
 						+ author.get(index).text() + "\n\n INDEX : " + index
-						+ "\n\n quoteNum : " + quoteNum + "\n\n PAGE : "
+						+ "\n\n quotesOnPage : " + quotesOnPage + "\n\n PAGE : "
 						+ pageNum + "\n\n URL : " + url;
 		}
 
@@ -476,8 +476,8 @@ public class SpecificQuote extends BaseActivity {
 				return "ERROR!  INVALID SEARCH" + "\n\n URL : " + url;
 			else
 				return quote.get(index).text() + "\n\n--" + queryText
-						+ "\n\n INDEX : " + index + "\n\n quoteNum : "
-						+ quoteNum + "\n\n PAGE : " + pageNum + "\n\n URL : "
+						+ "\n\n INDEX : " + index + "\n\n quotesOnPage : "
+						+ quotesOnPage + "\n\n PAGE : " + pageNum + "\n\n URL : "
 						+ url;
 		}
 
@@ -506,7 +506,7 @@ public class SpecificQuote extends BaseActivity {
 			else
 				return quote.get(index).text() + "\n\n--"
 						+ author.get(index).text() + "\n\n INDEX : " + index
-						+ "\n\n quoteNum : " + quoteNum + "\n\n URL : " + url;
+						+ "\n\n quotesOnPage : " + quotesOnPage + "\n\n URL : " + url;
 
 		}
 
