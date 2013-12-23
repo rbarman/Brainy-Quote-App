@@ -477,7 +477,7 @@ public class SpecificQuote extends BaseActivity {
 			url = params[0];
 			getDocumentAndModifyElements(url);
 			if (doc == null)
-				return "ERROR!  INVALID SEARCH" + "\n\n URL : " + url;
+				return "error";
 			else
 				return quote.get(index).text() + "\n\n--"
 						+ author.get(index).text() + "\n\n INDEX : " + index
@@ -487,11 +487,16 @@ public class SpecificQuote extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(String quote) {
-			star.setVisibility(0);
-			textView.setText(quote);
-			updateFavButton();
-			if ((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
-				showCustomToast(index);
+			if (quote.equals("error")) {
+				textView.setText("ERROR!  INVALID SEARCH" + "\n\n URL : " + url);
+			}
+			else {
+				star.setVisibility(0);
+				textView.setText(quote);
+				updateFavButton();
+				if ((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
+					showCustomToast(index);
+			}
 		}
 	}
 
@@ -503,13 +508,11 @@ public class SpecificQuote extends BaseActivity {
 			searchType = "byAuthor";
 			url = params[0];
 			getDocumentAndModifyElements(url);
-			if (doc == null)
-				return "ERROR!  INVALID SEARCH" + "\n\n URL : " + url;
-			else
-				return quote.get(index).text() + "\n\n--" + queryText
-						+ "\n\n INDEX : " + index + "\n\n quotesOnPage : "
-						+ quotesOnPage + "\n\n PAGE : " + pageNum
-						+ "\n\n URL : " + url;
+			//doc will never be null here. 
+			return quote.get(index).text() + "\n\n--" + queryText
+				+ "\n\n INDEX : " + index + "\n\n quotesOnPage : "
+				+ quotesOnPage + "\n\n PAGE : " + pageNum
+				+ "\n\n URL : " + url;
 		}
 
 		@Override
@@ -532,22 +535,19 @@ public class SpecificQuote extends BaseActivity {
 			url = params[0];
 			getDocumentAndModifyElements(url);
 			if (doc == null)
-				return "There are no quotes about " + queryText + ". Sorry!"
-						+ "\n\n URL : " + url;
+				return "error";
 			else
 				return quote.get(index).text() + "\n\n--"
 						+ author.get(index).text() + "\n\n INDEX : " + index
 						+ "\n\n quotesOnPage : " + quotesOnPage + "\n\n URL : "
 						+ url;
-
 		}
 
 		@Override
 		protected void onPostExecute(String quote) {
 
 			if (quote.equals("error")) {
-				textView.setText("No available quotes about " + queryText + "!");
-				updateFavButton();
+				textView.setText("There are no quotes about " + queryText + ". Sorry!" + "\n\n URL : " + url);
 			} else {
 				star.setVisibility(0);
 				textView.setText(quote);
