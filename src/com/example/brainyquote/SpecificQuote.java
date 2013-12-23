@@ -498,6 +498,7 @@ public class SpecificQuote extends BaseActivity {
 			else {
 				star.setVisibility(0);
 				textView.setText(quote);
+				Tools.setShareQuote(textView.getText().toString());
 				updateFavButton();
 				if ((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
 					showCustomToast(index);
@@ -524,6 +525,7 @@ public class SpecificQuote extends BaseActivity {
 		protected void onPostExecute(String quote) {
 			star.setVisibility(0);
 			textView.setText(quote);
+			Tools.setShareQuote(textView.getText().toString());
 			updateFavButton();
 
 			if ((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
@@ -556,6 +558,7 @@ public class SpecificQuote extends BaseActivity {
 			} else {
 				star.setVisibility(0);
 				textView.setText(quote);
+				Tools.setShareQuote(textView.getText().toString());
 				updateFavButton();
 				if ((pageNum == 1 && index == 0)
 						|| (pageNum == 1 && index == 1))
