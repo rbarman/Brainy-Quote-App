@@ -71,10 +71,10 @@ public class FavQuotesScreen extends BaseActivity {
 		        // Respond to clicks on the actions in the CAB
 		        switch (item.getItemId()) {
 		            case R.id.delete:
-		            	/*String quoteText = adapter.getItem((int) list.getCheckedItemIds()[0]).toString();
+		            	String quoteText = ((TextView) findViewById(R.id.quoteTextView)).getText().toString();
 		            	String[] quoteAndDir = {quoteText, quotesDir};
 		            	DeleteFavTask favDelete = new DeleteFavTask();
-		            	favDelete.execute(quoteAndDir);*/
+		            	favDelete.execute(quoteAndDir);
 		                mode.finish(); // Action picked, so close the CAB
 		                return true;
 		            default:
