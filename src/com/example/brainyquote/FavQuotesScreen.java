@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import com.example.brainyquote.Tools.DeleteAllFavsTask;
+import com.example.brainyquote.Tools.DeleteFavTask;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,14 +18,18 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
 
@@ -50,6 +55,54 @@ public class FavQuotesScreen extends BaseActivity {
 		noQuoteTextView = (View) findViewById(R.id.noQuoteTextView);
 		
 		new GetFavQuotesTask().execute();
+		
+		list.setChoiceMode(list.CHOICE_MODE_MULTIPLE_MODAL);
+		list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+
+		    @Override
+		    public void onItemCheckedStateChanged(ActionMode mode, int position,
+		                                          long id, boolean checked) {
+		        // Here you can do something when items are selected/de-selected,
+		        // such as update the title in the CAB
+		    }
+		    
+		    @Override
+		    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+		        // Respond to clicks on the actions in the CAB
+		        switch (item.getItemId()) {
+		            case R.id.delete:
+		            	/*String quoteText = adapter.getItem((int) list.getCheckedItemIds()[0]).toString();
+		            	String[] quoteAndDir = {quoteText, quotesDir};
+		            	DeleteFavTask favDelete = new DeleteFavTask();
+		            	favDelete.execute(quoteAndDir);*/
+		                mode.finish(); // Action picked, so close the CAB
+		                return true;
+		            default:
+		                return false;
+		        }
+		    }
+
+		    @Override
+		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+		        // Inflate the menu for the CAB
+		        MenuInflater inflater = mode.getMenuInflater();
+		        inflater.inflate(R.menu.context, menu);
+		        return true;
+		    }
+
+		    @Override
+		    public void onDestroyActionMode(ActionMode mode) {
+		        // Here you can make any necessary updates to the activity when
+		        // the CAB is removed. By default, selected items are deselected/unchecked.
+		    }
+
+		    @Override
+		    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+		        // Here you can perform updates to the CAB due to
+		        // an invalidate() request
+		        return false;
+		    }
+		});
 	}
 	
 	@Override
@@ -121,6 +174,7 @@ public class FavQuotesScreen extends BaseActivity {
 		if (quotes.isEmpty()) {
 			noQuoteTextView.setVisibility(View.VISIBLE);
 		}
+		
 	}
 
 	//deletes all favorites stored in quotesDir

@@ -98,8 +98,8 @@ public class Tools {
 		}
 	}
 	
-	//takes a single string of the directory to delete all
-	//favorite files
+	//takes a single string of the directory to delete a given
+	//favorite file
 	protected static class DeleteFavTask extends AsyncTask<String, Void, Void> {
 
 		@Override
