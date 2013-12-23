@@ -53,6 +53,7 @@ public class SpecificQuote extends BaseActivity {
 	boolean nextPage = false;
 	boolean first = false;
 	boolean wentPreviousPage = false;
+	boolean error = false; 
 	Document doc = null;
 	Elements author = null;
 	Elements quote = null;
@@ -139,35 +140,38 @@ public class SpecificQuote extends BaseActivity {
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 		public void onSwipeRight() {
 			// on every swipe to the right we will get the previous quote.
-
-			if (index > 0) {
-				Toast.makeText(SpecificQuote.this,
-						"Swipe to Right : Previous Quote Coming!",
-						Toast.LENGTH_SHORT).show();
-				index--;
-				startTaskOnSwipe();
-			} else if (index == 0 && pageNum > 1) {
-				Toast.makeText(SpecificQuote.this,
-						"Swipe to Right : Previous Quote Coming!",
-						Toast.LENGTH_SHORT).show();
-				index = quotesOnPage - 1;
-				pageNum--;
-				wentPreviousPage = true;
-				startTaskOnSwipe();
-			} else {
-				Toast.makeText(SpecificQuote.this,
-						"Swipe to Right : No more previous Quotes :(",
-						Toast.LENGTH_SHORT).show();
+			if (error == false) {
+				if (index > 0) {
+					Toast.makeText(SpecificQuote.this,
+							"Swipe to Right : Previous Quote Coming!",
+							Toast.LENGTH_SHORT).show();
+					index--;
+					startTaskOnSwipe();
+				} else if (index == 0 && pageNum > 1) {
+					Toast.makeText(SpecificQuote.this,
+							"Swipe to Right : Previous Quote Coming!",
+							Toast.LENGTH_SHORT).show();
+					index = quotesOnPage - 1;
+					pageNum--;
+					wentPreviousPage = true;
+					startTaskOnSwipe();
+				} else {
+					Toast.makeText(SpecificQuote.this,
+							"Swipe to Right : No more previous Quotes :(",
+							Toast.LENGTH_SHORT).show();
+				}
 			}
 		}
 
 		public void onSwipeLeft() {
 			// on every swipe to the left we will get the next quote.
-			index++;
-			Toast.makeText(SpecificQuote.this,
-					"Swipe to Left : Next Quote Coming!", Toast.LENGTH_SHORT)
-					.show();
-			startTaskOnSwipe();
+			if (error == false) {
+				index++;
+				Toast.makeText(SpecificQuote.this,
+						"Swipe to Left : Next Quote Coming!", Toast.LENGTH_SHORT)
+						.show();
+				startTaskOnSwipe();
+			}
 		}
 
 		public void onSwipeBottom() {
@@ -488,6 +492,7 @@ public class SpecificQuote extends BaseActivity {
 		@Override
 		protected void onPostExecute(String quote) {
 			if (quote.equals("error")) {
+				error = true;
 				textView.setText("ERROR!  INVALID SEARCH" + "\n\n URL : " + url);
 			}
 			else {
