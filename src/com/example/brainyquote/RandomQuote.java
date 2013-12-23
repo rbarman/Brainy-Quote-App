@@ -159,11 +159,6 @@ public class RandomQuote extends BaseActivity {
 		}
 	};
 
-	// need to create an AsyncTask so that the UI thread does not have to do
-	// extra work
-	// if we make the UI thread to the Jsoup.connect, the application will
-	// crash.
-
 	public void getCategories() {
 		BufferedReader br = null;
 		try {
@@ -173,9 +168,12 @@ public class RandomQuote extends BaseActivity {
 			while ((word = br.readLine()) != null) {
 				categories.add(word);
 			}
-		} catch (IOException ioe) {
-		}
+		} catch (IOException ioe) {}
 	}
+	// need to create an AsyncTask so that the UI thread does not have to do
+	// extra work
+	// if we make the UI thread to the Jsoup.connect, the application will
+	// crash.
 
 	private class GetQuote extends AsyncTask<Void, Void, String> {
 
@@ -218,7 +216,6 @@ public class RandomQuote extends BaseActivity {
 		@Override
 		protected void onPostExecute(String title) {
 
-			TextView textView = (TextView) findViewById(R.id.textView);
 			textView.setText(title);
 			Tools.setShareQuote(textView.getText().toString());
 			updateFavButton();		
