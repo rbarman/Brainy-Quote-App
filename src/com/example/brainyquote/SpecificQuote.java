@@ -45,13 +45,15 @@ public class SpecificQuote extends BaseActivity {
 	// possible types are aboutAuthor, byAuthor, tag
 	int index = 0;
 	int pageNum = -1;
-	int quoteNum = 0; // number of quotes
+	int quotesOnPage = 0; // number of quotes on page
 	int toggle = 0;
 	View view;
 	boolean foundInitials = false;
 	boolean foundTopic = false;
 	boolean nextPage = false;
 	boolean first = false;
+	boolean wentPreviousPage = false;
+	boolean error = false; 
 	Document doc = null;
 	Elements author = null;
 	Elements quote = null;
@@ -128,11 +130,9 @@ public class SpecificQuote extends BaseActivity {
 		else if (searchType.equals("byAuthor") && foundInitials == false)
 			new ByAuthorSearch().execute(generateAuthorUrl());
 		else if (searchType.equals("byAuthor") && foundInitials == true)
-			new ByAuthorSearch()
-					.execute(generateAuthorWithInitialsUrl());
+			new ByAuthorSearch().execute(generateAuthorWithInitialsUrl());
 		else if (searchType.equals("aboutAuthor") && foundInitials == true)
-			new AboutAuthorSearch()
-					.execute(generateAuthorWithInitialsUrl());
+			new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl());
 		else
 			new AboutAuthorSearch().execute(generateTagUrl());
 	}
@@ -140,34 +140,38 @@ public class SpecificQuote extends BaseActivity {
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 		public void onSwipeRight() {
 			// on every swipe to the right we will get the previous quote.
-
-			if (index > 0) {
-				Toast.makeText(SpecificQuote.this,
-						"Swipe to Right : Previous Quote Coming!",
-						Toast.LENGTH_SHORT).show();
-				index--;
-				startTaskOnSwipe();
-			} else if (index == 0 && pageNum > 1) {
-				Toast.makeText(SpecificQuote.this,
-						"Swipe to Right : Previous Quote Coming!",
-						Toast.LENGTH_SHORT).show();
-				index = quoteNum - 1;
-				pageNum--;
-				startTaskOnSwipe();
-			} else {
-				Toast.makeText(SpecificQuote.this,
-						"Swipe to Right : No more previous Quotes :(",
-						Toast.LENGTH_SHORT).show();
+			if (error == false) {
+				if (index > 0) {
+					Toast.makeText(SpecificQuote.this,
+							"Swipe to Right : Previous Quote Coming!",
+							Toast.LENGTH_SHORT).show();
+					index--;
+					startTaskOnSwipe();
+				} else if (index == 0 && pageNum > 1) {
+					Toast.makeText(SpecificQuote.this,
+							"Swipe to Right : Previous Quote Coming!",
+							Toast.LENGTH_SHORT).show();
+					index = quotesOnPage - 1;
+					pageNum--;
+					wentPreviousPage = true;
+					startTaskOnSwipe();
+				} else {
+					Toast.makeText(SpecificQuote.this,
+							"Swipe to Right : No more previous Quotes :(",
+							Toast.LENGTH_SHORT).show();
+				}
 			}
 		}
 
 		public void onSwipeLeft() {
 			// on every swipe to the left we will get the next quote.
-			index++;
-			Toast.makeText(SpecificQuote.this,
-					"Swipe to Left : Next Quote Coming!", Toast.LENGTH_SHORT)
-					.show();
-			startTaskOnSwipe();
+			if (error == false) {
+				index++;
+				Toast.makeText(SpecificQuote.this,
+						"Swipe to Left : Next Quote Coming!", Toast.LENGTH_SHORT)
+						.show();
+				startTaskOnSwipe();
+			}
 		}
 
 		public void onSwipeBottom() {
@@ -179,7 +183,19 @@ public class SpecificQuote extends BaseActivity {
 		}
 	};
 
+	public void getDocumentAndModifyElements(String url) {
+		// this method wil get a new Document and modify author + quote only
+		// when we are on a New Page (nextPage == true)
+		if (nextPage == true) {
+			doc = getDocument(url);
+			modifyElements();
+		} else {
+		}
+		nextPage = false;
+	}
+
 	public Document getDocument(String url) {
+		// connects to a url and returns a Document.
 		try {
 			Document doc = Jsoup
 					.connect(url)
@@ -193,114 +209,137 @@ public class SpecificQuote extends BaseActivity {
 	}
 
 	public void modifyElements() {
+		// if there is a document then we select elements from the document.
+		// quote and author will take these elements.
 		if (doc != null) {
 			quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 			author = doc.select(".boxyPaddingBig span.bodybold a");
-			quoteNum = quote.size();
+			quotesOnPage = quote.size();
 		} else {
 		}
-	}
-
-	public void getDocumentAndModifyElements(String url) {
-		if (nextPage = true) {
-			doc = getDocument(url);
-			modifyElements();
-		} else {
-		}
-		nextPage = false;
-	}
-
-	public String generateAuthorWithInitialsUrl() {
-
-		if (first == true)
-			pageNum--;
-		else {
-		}
-		first = false;
-		if (index == quoteNum) {
-			//we are here if we go to a new page of quotes. 
-			pageNum++;
-			index = 0;
-			nextPage = true;
-			if (queryTextSplit[0].length() == 2)
-				// http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
-				url = "http://www.brainyquote.com/quotes/authors/"
-						+ queryTextSplit[0].charAt(0) + "/"
-						+ queryTextSplit[0].charAt(0) + "_"
-						+ queryTextSplit[0].charAt(1);
-			else
-				url = "http://www.brainyquote.com/quotes/authors/"
-						+ queryTextSplit[0].charAt(0) + "/"
-						+ queryTextSplit[0].charAt(0) + "_"
-						+ queryTextSplit[0].charAt(1) + "_"
-						+ queryTextSplit[0].charAt(2);
-			for (int i = 1; i < queryTextSplit.length; i++)
-				url = url + "_" + queryTextSplit[i];
-			return addHTMLtoUrl(url);
-		} else 
-			return url;
 	}
 
 	public String addHTMLtoUrl(String url) {
+		// this method will add ".html" to url added based on the page number.
 		if (pageNum == 1)
 			url = url + ".html";
-		else
-			if(foundTopic == true)
-				//topic urls are slightly different for pages > 1
+		else {
+			if (foundTopic == true)
+				// topic urls are slightly different for pages > 1
 				url = url + pageNum + ".html";
 			else
 				url = url + "_" + pageNum + ".html";
+		}
 		return url;
 	}
-	public String generateAuthorUrl() {
 
-		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3)
-			foundInitials = true;
-		else {}
-		
-		if (index == quoteNum) {
-			//we are here if we go to a new page of quotes. g
+	public String generateAuthorWithInitialsUrl() {
+		// generates and returns an url for Author with Initials
+		if (first == true){
+			pageNum--;
+			first = false;
+		}
+		else {
+		}
+
+		if (index == quotesOnPage) {
+			// we are here if we go to a new page of quotes.
 			pageNum++;
 			index = 0;
 			nextPage = true;
-			url = "http://www.brainyquote.com/quotes/authors/"
-					+ queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
-			for (int i = 1; i < queryTextSplit.length; i++)
-				url = url + "_" + queryTextSplit[i];
-			return addHTMLtoUrl(url);
-		} else 
+			return writeAuthorWithInitialsUrl();
+		} else if (wentPreviousPage == true) {
+			wentPreviousPage = false;
+			return writeAuthorWithInitialsUrl();
+		} else
 			return url;
-		
+	}
+
+	public String writeAuthorWithInitialsUrl() {
+		// writes a url without ".html" for authors with initials based on how
+		// many initials are in the first name.
+		if (queryTextSplit[0].length() == 2)
+			// http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
+			url = "http://www.brainyquote.com/quotes/authors/"
+					+ queryTextSplit[0].charAt(0) + "/"
+					+ queryTextSplit[0].charAt(0) + "_"
+					+ queryTextSplit[0].charAt(1);
+		else
+			url = "http://www.brainyquote.com/quotes/authors/"
+					+ queryTextSplit[0].charAt(0) + "/"
+					+ queryTextSplit[0].charAt(0) + "_"
+					+ queryTextSplit[0].charAt(1) + "_"
+					+ queryTextSplit[0].charAt(2);
+		for (int i = 1; i < queryTextSplit.length; i++)
+			url = url + "_" + queryTextSplit[i];
+		return addHTMLtoUrl(url);
+	}
+
+	public String generateAuthorUrl() {
+		// generates and returns a url for Authors.
+		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3)
+			foundInitials = true;
+		else {
+		}
+
+		if (index == quotesOnPage) {
+			// we are here if we go to a new page of quotes. g
+			pageNum++;
+			index = 0;
+			nextPage = true;
+			return writeAuthorUrl();
+		} else if (wentPreviousPage == true) {
+			wentPreviousPage = false;
+			return writeAuthorUrl();
+		} else
+			return url;
+	}
+
+	public String writeAuthorUrl() {
+		// writes a url without ".html" for authors
+		url = "http://www.brainyquote.com/quotes/authors/"
+				+ queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
+		for (int i = 1; i < queryTextSplit.length; i++)
+			url = url + "_" + queryTextSplit[i];
+		return addHTMLtoUrl(url);
 	}
 
 	public String generateTagUrl() {
-
-		if (first == true && foundTopic == true)
+		// generates and returns a url for Authors.
+		if (first == true && foundTopic == true) {
 			pageNum--;
-		else {}
-		first = false;
-		
-		if(index == quoteNum) {
-		pageNum++;
-		index = 0;
-		nextPage = true;
+			first = false;
+		}
+		else {
+		}
+
+		if (index == quotesOnPage) {
+			pageNum++;
+			index = 0;
+			nextPage = true;
+			return writeTagUrl();
+		} else if (wentPreviousPage == true) {
+			wentPreviousPage = false;
+			return writeTagUrl();
+		} else
+			return url;
+	}
+
+	public String writeTagUrl() {
+		// writes a tag url based on if the tag is a keyword or topic.
 		if (foundTopic == true) {
-			//tag is a topic
+			// tag is a topic
 			url = "http://www.brainyquote.com/quotes/topics/topic_"
 					+ queryTextSplit[0];
 			return addHTMLtoUrl(url);
-		}
-		else {
-			//tag is a keyword
+		} else {
+			// tag is a keyword
 			url = "http://www.brainyquote.com/quotes/keywords/"
-			+ queryTextSplit[0];
+					+ queryTextSplit[0];
 			for (int i = 1; i < queryTextSplit.length; i++)
 				url = url + "_" + queryTextSplit[i];
 			return addHTMLtoUrl(url);
 		}
-	}
-	else
-		return url;
 	}
 
 	private class SearchWithInitials extends AsyncTask<String, Void, String> {
@@ -340,8 +379,7 @@ public class SpecificQuote extends BaseActivity {
 							// new
 							// AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 							// TODO: temporary fix.
-							new AboutAuthorSearch()
-									.execute(generateTagUrl());
+							new AboutAuthorSearch().execute(generateTagUrl());
 							break;
 						case R.id.byAuthor:
 							new ByAuthorSearch()
@@ -374,7 +412,8 @@ public class SpecificQuote extends BaseActivity {
 			} catch (IOException ioe) {
 				// if queryText gets us an invalid author page with author
 				// search, we are put here.
-				//queryText can be a tag or an author with initials in the first name. 
+				// queryText can be a tag or an author with initials in the
+				// first name.
 				first = true;
 				checkIfTopic(queryTextSplit[0]);
 				if (foundInitials == true)
@@ -394,7 +433,6 @@ public class SpecificQuote extends BaseActivity {
 				// we can start a new AsyncTask that will run a keyword search
 				// on the searchQuery.
 				new TagSearch().execute(generateTagUrl());
-				
 
 			} else if (message.equals("found initials")) {
 				new SearchWithInitials()
@@ -420,12 +458,10 @@ public class SpecificQuote extends BaseActivity {
 
 						switch (item.getItemId()) {
 						case R.id.aboutAuthor:
-							new AboutAuthorSearch()
-									.execute(generateTagUrl());
+							new AboutAuthorSearch().execute(generateTagUrl());
 							break;
 						case R.id.byAuthor:
-							new ByAuthorSearch()
-									.execute(generateAuthorUrl());
+							new ByAuthorSearch().execute(generateAuthorUrl());
 							break;
 						}
 						return true;
@@ -445,21 +481,28 @@ public class SpecificQuote extends BaseActivity {
 			url = params[0];
 			getDocumentAndModifyElements(url);
 			if (doc == null)
-				return "ERROR!  INVALID SEARCH" + "\n\n URL : " + url;
+				return "error";
 			else
 				return quote.get(index).text() + "\n\n--"
 						+ author.get(index).text() + "\n\n INDEX : " + index
-						+ "\n\n quoteNum : " + quoteNum + "\n\n PAGE : "
-						+ pageNum + "\n\n URL : " + url;
+						+ "\n\n quotesOnPage : " + quotesOnPage
+						+ "\n\n PAGE : " + pageNum + "\n\n URL : " + url;
 		}
 
 		@Override
 		protected void onPostExecute(String quote) {
-			star.setVisibility(0);
-			textView.setText(quote);
-			updateFavButton();
-			if((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
-				showCustomToast(index);
+			if (quote.equals("error")) {
+				error = true;
+				textView.setText("ERROR!  INVALID SEARCH" + "\n\n URL : " + url);
+			}
+			else {
+				star.setVisibility(0);
+				textView.setText(quote);
+				Tools.setShareQuote(textView.getText().toString());
+				updateFavButton();
+				if ((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
+					showCustomToast(index);
+			}
 		}
 	}
 
@@ -471,22 +514,21 @@ public class SpecificQuote extends BaseActivity {
 			searchType = "byAuthor";
 			url = params[0];
 			getDocumentAndModifyElements(url);
-			if (doc == null)
-				return "ERROR!  INVALID SEARCH" + "\n\n URL : " + url;
-			else
-				return quote.get(index).text() + "\n\n--" + queryText
-						+ "\n\n INDEX : " + index + "\n\n quoteNum : "
-						+ quoteNum + "\n\n PAGE : " + pageNum + "\n\n URL : "
-						+ url;
+			//doc will never be null here. 
+			return quote.get(index).text() + "\n\n--" + queryText
+				+ "\n\n INDEX : " + index + "\n\n quotesOnPage : "
+				+ quotesOnPage + "\n\n PAGE : " + pageNum
+				+ "\n\n URL : " + url;
 		}
 
 		@Override
 		protected void onPostExecute(String quote) {
 			star.setVisibility(0);
 			textView.setText(quote);
+			Tools.setShareQuote(textView.getText().toString());
 			updateFavButton();
-			
-			if((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
+
+			if ((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
 				showCustomToast(index);
 		}
 	}
@@ -500,26 +542,26 @@ public class SpecificQuote extends BaseActivity {
 			url = params[0];
 			getDocumentAndModifyElements(url);
 			if (doc == null)
-				return "There are no quotes about " + queryText + ". Sorry!"
-						+ "\n\n URL : " + url;
+				return "error";
 			else
 				return quote.get(index).text() + "\n\n--"
 						+ author.get(index).text() + "\n\n INDEX : " + index
-						+ "\n\n quoteNum : " + quoteNum + "\n\n URL : " + url;
-
+						+ "\n\n quotesOnPage : " + quotesOnPage + "\n\n URL : "
+						+ url;
 		}
 
 		@Override
 		protected void onPostExecute(String quote) {
 
 			if (quote.equals("error")) {
-				textView.setText("No available quotes about " + queryText + "!");
-				updateFavButton();
+				textView.setText("There are no quotes about " + queryText + ". Sorry!" + "\n\n URL : " + url);
 			} else {
 				star.setVisibility(0);
 				textView.setText(quote);
+				Tools.setShareQuote(textView.getText().toString());
 				updateFavButton();
-				if((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
+				if ((pageNum == 1 && index == 0)
+						|| (pageNum == 1 && index == 1))
 					showCustomToast(index);
 			}
 		}
