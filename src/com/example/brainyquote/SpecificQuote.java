@@ -179,7 +179,7 @@ public class SpecificQuote extends BaseActivity {
 		}
 	};
 
-	public Document getDocument(String url) {
+	public Document getDocument() {
 		try {
 			Document doc = Jsoup
 					.connect(url)
@@ -201,9 +201,9 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 
-	public void getDocumentAndModifyElements(String url) {
+	public void getDocumentAndModifyElements() {
 		if (nextPage = true) {
-			doc = getDocument(url);
+			doc = getDocument();
 			modifyElements();
 		} else {
 		}
@@ -442,8 +442,7 @@ public class SpecificQuote extends BaseActivity {
 		protected String doInBackground(String... params) {
 
 			searchType = "tag";
-			url = params[0];
-			getDocumentAndModifyElements(url);
+			getDocumentAndModifyElements();
 			if (doc == null)
 				return "ERROR!  INVALID SEARCH" + "\n\n URL : " + url;
 			else
@@ -469,8 +468,7 @@ public class SpecificQuote extends BaseActivity {
 		protected String doInBackground(String... params) {
 
 			searchType = "byAuthor";
-			url = params[0];
-			getDocumentAndModifyElements(url);
+			getDocumentAndModifyElements();
 			if (doc == null)
 				return "ERROR!  INVALID SEARCH" + "\n\n URL : " + url;
 			else
@@ -497,8 +495,7 @@ public class SpecificQuote extends BaseActivity {
 		protected String doInBackground(String... params) {
 
 			searchType = "aboutAuthor";
-			url = params[0];
-			getDocumentAndModifyElements(url);
+			getDocumentAndModifyElements();
 			if (doc == null)
 				return "There are no quotes about " + queryText + ". Sorry!"
 						+ "\n\n URL : " + url;

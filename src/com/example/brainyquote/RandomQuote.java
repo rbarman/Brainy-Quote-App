@@ -186,7 +186,6 @@ public class RandomQuote extends BaseActivity {
 			try {
 				String url = "http://www.brainyquote.com/quotes/topics/topic_"
 						+ topic + ".html";
-				// sample url for age quote :
 				// http://www.brainyquote.com/quotes/topics/topic_age.html
 				doc = Jsoup
 						.connect(url)
