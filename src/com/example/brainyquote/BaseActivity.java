@@ -88,17 +88,18 @@ public abstract class BaseActivity extends Activity {
 				// This ID represents the Home or Up button. In the case of this
 				// activity, the Up button is shown.
 				NavUtils.navigateUpFromSameTask(this);
-				return true;
+				break;
 			case R.id.launch_fav_activity:
 				Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
 				startActivity(intent);
-				return true;
+				break;
 			case R.id.menu_share:
 				Intent shareIntent = new Intent();
 		        shareIntent.setAction(Intent.ACTION_SEND);
 		        shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
 		        shareIntent.setType("text/plain");
 		        shareActionProvider.setShareIntent(shareIntent);
+		        break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

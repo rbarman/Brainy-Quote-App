@@ -16,10 +16,13 @@ import com.example.brainyquote.Tools.DeleteFavTask;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,6 +57,8 @@ public class RandomQuote extends BaseActivity {
 		setContentView(R.layout.activity_random_quote);
 		// Show the Up button in the action bar.
 		setupActionBar();
+		ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
 
 		textView = (TextView) findViewById(R.id.textView);
 		view = (View) findViewById(R.id.view);
