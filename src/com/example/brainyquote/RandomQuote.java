@@ -110,7 +110,7 @@ public class RandomQuote extends BaseActivity {
 
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 
-		// on every swipe to the right we will get the next random quote.
+		// on every swipe to the right we will get the previous random quote.
 		public void onSwipeRight() {
 
 			if (currentIndex > 0) {
@@ -145,7 +145,9 @@ public class RandomQuote extends BaseActivity {
 				Toast.makeText(RandomQuote.this,
 						"Swipe to Left : New Random Quote Coming!",
 						Toast.LENGTH_SHORT).show();
+				
 				new GetQuote().execute();
+				
 			}
 		}
 
@@ -219,7 +221,7 @@ public class RandomQuote extends BaseActivity {
 			textView.setText(title);
 			Tools.setShareQuote(textView.getText().toString());
 			updateFavButton();
-			
+			invalidateOptionsMenu();
 			if (quotePlaceHolder == 0 || quotePlaceHolder == 1) {
 				showCustomToast(quotePlaceHolder);
 			}
