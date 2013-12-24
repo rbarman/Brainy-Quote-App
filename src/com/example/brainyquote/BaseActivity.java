@@ -19,116 +19,123 @@ import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 //Base class for common variables and UI
 //features such as menus, search bars, settings. 
 //Eliminates redundant code.
 public abstract class BaseActivity extends Activity {
-	
-	ShareActionProvider shareActionProvider;
-	//quote used for sharing on google+, texting, etc.
-	//Modified by subclasses once a quote is shown on screen
-	protected static String sharingQuote = "";
-		
-	 @Override
-	    protected void onCreate(Bundle savedInstanceState) { 
-		 super.onCreate(savedInstanceState);
-	        setContentView(R.layout.activity_main);
-	        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
-			View view = View.inflate(getApplicationContext(), R.layout.custom_actionbar, null);
-			getActionBar().setCustomView(view);
-			
-			SearchView searchView = (SearchView)findViewById(R.id.searchView);
-			final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-	        	
-	    	    @Override
-	    	    public boolean onQueryTextChange(String newText) {
-	    	        return true;
-	    	    }
 
-	    	    @Override
-	    	    public boolean onQueryTextSubmit(String query) {    	    		
-	    	        launchSpecificQuoteActivity(query);
-	    	        return true;
-	    	    }
-	    	};
-	    	searchView.setOnQueryTextListener(queryTextListener);
-	 }
-	
+	ShareActionProvider shareActionProvider;
+	// quote used for sharing on google+, texting, etc.
+	// Modified by subclasses once a quote is shown on screen
+	protected static String sharingQuote = "";
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		getActionBar().setDisplayOptions(
+				ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP
+						| ActionBar.DISPLAY_SHOW_CUSTOM);
+		View view = View.inflate(getApplicationContext(),
+				R.layout.custom_actionbar, null);
+		getActionBar().setCustomView(view);
+
+		SearchView searchView = (SearchView) findViewById(R.id.searchView);
+		final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				launchSpecificQuoteActivity(query);
+				return true;
+			}
+		};
+		searchView.setOnQueryTextListener(queryTextListener);
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		
+
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.base, menu); 
-        MenuItem item = menu.findItem(R.id.menu_share);
-        shareActionProvider = (ShareActionProvider) item.getActionProvider();    	
-        return true;
+		getMenuInflater().inflate(R.menu.base, menu);
+		MenuItem item = menu.findItem(R.id.menu_share);
+		shareActionProvider = (ShareActionProvider) item.getActionProvider();
+		return true;
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case android.R.id.home:
-				// This ID represents the Home or Up button. In the case of this
-				// activity, the Up button is shown.
-				NavUtils.navigateUpFromSameTask(this);
-				break;
-			case R.id.launch_fav_activity:
-				Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-				startActivity(intent);
-				break;
-			case R.id.menu_share:
-				Intent shareIntent = new Intent();
-		        shareIntent.setAction(Intent.ACTION_SEND);
-		        shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
-		        shareIntent.setType("text/plain");
-		        shareActionProvider.setShareIntent(shareIntent);
-		        break;
+		case android.R.id.home:
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown.
+			NavUtils.navigateUpFromSameTask(this);
+			break;
+		case R.id.launch_fav_activity:
+			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+			startActivity(intent);
+			break;
+		case R.id.menu_share:
+			Intent shareIntent = new Intent();
+			shareIntent.setAction(Intent.ACTION_SEND);
+			shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
+			shareIntent.setType("text/plain");
+			shareActionProvider.setShareIntent(shareIntent);
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	public void setupActionBar() {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
+
 	public void showCustomToast(int quotePlaceHolder) {
 		LayoutInflater inflater = getLayoutInflater();
-		 
+
 		View layout = inflater.inflate(R.layout.custom_toast,
-		  (ViewGroup) findViewById(R.id.custom_toast_layout_id));
+				(ViewGroup) findViewById(R.id.custom_toast_layout_id));
 
 		ImageView image = (ImageView) layout.findViewById(R.id.image);
 		TextView text = (TextView) layout.findViewById(R.id.text);
-		if(quotePlaceHolder == 0) {
+		if (quotePlaceHolder == 0) {
 			text.setText("Swipe left to see the next quote");
 			image.setImageResource(R.drawable.arrow_left);
-		}
-		else {
+		} else {
 			text.setText("Swipe right to see the previous quote");
 			image.setImageResource(R.drawable.arrow_right);
 		}
 		Toast toast = new Toast(getApplicationContext());
 		toast.setDuration(Toast.LENGTH_SHORT);
 		toast.setView(layout);
-		toast.show();	
+		toast.show();
 	}
+
 	public void launchSpecificQuoteActivity(String queryText) {
-		     
-		       queryText = queryText.replaceAll("[^a-zA-Z\\s]","");
-		       String [] queryTextSplit = queryText.split(" ");
-		       //regex statement gets rid of all non letter characters.
-		         Toast toast = Toast.makeText(getApplicationContext(), "Searching for " + queryText + "...", Toast.LENGTH_SHORT);
-		         toast.setGravity(Gravity.CENTER, 0, 0);
-		         toast.show();
-		        
-		         //Now a new intent will be created to go to the SpecificQuote.java activity! 
-		     Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
-		     
-		     //we will pass the value of query as a string variable called queryText to the SpecificQuote activity
-		     //so the SpecificQuote activity can use the queryText as the search parameter. 
-		     intent.putExtra("queryTextSplit", queryTextSplit);
-		     intent.putExtra("queryText", queryText);
-		     startActivity(intent);  
-		     }
+
+		queryText = queryText.replaceAll("[^a-zA-Z\\s]", "");
+		String[] queryTextSplit = queryText.split(" ");
+		// regex statement gets rid of all non letter characters.
+		Toast toast = Toast.makeText(getApplicationContext(), "Searching for "
+				+ queryText + "...", Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.show();
+
+		// Now a new intent will be created to go to the SpecificQuote.java
+		// activity!
+		Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
+
+		// we will pass the value of query as a string variable called queryText
+		// to the SpecificQuote activity
+		// so the SpecificQuote activity can use the queryText as the search
+		// parameter.
+		intent.putExtra("queryTextSplit", queryTextSplit);
+		intent.putExtra("queryText", queryText);
+		startActivity(intent);
+	}
 }
