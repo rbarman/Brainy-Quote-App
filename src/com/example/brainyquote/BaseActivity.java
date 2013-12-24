@@ -64,7 +64,9 @@ public abstract class BaseActivity extends Activity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				launchSpecificQuoteActivity(query);
+				if(!query.isEmpty())
+					launchSpecificQuoteActivity(query);
+				else {}
 				return true;
 			}
 		};
