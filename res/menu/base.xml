@@ -1,19 +1,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
-<!--     <item android:id = "@+id/launch_fav_activity"
-          android:icon="@drawable/star"
-          android:title="@string/fav_launcher_title"
-          android:showAsAction="always"
-        /> -->
+
        <item android:id = "@+id/star"
           android:icon="@drawable/star"
           android:title="add to favorites"
           android:showAsAction="always"
-        />
-
+        />  
+       
     <item 
         android:id="@+id/menu_share"
         android:showAsAction="always"
         android:title="Share quote"
         android:actionProviderClass="android.widget.ShareActionProvider"/>
+    	
+    <!-- this is currently put in place for testing to launch favQuoteScreen Activity
+    		will eventually be accessed in custom_actionbar.xml -->
+        <item android:id = "@+id/launch_fav_activity"
+          android:icon="@drawable/arrow_right"
+          android:title="launch favorites"
+          android:showAsAction="always"
+        /> 
+    
 </menu>
