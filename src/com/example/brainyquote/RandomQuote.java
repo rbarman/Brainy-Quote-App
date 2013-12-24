@@ -236,18 +236,6 @@ public class RandomQuote extends BaseActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		switch (item.getItemId()) {
-		//this case is only here for temporary testing purposes. 
-		case R.id.launch_fav_activity:
-			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-			startActivity(intent);
-			break;
-		case R.id.menu_share:
-			Intent shareIntent = new Intent();
-			shareIntent.setAction(Intent.ACTION_SEND);
-			shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
-			shareIntent.setType("text/plain");
-			shareActionProvider.setShareIntent(shareIntent);
-			break;
 		case R.id.favorite:
 			
 			String text = textView.getText().toString();

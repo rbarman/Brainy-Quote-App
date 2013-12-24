@@ -5,26 +5,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+
 import com.example.brainyquote.Tools.CheckQuoteTask;
 import com.example.brainyquote.Tools.DeleteFavTask;
 import com.example.brainyquote.Tools.WriteFavQuoteTask;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class SpecificQuote extends BaseActivity {
 
 	TextView textView;
+	MenuItem favorite;
 	String queryText;
 	String appDir;
 	String url = "";
@@ -578,4 +584,39 @@ public class SpecificQuote extends BaseActivity {
 			}
 		}
 	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+
+		case R.id.favorite:
+			
+			String text = textView.getText().toString();
+			String[] quoteAndDir = {text, appDir};
+			if (toggle == 0) { 				
+				favorite.setIcon(R.drawable.btn_star_big_on);
+				new WriteFavQuoteTask().execute(quoteAndDir);
+				toggle = 1;
+			} else if (toggle == 1) {
+
+				favorite.setIcon(R.drawable.btn_star_big_off);
+				new DeleteFavTask().execute(quoteAndDir);
+				toggle = 0;
+			}
+			
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.base, menu);
+		MenuItem item = menu.findItem(R.id.menu_share);
+		favorite = menu.findItem(R.id.favorite);
+		shareActionProvider = (ShareActionProvider) item.getActionProvider();
+		
+		return true;
+	}
+
 }
