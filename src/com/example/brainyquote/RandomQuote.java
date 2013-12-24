@@ -62,29 +62,7 @@ public class RandomQuote extends BaseActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-	}
-
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		favorite = menu.findItem(R.id.favorite);
-		String[] quoteAndDir = { textView.getText().toString(), appDir };
-		
-		try {
-			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
-				favorite.setIcon(R.drawable.btn_star_big_on);
-				toggle = 1;
-			} else {
-				favorite.setIcon(R.drawable.btn_star_big_off);
-				toggle = 0;
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-		return true;
-	}
-	
+	}	
 
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 
@@ -235,5 +213,26 @@ public class RandomQuote extends BaseActivity {
 			
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		favorite = menu.findItem(R.id.favorite);
+		String[] quoteAndDir = { textView.getText().toString(), appDir };
+		
+		try {
+			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
+				favorite.setIcon(R.drawable.btn_star_big_on);
+				toggle = 1;
+			} else {
+				favorite.setIcon(R.drawable.btn_star_big_off);
+				toggle = 0;
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 }
