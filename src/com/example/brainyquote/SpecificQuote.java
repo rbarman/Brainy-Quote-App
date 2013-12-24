@@ -563,16 +563,17 @@ public class SpecificQuote extends BaseActivity {
 			}
 		}
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
+
 		switch (item.getItemId()) {
 
 		case R.id.favorite:
-			
+
 			String text = textView.getText().toString();
-			String[] quoteAndDir = {text, appDir};
-			if (toggle == 0) { 				
+			String[] quoteAndDir = { text, appDir };
+			if (toggle == 0) {
 				favorite.setIcon(R.drawable.btn_star_big_on);
 				new WriteFavQuoteTask().execute(quoteAndDir);
 				toggle = 1;
@@ -582,10 +583,11 @@ public class SpecificQuote extends BaseActivity {
 				new DeleteFavTask().execute(quoteAndDir);
 				toggle = 0;
 			}
-			
+
 		}
 		return super.onOptionsItemSelected(item);
 	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
