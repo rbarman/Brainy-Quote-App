@@ -62,17 +62,17 @@ public class MainActivity extends BaseActivity {
         
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         
         //setting hint value via .java.... should be able to do in .XML....
-        searchView.setQueryHint("Search Brainy Quote");
+//        searchView.setQueryHint("Search Brainy Quote");
         searchButton = (Button) findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener() {
 		
 			@Override
 			public void onClick(View v) {				
-				searchView.setIconified(false);		
+//				searchView.setIconified(false);		
 				if(textChanged == true) {
 					 launchSpecificQuoteActivity(queryText);
 				}
@@ -94,7 +94,7 @@ public class MainActivity extends BaseActivity {
     	        return true;
     	    }
     	};
-    	searchView.setOnQueryTextListener(queryTextListener);
+//    	searchView.setOnQueryTextListener(queryTextListener);
         
         return true;
     }

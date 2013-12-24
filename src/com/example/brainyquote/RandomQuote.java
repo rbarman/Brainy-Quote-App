@@ -1,75 +1,64 @@
-package com.example.brainyquote;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-
-import com.example.brainyquote.Tools.CheckQuoteTask;
-import com.example.brainyquote.Tools.WriteFavQuoteTask;
-import com.example.brainyquote.Tools.DeleteFavTask;
-
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.SearchView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.support.v4.app.NavUtils;
-
+		
+		
+		package com.example.brainyquote;
+		
+		import java.io.BufferedReader;
+		import java.io.IOException;
+		import java.io.InputStreamReader;
+		import java.util.ArrayList;
+		import java.util.concurrent.ExecutionException;
+		
+		import org.jsoup.Jsoup;
+		import org.jsoup.nodes.Document;
+		import org.jsoup.select.Elements;
+		
+		import com.example.brainyquote.Tools.CheckQuoteTask;
+		import com.example.brainyquote.Tools.WriteFavQuoteTask;
+		import com.example.brainyquote.Tools.DeleteFavTask;
+		
+		import android.os.AsyncTask;
+		import android.os.Bundle;
+		import android.app.ActionBar;
+		import android.view.View;
+		import android.view.View.OnTouchListener;
+		import android.widget.ImageButton;
+		import android.widget.TextView;
+		import android.widget.Toast;
+		
+		
 //This is the activity launched when the user selects the randomButton on main activity.
-public class RandomQuote extends BaseActivity {
+		public class RandomQuote extends BaseActivity {
+			
+			ArrayList<String> categories = new ArrayList<String>();
+			ArrayList<String> randomQuotes = new ArrayList<String>();
+			TextView textView;
+			ImageButton star;
+			View view;
+			int toggle = 0;
+			int currentIndex = -1;
+			int quotePlaceHolder = -1;
+			String appDir;
+			
+			@Override
+			protected void onCreate(Bundle savedInstanceState) {
+				
+				super.onCreate(savedInstanceState);
+				setContentView(R.layout.activity_random_quote);
+				 
+				getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
+				View view = View.inflate(getApplicationContext(), R.layout.custom_actionbar, null);
+				getActionBar().setCustomView(view);
 
-	ArrayList<String> categories = new ArrayList<String>();
-	ArrayList<String> randomQuotes = new ArrayList<String>();
-	TextView textView;
-	ImageButton star;
-	View view;
-	int toggle = 0;
-	int currentIndex = -1;
-	int quotePlaceHolder = -1;
-	String appDir;
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_random_quote);
-		// Show the Up button in the action bar.
-		setupActionBar();
-		ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
-
-		textView = (TextView) findViewById(R.id.textView);
-		view = (View) findViewById(R.id.view);
-		view.setOnTouchListener(viewSwiped);
-		star = (ImageButton) findViewById(R.id.star);
-		appDir = getFilesDir().getAbsolutePath().toString();
-		getCategories();
+			textView = (TextView) findViewById(R.id.textView);
+			view = (View) findViewById(R.id.view);
+			view.setOnTouchListener(viewSwiped);
+			star = (ImageButton) findViewById(R.id.star);
+			appDir = getFilesDir().getAbsolutePath().toString();
+			getCategories();
 
 		// Star is initially off. Pressing it will toggle it
 		// on or off (0 is off, 1 is on)
-		star.setOnClickListener(new View.OnClickListener() {
+			star.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -229,4 +218,4 @@ public class RandomQuote extends BaseActivity {
 			}
 		}
 	}
-}
+}	
