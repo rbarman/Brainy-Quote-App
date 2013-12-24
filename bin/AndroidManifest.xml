@@ -59,15 +59,7 @@
                 android:resource="@xml/searchable"
                 android:value="com.example.brainyquote.MainActivity" />
         </activity>
-        <!--  FavoritesQuotes -->
-        <activity
-            android:name="com.example.brainyquote.FavouritesQuotes"
-            android:label="@string/title_activity_favourites_quotes"
-            android:parentActivityName="com.example.brainyquote.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.brainyquote.MainActivity" />
-        </activity>
+
         <!-- FavQuotesScreen Activity -->
         <activity
             android:name="com.example.brainyquote.FavQuotesScreen"
