@@ -78,6 +78,7 @@
         <activity
             android:name="com.example.brainyquote.SelectedQuote"
             android:label="@string/title_activity_selected_quote"
+            android:uiOptions="splitActionBarWhenNarrow"
             android:parentActivityName="com.example.brainyquote.FavQuotesScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

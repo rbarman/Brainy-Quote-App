@@ -14,8 +14,6 @@ public class SelectedQuote extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_selected_quote);
-		// Show the Up button in the action bar.
-		setupActionBar();
 		
 		Intent intent = getIntent();
 		String quote = intent.getStringExtra(FavQuotesScreen.QUOTE_MESSAGE);
