@@ -50,7 +50,6 @@ public class SpecificQuote extends BaseActivity {
 	Document doc = null;
 	Elements author = null;
 	Elements quote = null;
-	ImageButton star;
 	ArrayList<String> topics = new ArrayList<String>();
 	String[] queryTextSplit;
 
@@ -66,7 +65,6 @@ public class SpecificQuote extends BaseActivity {
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView) findViewById(R.id.textView);
-		star = (ImageButton) findViewById(R.id.star);
 		appDir = getFilesDir().getAbsolutePath().toString();
 
 		// execute the AsyncTask
@@ -74,24 +72,6 @@ public class SpecificQuote extends BaseActivity {
 		// then from InitialSearch we will start other respective AsyncTasks.
 		getTopics();
 		new InitialSearch().execute((generateAuthorUrl()));
-	}
-
-	public void updateFavButton() {
-
-		String[] quoteAndDir = { textView.getText().toString(), appDir };
-		try {
-			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
-				star.setImageResource(R.drawable.btn_star_big_on);
-				toggle = 1;
-			} else {
-				star.setImageResource(R.drawable.btn_star_big_off);
-				toggle = 0;
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void startTaskOnSwipe() {
@@ -463,10 +443,8 @@ public class SpecificQuote extends BaseActivity {
 				error = true;
 				textView.setText("ERROR!  INVALID SEARCH" + "\n\n URL : " + url);
 			} else {
-				star.setVisibility(0);
 				textView.setText(quote);
 				Tools.setShareQuote(textView.getText().toString());
-				updateFavButton();
 				invalidateOptionsMenu();
 				if ((pageNum == 1 && index == 0)
 						|| (pageNum == 1 && index == 1))
@@ -492,10 +470,8 @@ public class SpecificQuote extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(String quote) {
-			star.setVisibility(0);
 			textView.setText(quote);
 			Tools.setShareQuote(textView.getText().toString());
-			updateFavButton();
 			invalidateOptionsMenu();
 
 			if ((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
@@ -527,10 +503,8 @@ public class SpecificQuote extends BaseActivity {
 				textView.setText("There are no quotes about " + queryText
 						+ ". Sorry!" + "\n\n URL : " + url);
 			} else {
-				star.setVisibility(0);
 				textView.setText(quote);
 				Tools.setShareQuote(textView.getText().toString());
-				updateFavButton();
 				invalidateOptionsMenu();
 				if ((pageNum == 1 && index == 0)
 						|| (pageNum == 1 && index == 1))
@@ -542,7 +516,6 @@ public class SpecificQuote extends BaseActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateFavButton();
 	}
 
 	public void getTopics() {
@@ -609,11 +582,9 @@ public class SpecificQuote extends BaseActivity {
 		
 		try {
 			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
-				star.setImageResource(R.drawable.btn_star_big_on);
 				favorite.setIcon(R.drawable.btn_star_big_on);
 				toggle = 1;
 			} else {
-				star.setImageResource(R.drawable.btn_star_big_off);
 				favorite.setIcon(R.drawable.btn_star_big_off);
 				toggle = 0;
 			}

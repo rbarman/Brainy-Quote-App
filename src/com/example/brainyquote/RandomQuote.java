@@ -34,7 +34,6 @@ public class RandomQuote extends BaseActivity {
 	ArrayList<String> categories = new ArrayList<String>();
 	ArrayList<String> randomQuotes = new ArrayList<String>();
 	TextView textView;
-	ImageButton star;
 	Menu menu;
 	MenuItem favorite;
 	View view;
@@ -52,7 +51,6 @@ public class RandomQuote extends BaseActivity {
 		textView = (TextView) findViewById(R.id.textView);
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
-		star = (ImageButton) findViewById(R.id.star);
 		appDir = getFilesDir().getAbsolutePath().toString();
 		
 		getCategories();
@@ -64,7 +62,6 @@ public class RandomQuote extends BaseActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-		updateFavButton();
 	}
 
 	@Override
@@ -74,11 +71,9 @@ public class RandomQuote extends BaseActivity {
 		
 		try {
 			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
-				star.setImageResource(R.drawable.btn_star_big_on);
 				favorite.setIcon(R.drawable.btn_star_big_on);
 				toggle = 1;
 			} else {
-				star.setImageResource(R.drawable.btn_star_big_off);
 				favorite.setIcon(R.drawable.btn_star_big_off);
 				toggle = 0;
 			}
@@ -90,23 +85,6 @@ public class RandomQuote extends BaseActivity {
 		return true;
 	}
 	
-	
-	public void updateFavButton() {
-		String[] quoteAndDir = { textView.getText().toString(), appDir };
-		try {
-			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
-				star.setImageResource(R.drawable.btn_star_big_on);
-				toggle = 1;
-			} else {
-				star.setImageResource(R.drawable.btn_star_big_off);
-				toggle = 0;
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
-	}
 
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 
@@ -120,7 +98,6 @@ public class RandomQuote extends BaseActivity {
 						Toast.LENGTH_SHORT).show();
 				textView.setText(randomQuotes.get(currentIndex));
 				Tools.setShareQuote(textView.getText().toString());
-				updateFavButton();
 				invalidateOptionsMenu();
 			} else {
 				Toast.makeText(RandomQuote.this,
@@ -139,7 +116,6 @@ public class RandomQuote extends BaseActivity {
 						Toast.LENGTH_SHORT).show();
 				textView.setText(randomQuotes.get(currentIndex));
 				Tools.setShareQuote(textView.getText().toString());
-				updateFavButton();
 				invalidateOptionsMenu();
 			} else {
 				Toast.makeText(RandomQuote.this,
@@ -220,7 +196,6 @@ public class RandomQuote extends BaseActivity {
 
 			textView.setText(title);
 			Tools.setShareQuote(textView.getText().toString());
-			updateFavButton();
 			invalidateOptionsMenu();
 			if (quotePlaceHolder == 0 || quotePlaceHolder == 1) {
 				showCustomToast(quotePlaceHolder);
