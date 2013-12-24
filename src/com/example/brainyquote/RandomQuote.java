@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
+import android.widget.SearchView;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +45,7 @@ public class RandomQuote extends BaseActivity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_random_quote);
-
+		
 		textView = (TextView) findViewById(R.id.textView);
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
