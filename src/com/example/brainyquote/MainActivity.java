@@ -32,13 +32,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
-		View view = View.inflate(getApplicationContext(), R.layout.custom_actionbar, null);
-		getActionBar().setCustomView(view);
-        
+		 super.onCreate(savedInstanceState);
+	     setContentView(R.layout.activity_main);
 		searchView = (SearchView)findViewById(R.id.searchView);
         searchButton = (Button) findViewById(R.id.searchButton);
         randomButton = (Button) findViewById(R.id.randomButton);

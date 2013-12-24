@@ -66,11 +66,7 @@ public class SpecificQuote extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_specific_quote);
-		// Show the Up button in the action bar.
-		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
-		View view = View.inflate(getApplicationContext(), R.layout.custom_actionbar, null);
-		getActionBar().setCustomView(view);
-
+		
 		Intent intent = getIntent();
 		queryText = intent.getExtras().getString("queryText");
 		queryTextSplit = intent.getExtras().getStringArray("queryTextSplit");

@@ -1,6 +1,7 @@
 package com.example.brainyquote;
 
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
@@ -29,6 +30,15 @@ public abstract class BaseActivity extends Activity {
 	//Modified by subclasses once a quote is shown on screen
 	protected static String sharingQuote = "";
 		
+	 @Override
+	    protected void onCreate(Bundle savedInstanceState) { 
+		 super.onCreate(savedInstanceState);
+	        setContentView(R.layout.activity_main);
+	        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
+			View view = View.inflate(getApplicationContext(), R.layout.custom_actionbar, null);
+			getActionBar().setCustomView(view);
+	 }
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		

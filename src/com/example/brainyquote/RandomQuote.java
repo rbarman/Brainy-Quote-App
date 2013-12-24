@@ -45,13 +45,6 @@ public class RandomQuote extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_random_quote);
 
-		getActionBar().setDisplayOptions(
-				ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP
-						| ActionBar.DISPLAY_SHOW_CUSTOM);
-		View view = View.inflate(getApplicationContext(),
-				R.layout.custom_actionbar, null);
-		getActionBar().setCustomView(view);
-
 		textView = (TextView) findViewById(R.id.textView);
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
