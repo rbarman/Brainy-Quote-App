@@ -33,9 +33,8 @@ public abstract class BaseActivity extends Activity {
 	
 	String appDir;
 	ShareActionProvider shareActionProvider;
-	MenuItem star;
+//	MenuItem favorite;	
 	int toggle = 0;
-	TextView textView;
 
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
@@ -44,7 +43,6 @@ public abstract class BaseActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_main);
 		
 		getActionBar().setDisplayOptions(
 				ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP
@@ -52,8 +50,9 @@ public abstract class BaseActivity extends Activity {
 		View view = View.inflate(getApplicationContext(),
 				R.layout.custom_actionbar, null);
 		getActionBar().setCustomView(view);
-		textView = (TextView)findViewById(R.id.textView);
+		
 		appDir = getFilesDir().getAbsolutePath().toString();
+		
 		SearchView searchView = (SearchView) findViewById(R.id.searchView);
 		final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 
@@ -79,45 +78,40 @@ public abstract class BaseActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.base, menu);
 		MenuItem item = menu.findItem(R.id.menu_share);
-		star = menu.findItem(R.id.star);
+//		favorite = menu.findItem(R.id.favorite);
 		shareActionProvider = (ShareActionProvider) item.getActionProvider();
 		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
-		switch (item.getItemId()) {
-
-		case R.id.launch_fav_activity:
-			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-			startActivity(intent);
-			break;
-		case R.id.menu_share:
-			Intent shareIntent = new Intent();
-			shareIntent.setAction(Intent.ACTION_SEND);
-			shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
-			shareIntent.setType("text/plain");
-			shareActionProvider.setShareIntent(shareIntent);
-			break;
-		case R.id.star:
-			if (toggle == 0) {
-//				String[] quoteAndDir = { textView.getText().toString(),
-//						appDir };
-				star.setIcon(R.drawable.btn_star_big_on);
-//				new WriteFavQuoteTask().execute(quoteAndDir);
-				toggle = 1;
-			} else if (toggle == 1) {
-//				String[] quoteAndDir = { textView.getText().toString(),
-//						appDir };
-				star.setIcon(R.drawable.btn_star_big_off);
-//				new DeleteFavTask().execute(quoteAndDir);
-				toggle = 0;
-			}
-			
-		}
-		return super.onOptionsItemSelected(item);
-	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//		
+//		switch (item.getItemId()) {
+//		//this case is only here for temporary testing purposes. 
+//		case R.id.launch_fav_activity:
+//			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+//			startActivity(intent);
+//			break;
+//		case R.id.menu_share:
+//			Intent shareIntent = new Intent();
+//			shareIntent.setAction(Intent.ACTION_SEND);
+//			shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
+//			shareIntent.setType("text/plain");
+//			shareActionProvider.setShareIntent(shareIntent);
+//			break;
+//		case R.id.favorite:
+//			if(toggle == 0) {
+//				favorite.setIcon(R.drawable.btn_star_big_on);
+//				toggle = 1;
+//			}
+//			else if(toggle == 1) {
+//				favorite.setIcon(R.drawable.btn_star_big_off);
+//				toggle = 0;
+//			}
+//			
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
 
 	public void setupActionBar() {
 

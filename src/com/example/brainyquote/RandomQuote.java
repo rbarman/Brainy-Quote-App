@@ -17,6 +17,7 @@ import com.example.brainyquote.Tools.DeleteFavTask;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.ActionBar;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +35,7 @@ public class RandomQuote extends BaseActivity {
 	ArrayList<String> randomQuotes = new ArrayList<String>();
 	TextView textView;
 	ImageButton star;
+	MenuItem favorite;
 	View view;
 	int toggle = 0;
 	int currentIndex = -1;
@@ -224,7 +226,44 @@ public class RandomQuote extends BaseActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.base, menu);
 		MenuItem item = menu.findItem(R.id.menu_share);
+		favorite = menu.findItem(R.id.favorite);
 		shareActionProvider = (ShareActionProvider) item.getActionProvider();
+		
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch (item.getItemId()) {
+		//this case is only here for temporary testing purposes. 
+		case R.id.launch_fav_activity:
+			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+			startActivity(intent);
+			break;
+		case R.id.menu_share:
+			Intent shareIntent = new Intent();
+			shareIntent.setAction(Intent.ACTION_SEND);
+			shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
+			shareIntent.setType("text/plain");
+			shareActionProvider.setShareIntent(shareIntent);
+			break;
+		case R.id.favorite:
+			
+			String text = textView.getText().toString();
+			String[] quoteAndDir = {text, appDir};
+			if (toggle == 0) { 				
+				favorite.setIcon(R.drawable.btn_star_big_on);
+				new WriteFavQuoteTask().execute(quoteAndDir);
+				toggle = 1;
+			} else if (toggle == 1) {
+
+				favorite.setIcon(R.drawable.btn_star_big_off);
+				new DeleteFavTask().execute(quoteAndDir);
+				toggle = 0;
+			}
+			
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

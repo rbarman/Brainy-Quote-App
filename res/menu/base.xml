@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
 
-       <item android:id = "@+id/star"
+       <item android:id = "@+id/favorite"
           android:icon="@drawable/star"
           android:title="add to favorites"
           android:showAsAction="always"
