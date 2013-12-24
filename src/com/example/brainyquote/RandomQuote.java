@@ -1,64 +1,67 @@
-		
-		
-		package com.example.brainyquote;
-		
-		import java.io.BufferedReader;
-		import java.io.IOException;
-		import java.io.InputStreamReader;
-		import java.util.ArrayList;
-		import java.util.concurrent.ExecutionException;
-		
-		import org.jsoup.Jsoup;
-		import org.jsoup.nodes.Document;
-		import org.jsoup.select.Elements;
-		
-		import com.example.brainyquote.Tools.CheckQuoteTask;
-		import com.example.brainyquote.Tools.WriteFavQuoteTask;
-		import com.example.brainyquote.Tools.DeleteFavTask;
-		
-		import android.os.AsyncTask;
-		import android.os.Bundle;
-		import android.app.ActionBar;
-		import android.view.View;
-		import android.view.View.OnTouchListener;
-		import android.widget.ImageButton;
-		import android.widget.TextView;
-		import android.widget.Toast;
-		
-		
-//This is the activity launched when the user selects the randomButton on main activity.
-		public class RandomQuote extends BaseActivity {
-			
-			ArrayList<String> categories = new ArrayList<String>();
-			ArrayList<String> randomQuotes = new ArrayList<String>();
-			TextView textView;
-			ImageButton star;
-			View view;
-			int toggle = 0;
-			int currentIndex = -1;
-			int quotePlaceHolder = -1;
-			String appDir;
-			
-			@Override
-			protected void onCreate(Bundle savedInstanceState) {
-				
-				super.onCreate(savedInstanceState);
-				setContentView(R.layout.activity_random_quote);
-				 
-				getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
-				View view = View.inflate(getApplicationContext(), R.layout.custom_actionbar, null);
-				getActionBar().setCustomView(view);
+package com.example.brainyquote;
 
-			textView = (TextView) findViewById(R.id.textView);
-			view = (View) findViewById(R.id.view);
-			view.setOnTouchListener(viewSwiped);
-			star = (ImageButton) findViewById(R.id.star);
-			appDir = getFilesDir().getAbsolutePath().toString();
-			getCategories();
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import com.example.brainyquote.Tools.CheckQuoteTask;
+import com.example.brainyquote.Tools.WriteFavQuoteTask;
+import com.example.brainyquote.Tools.DeleteFavTask;
+
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.app.ActionBar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnTouchListener;
+import android.widget.ImageButton;
+import android.widget.ShareActionProvider;
+import android.widget.TextView;
+import android.widget.Toast;
+
+//This is the activity launched when the user selects the randomButton on main activity.
+public class RandomQuote extends BaseActivity {
+
+	ArrayList<String> categories = new ArrayList<String>();
+	ArrayList<String> randomQuotes = new ArrayList<String>();
+	TextView textView;
+	ImageButton star;
+	View view;
+	int toggle = 0;
+	int currentIndex = -1;
+	int quotePlaceHolder = -1;
+	String appDir;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_random_quote);
+
+		getActionBar().setDisplayOptions(
+				ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP
+						| ActionBar.DISPLAY_SHOW_CUSTOM);
+		View view = View.inflate(getApplicationContext(),
+				R.layout.custom_actionbar, null);
+		getActionBar().setCustomView(view);
+
+		textView = (TextView) findViewById(R.id.textView);
+		view = (View) findViewById(R.id.view);
+		view.setOnTouchListener(viewSwiped);
+		star = (ImageButton) findViewById(R.id.star);
+		appDir = getFilesDir().getAbsolutePath().toString();
+		getCategories();
 
 		// Star is initially off. Pressing it will toggle it
 		// on or off (0 is off, 1 is on)
-			star.setOnClickListener(new View.OnClickListener() {
+		star.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -162,8 +165,10 @@
 			while ((word = br.readLine()) != null) {
 				categories.add(word);
 			}
-		} catch (IOException ioe) {}
+		} catch (IOException ioe) {
+		}
 	}
+
 	// need to create an AsyncTask so that the UI thread does not have to do
 	// extra work
 	// if we make the UI thread to the Jsoup.connect, the application will
@@ -211,11 +216,21 @@
 
 			textView.setText(title);
 			Tools.setShareQuote(textView.getText().toString());
-			updateFavButton();		
-			
-			if(quotePlaceHolder == 0 || quotePlaceHolder == 1) {
+			updateFavButton();
+
+			if (quotePlaceHolder == 0 || quotePlaceHolder == 1) {
 				showCustomToast(quotePlaceHolder);
 			}
 		}
 	}
-}	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.base, menu);
+		MenuItem item = menu.findItem(R.id.menu_share);
+		shareActionProvider = (ShareActionProvider) item.getActionProvider();
+		return true;
+	}
+}

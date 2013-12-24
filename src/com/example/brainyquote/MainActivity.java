@@ -18,12 +18,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
+
 import java.io.File;
 
 public class MainActivity extends BaseActivity {
 
 	Button searchButton;
 	Button randomButton;
+	SearchView searchView;
 	ImageView logo;
 	String queryText = null;
 	boolean textChanged = false;
@@ -33,9 +35,11 @@ public class MainActivity extends BaseActivity {
     	
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(false);
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
+		View view = View.inflate(getApplicationContext(), R.layout.custom_actionbar, null);
+		getActionBar().setCustomView(view);
         
+		searchView = (SearchView)findViewById(R.id.searchView);
         searchButton = (Button) findViewById(R.id.searchButton);
         randomButton = (Button) findViewById(R.id.randomButton);
         logo = (ImageView)findViewById(R.id.logo);
@@ -52,33 +56,17 @@ public class MainActivity extends BaseActivity {
 				startActivity(intent);				 
 			}
 		});        
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-    	
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        
-        //setting hint value via .java.... should be able to do in .XML....
-//        searchView.setQueryHint("Search Brainy Quote");
-        searchButton = (Button) findViewById(R.id.searchButton);
+    
         searchButton.setOnClickListener(new View.OnClickListener() {
-		
+			
 			@Override
-			public void onClick(View v) {				
-//				searchView.setIconified(false);		
+			public void onClick(View v) {
+				searchView.setIconified(false);		
 				if(textChanged == true) {
-					 launchSpecificQuoteActivity(queryText);
+					launchSpecificQuoteActivity(queryText);
 				}
 			}
 		});
-        
         final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
         	
     	    @Override
@@ -94,10 +82,9 @@ public class MainActivity extends BaseActivity {
     	        return true;
     	    }
     	};
-//    	searchView.setOnQueryTextListener(queryTextListener);
-        
-        return true;
+    	searchView.setOnQueryTextListener(queryTextListener);
     }
+
     public void launchSpecificQuoteActivity(String queryText) {
     	
     	queryText = queryText.replaceAll("[^a-zA-Z\\s]","");

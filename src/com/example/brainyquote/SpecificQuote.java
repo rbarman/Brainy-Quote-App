@@ -16,6 +16,7 @@ import com.example.brainyquote.Tools.WriteFavQuoteTask;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
@@ -66,7 +67,9 @@ public class SpecificQuote extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_specific_quote);
 		// Show the Up button in the action bar.
-		setupActionBar();
+		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP | ActionBar.DISPLAY_SHOW_CUSTOM);
+		View view = View.inflate(getApplicationContext(), R.layout.custom_actionbar, null);
+		getActionBar().setCustomView(view);
 
 		Intent intent = getIntent();
 		queryText = intent.getExtras().getString("queryText");

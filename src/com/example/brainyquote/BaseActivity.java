@@ -33,51 +33,9 @@ public abstract class BaseActivity extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.base, menu);
-        
+		getMenuInflater().inflate(R.menu.base, menu); 
         MenuItem item = menu.findItem(R.id.menu_share);
-        shareActionProvider = (ShareActionProvider) item.getActionProvider();
-        
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        
-        //setting hint value via .java.... should be able to do in .XML....
-        searchView.setQueryHint("Search Brainy Quote!");
-        
-        final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-        	
-    	    @Override
-    	    public boolean onQueryTextChange(String newText) {
-    	    	
-    	        // Do something
-    	        return true;
-    	    }
-
-    	    @Override
-    	    public boolean onQueryTextSubmit(String query) {    	    	
-   
-    	        Toast toast = Toast.makeText(getApplicationContext(), query + " Quotes coming soon...", Toast.LENGTH_SHORT);
-    	        toast.setGravity(Gravity.CENTER, 0, 0);
-    	        toast.show();
-    	        
-    	      //Now a new intent will be created to go to the SpecificQuote.java activity! 
-				Intent intent = new Intent(getBaseContext(), SpecificQuote.class);
-				
-				//we will pass the value of query as a string variable called queryText to the SpecificQuote activity
-				//so the SpecificQuote activity can use the queryText as the search parameter. 
-				query = query.replaceAll("[^a-zA-Z\\s]","");
-    	    	String [] queryTextSplit = query.split(" ");
-    	    	intent.putExtra("queryTextSplit", queryTextSplit);
-				intent.putExtra("queryText", query);
-				startActivity(intent);	
-    	        
-    	        return true;
-    	    }
-    	};
-    	searchView.setOnQueryTextListener(queryTextListener);
-    	
+        shareActionProvider = (ShareActionProvider) item.getActionProvider();    	
         return true;
 	}
 	
