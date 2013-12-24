@@ -69,27 +69,6 @@ public class SpecificQuote extends BaseActivity {
 		star = (ImageButton) findViewById(R.id.star);
 		appDir = getFilesDir().getAbsolutePath().toString();
 
-		// Star is initially off. Pressing it will toggle it
-		// on or off (0 is off, 1 is on)
-		star.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (toggle == 0) {
-					String[] quoteAndDir = { textView.getText().toString(),
-							appDir };
-					star.setImageResource(R.drawable.btn_star_big_on);
-					new WriteFavQuoteTask().execute(quoteAndDir);
-					toggle = 1;
-				} else if (toggle == 1) {
-					String[] quoteAndDir = { textView.getText().toString(),
-							appDir };
-					star.setImageResource(R.drawable.btn_star_big_off);
-					new DeleteFavTask().execute(quoteAndDir);
-					toggle = 0;
-				}
-			}
-		});
 		// execute the AsyncTask
 		// InitialSearch will determine if we have an author or tag query.
 		// then from InitialSearch we will start other respective AsyncTasks.
@@ -615,7 +594,6 @@ public class SpecificQuote extends BaseActivity {
 		MenuItem item = menu.findItem(R.id.menu_share);
 		favorite = menu.findItem(R.id.favorite);
 		shareActionProvider = (ShareActionProvider) item.getActionProvider();
-		
 		return true;
 	}
 

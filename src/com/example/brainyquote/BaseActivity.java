@@ -33,8 +33,6 @@ public abstract class BaseActivity extends Activity {
 	
 	String appDir;
 	ShareActionProvider shareActionProvider;
-//	MenuItem favorite;	
-	int toggle = 0;
 
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
@@ -78,7 +76,6 @@ public abstract class BaseActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.base, menu);
 		MenuItem item = menu.findItem(R.id.menu_share);
-//		favorite = menu.findItem(R.id.favorite);
 		shareActionProvider = (ShareActionProvider) item.getActionProvider();
 		return true;
 	}

@@ -55,27 +55,6 @@ public class RandomQuote extends BaseActivity {
 		appDir = getFilesDir().getAbsolutePath().toString();
 		getCategories();
 
-		// Star is initially off. Pressing it will toggle it
-		// on or off (0 is off, 1 is on)
-		star.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (toggle == 0) {
-					String[] quoteAndDir = { textView.getText().toString(),
-							appDir };
-					star.setImageResource(R.drawable.btn_star_big_on);
-					new WriteFavQuoteTask().execute(quoteAndDir);
-					toggle = 1;
-				} else if (toggle == 1) {
-					String[] quoteAndDir = { textView.getText().toString(),
-							appDir };
-					star.setImageResource(R.drawable.btn_star_big_off);
-					new DeleteFavTask().execute(quoteAndDir);
-					toggle = 0;
-				}
-			}
-		});
 		// execute the async task
 		new GetQuote().execute();
 	}
