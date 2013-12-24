@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import java.io.File;
@@ -38,7 +39,8 @@ public class MainActivity extends BaseActivity {
         searchButton = (Button) findViewById(R.id.searchButton);
         randomButton = (Button) findViewById(R.id.randomButton);
         logo = (ImageView)findViewById(R.id.logo);
-
+        
+        
         randomButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -98,4 +100,9 @@ public class MainActivity extends BaseActivity {
 		intent.putExtra("queryText", queryText);
 		startActivity(intent);	
     }
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
+	}
+
 }

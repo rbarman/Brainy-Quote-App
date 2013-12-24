@@ -216,4 +216,8 @@ public class FavQuotesScreen extends BaseActivity {
 		
 		return super.onOptionsItemSelected(item);
 	}
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return true;
+	}
 }
