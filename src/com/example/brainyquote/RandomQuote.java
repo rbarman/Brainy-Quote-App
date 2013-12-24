@@ -188,7 +188,6 @@ public class RandomQuote extends BaseActivity {
 		getMenuInflater().inflate(R.menu.base, menu);
 		MenuItem item = menu.findItem(R.id.menu_share);
 		favorite = menu.findItem(R.id.favorite);
-		shareActionProvider = (ShareActionProvider) item.getActionProvider();
 		return true;
 	}
 
@@ -196,6 +195,18 @@ public class RandomQuote extends BaseActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		switch (item.getItemId()) {
+//		case R.id.launch_fav_activity:
+//			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+//			startActivity(intent);
+//			break;
+//		case R.id.menu_share:
+//			Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
+//			Intent shareIntent = new Intent();
+//			shareIntent.setAction(Intent.ACTION_SEND);
+//			shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
+//			shareIntent.setType("text/plain");
+//			shareActionProvider.setShareIntent(shareIntent);
+//			break;
 		case R.id.favorite:
 			
 			String text = textView.getText().toString();

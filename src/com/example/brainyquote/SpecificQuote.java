@@ -571,7 +571,6 @@ public class SpecificQuote extends BaseActivity {
 		getMenuInflater().inflate(R.menu.base, menu);
 		MenuItem item = menu.findItem(R.id.menu_share);
 		favorite = menu.findItem(R.id.favorite);
-		shareActionProvider = (ShareActionProvider) item.getActionProvider();
 		return true;
 	}
 

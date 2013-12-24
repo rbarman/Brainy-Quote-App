@@ -32,7 +32,6 @@ import android.widget.Toast;
 public abstract class BaseActivity extends Activity {
 	
 	String appDir;
-	ShareActionProvider shareActionProvider;
 
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
@@ -76,7 +75,6 @@ public abstract class BaseActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.base, menu);
 		MenuItem item = menu.findItem(R.id.menu_share);
-		shareActionProvider = (ShareActionProvider) item.getActionProvider();
 		return true;
 	}
 
@@ -90,11 +88,12 @@ public abstract class BaseActivity extends Activity {
 			startActivity(intent);
 			break;
 		case R.id.menu_share:
+			Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
 			Intent shareIntent = new Intent();
 			shareIntent.setAction(Intent.ACTION_SEND);
 			shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
 			shareIntent.setType("text/plain");
-			shareActionProvider.setShareIntent(shareIntent);
+			startActivity(Intent.createChooser(shareIntent, "Share via"));
 			break;			
 		}
 		return super.onOptionsItemSelected(item);
@@ -148,4 +147,5 @@ public abstract class BaseActivity extends Activity {
 		intent.putExtra("queryText", queryText);
 		startActivity(intent);
 	}
+
 }

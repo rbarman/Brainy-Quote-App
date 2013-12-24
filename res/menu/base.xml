@@ -11,7 +11,8 @@
         android:id="@+id/menu_share"
         android:showAsAction="always"
         android:title="Share quote"
-        android:actionProviderClass="android.widget.ShareActionProvider"/>
+        android:icon="@drawable/ic_menu_share"
+         />
     	
     <!-- this is currently put in place for testing to launch favQuoteScreen Activity
     		will eventually be accessed in custom_actionbar.xml -->
