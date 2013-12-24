@@ -467,6 +467,7 @@ public class SpecificQuote extends BaseActivity {
 				textView.setText(quote);
 				Tools.setShareQuote(textView.getText().toString());
 				updateFavButton();
+				invalidateOptionsMenu();
 				if ((pageNum == 1 && index == 0)
 						|| (pageNum == 1 && index == 1))
 					showCustomToast(index);
@@ -495,6 +496,7 @@ public class SpecificQuote extends BaseActivity {
 			textView.setText(quote);
 			Tools.setShareQuote(textView.getText().toString());
 			updateFavButton();
+			invalidateOptionsMenu();
 
 			if ((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
 				showCustomToast(index);
@@ -529,6 +531,7 @@ public class SpecificQuote extends BaseActivity {
 				textView.setText(quote);
 				Tools.setShareQuote(textView.getText().toString());
 				updateFavButton();
+				invalidateOptionsMenu();
 				if ((pageNum == 1 && index == 0)
 						|| (pageNum == 1 && index == 1))
 					showCustomToast(index);
@@ -599,4 +602,26 @@ public class SpecificQuote extends BaseActivity {
 		return true;
 	}
 
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		favorite = menu.findItem(R.id.favorite);
+		String[] quoteAndDir = { textView.getText().toString(), appDir };
+		
+		try {
+			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
+				star.setImageResource(R.drawable.btn_star_big_on);
+				favorite.setIcon(R.drawable.btn_star_big_on);
+				toggle = 1;
+			} else {
+				star.setImageResource(R.drawable.btn_star_big_off);
+				favorite.setIcon(R.drawable.btn_star_big_off);
+				toggle = 0;
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
 }
