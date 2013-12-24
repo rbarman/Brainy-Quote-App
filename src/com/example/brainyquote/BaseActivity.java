@@ -1,5 +1,11 @@
 package com.example.brainyquote;
 
+import java.util.concurrent.ExecutionException;
+
+import com.example.brainyquote.Tools.CheckQuoteTask;
+import com.example.brainyquote.Tools.DeleteFavTask;
+import com.example.brainyquote.Tools.WriteFavQuoteTask;
+
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -24,8 +30,10 @@ import android.widget.Toast;
 //features such as menus, search bars, settings. 
 //Eliminates redundant code.
 public abstract class BaseActivity extends Activity {
-
+	
+	String appDir;
 	ShareActionProvider shareActionProvider;
+
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
 	protected static String sharingQuote = "";
@@ -70,12 +78,9 @@ public abstract class BaseActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown.
-			NavUtils.navigateUpFromSameTask(this);
-			break;
+
 		case R.id.launch_fav_activity:
 			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
 			startActivity(intent);
@@ -87,6 +92,8 @@ public abstract class BaseActivity extends Activity {
 			shareIntent.setType("text/plain");
 			shareActionProvider.setShareIntent(shareIntent);
 			break;
+		case R.id.star:
+			
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -116,7 +123,7 @@ public abstract class BaseActivity extends Activity {
 		toast.setView(layout);
 		toast.show();
 	}
-
+	
 	public void launchSpecificQuoteActivity(String queryText) {
 
 		queryText = queryText.replaceAll("[^a-zA-Z\\s]", "");
