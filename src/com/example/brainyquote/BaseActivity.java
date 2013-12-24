@@ -33,6 +33,9 @@ public abstract class BaseActivity extends Activity {
 	
 	String appDir;
 	ShareActionProvider shareActionProvider;
+	MenuItem star;
+	int toggle = 0;
+	TextView textView;
 
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
@@ -48,7 +51,8 @@ public abstract class BaseActivity extends Activity {
 		View view = View.inflate(getApplicationContext(),
 				R.layout.custom_actionbar, null);
 		getActionBar().setCustomView(view);
-		
+		textView = (TextView)findViewById(R.id.textView);
+		appDir = getFilesDir().getAbsolutePath().toString();
 		SearchView searchView = (SearchView) findViewById(R.id.searchView);
 		final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 
@@ -72,6 +76,7 @@ public abstract class BaseActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.base, menu);
 		MenuItem item = menu.findItem(R.id.menu_share);
+		star = menu.findItem(R.id.star);
 		shareActionProvider = (ShareActionProvider) item.getActionProvider();
 		return true;
 	}
@@ -93,6 +98,19 @@ public abstract class BaseActivity extends Activity {
 			shareActionProvider.setShareIntent(shareIntent);
 			break;
 		case R.id.star:
+			if (toggle == 0) {
+//				String[] quoteAndDir = { textView.getText().toString(),
+//						appDir };
+				star.setIcon(R.drawable.btn_star_big_on);
+//				new WriteFavQuoteTask().execute(quoteAndDir);
+				toggle = 1;
+			} else if (toggle == 1) {
+//				String[] quoteAndDir = { textView.getText().toString(),
+//						appDir };
+				star.setIcon(R.drawable.btn_star_big_off);
+//				new DeleteFavTask().execute(quoteAndDir);
+				toggle = 0;
+			}
 			
 		}
 		return super.onOptionsItemSelected(item);
