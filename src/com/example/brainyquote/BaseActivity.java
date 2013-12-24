@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
@@ -39,7 +40,7 @@ public abstract class BaseActivity extends Activity {
 		View view = View.inflate(getApplicationContext(),
 				R.layout.custom_actionbar, null);
 		getActionBar().setCustomView(view);
-
+		
 		SearchView searchView = (SearchView) findViewById(R.id.searchView);
 		final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 
