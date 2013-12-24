@@ -1,5 +1,6 @@
 package com.example.brainyquote;
 
+import java.text.DateFormat.Field;
 import java.util.concurrent.ExecutionException;
 
 import com.example.brainyquote.Tools.CheckQuoteTask;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -49,6 +51,18 @@ public abstract class BaseActivity extends Activity {
 		getActionBar().setCustomView(view);
 		
 		appDir = getFilesDir().getAbsolutePath().toString();
+		
+//		 try {
+//		        ViewConfiguration config = ViewConfiguration.get(this);
+//		        java.lang.reflect.Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+//		        if(menuKeyField != null) {
+//		            menuKeyField.setAccessible(true);
+//		            menuKeyField.setBoolean(config, false);
+//		        }
+//		    } catch (Exception ex) {
+//		        // Ignore
+//		    }
+//		
 		
 		SearchView searchView = (SearchView) findViewById(R.id.searchView);
 		final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
