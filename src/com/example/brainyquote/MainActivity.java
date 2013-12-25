@@ -34,7 +34,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 		 super.onCreate(savedInstanceState);
-	     setContentView(R.layout.activity_main);
+		 
+	    setContentView(R.layout.activity_main);
 		searchView = (SearchView)findViewById(R.id.searchView);
         searchButton = (Button) findViewById(R.id.searchButton);
         randomButton = (Button) findViewById(R.id.randomButton);
@@ -102,6 +103,7 @@ public class MainActivity extends BaseActivity {
     }
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
 

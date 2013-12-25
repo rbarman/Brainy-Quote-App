@@ -27,7 +27,7 @@ import android.widget.Toast;
 public abstract class BaseActivity extends Activity {
 	
 	String appDir;
-
+	Menu menu;
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
 	protected static String sharingQuote = "";
@@ -82,7 +82,7 @@ public abstract class BaseActivity extends Activity {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.base, menu);
-		
+		this.menu = menu;
 		return true;
 	}
 
