@@ -58,6 +58,7 @@ public abstract class BaseActivity extends Activity {
 		
 		
 		SearchView searchView = (SearchView) findViewById(R.id.searchView);
+		searchView.setQueryHint("Search BrainyQuote");
 		final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
 
 			@Override
