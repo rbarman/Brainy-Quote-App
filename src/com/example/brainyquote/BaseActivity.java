@@ -1,10 +1,6 @@
 package com.example.brainyquote;
 
 
-import com.example.brainyquote.Tools.CheckQuoteTask;
-import com.example.brainyquote.Tools.DeleteFavTask;
-import com.example.brainyquote.Tools.WriteFavQuoteTask;
-
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -16,7 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +53,14 @@ public abstract class BaseActivity extends Activity {
 		    } catch (Exception ex) {
 		        // Ignore
 		    }
-		
+		ImageButton fakeOverFlowIcon = (ImageButton)findViewById(R.id.fakeOverflowIcon);
+		fakeOverFlowIcon.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {			
+				showPopUpMenu(v);
+			}
+		});
 		
 		SearchView searchView = (SearchView) findViewById(R.id.searchView);
 		searchView.setQueryHint("Search BrainyQuote");
@@ -77,6 +82,26 @@ public abstract class BaseActivity extends Activity {
 		searchView.setOnQueryTextListener(queryTextListener);
 	}
 
+	
+	public void showPopUpMenu(View v) {
+		PopupMenu popUpMenu = new PopupMenu(BaseActivity.this, v);
+	    popUpMenu.getMenuInflater().inflate(R.menu.fake_overflow_menu, popUpMenu.getMenu());
+	    popUpMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				switch(item.getItemId()) {
+				case R.id.Favorites:
+					Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+					startActivity(intent);
+				}
+				return true;
+			}
+		});
+	    	popUpMenu.show();
+	}
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 

@@ -1,26 +1,14 @@
 package com.example.brainyquote;
 
-import java.io.File;
-
 import android.os.Bundle;
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.ShareActionProvider;
 import android.widget.Toast;
-
-import java.io.File;
 
 public class MainActivity extends BaseActivity {
 
@@ -40,7 +28,6 @@ public class MainActivity extends BaseActivity {
         searchButton = (Button) findViewById(R.id.searchButton);
         randomButton = (Button) findViewById(R.id.randomButton);
         logo = (ImageView)findViewById(R.id.logo);
-        
         
         randomButton.setOnClickListener(new View.OnClickListener() {
 
