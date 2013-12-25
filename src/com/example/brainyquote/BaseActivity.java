@@ -1,7 +1,5 @@
 package com.example.brainyquote;
 
-import java.text.DateFormat.Field;
-import java.util.concurrent.ExecutionException;
 
 import com.example.brainyquote.Tools.CheckQuoteTask;
 import com.example.brainyquote.Tools.DeleteFavTask;
@@ -10,10 +8,7 @@ import com.example.brainyquote.Tools.WriteFavQuoteTask;
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NavUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,10 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,17 +45,17 @@ public abstract class BaseActivity extends Activity {
 		
 		appDir = getFilesDir().getAbsolutePath().toString();
 		
-//		 try {
-//		        ViewConfiguration config = ViewConfiguration.get(this);
-//		        java.lang.reflect.Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-//		        if(menuKeyField != null) {
-//		            menuKeyField.setAccessible(true);
-//		            menuKeyField.setBoolean(config, false);
-//		        }
-//		    } catch (Exception ex) {
-//		        // Ignore
-//		    }
-//		
+		 try {
+		        ViewConfiguration config = ViewConfiguration.get(this);
+		        java.lang.reflect.Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+		        if(menuKeyField != null) {
+		            menuKeyField.setAccessible(true);
+		            menuKeyField.setBoolean(config, false);
+		        }
+		    } catch (Exception ex) {
+		        // Ignore
+		    }
+		
 		
 		SearchView searchView = (SearchView) findViewById(R.id.searchView);
 		final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
@@ -88,7 +81,7 @@ public abstract class BaseActivity extends Activity {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.base, menu);
-		MenuItem item = menu.findItem(R.id.menu_share);
+		
 		return true;
 	}
 
@@ -96,7 +89,6 @@ public abstract class BaseActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		switch (item.getItemId()) {
-		//this case is only here for temporary testing purposes. 
 		case R.id.launch_fav_activity:
 			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
 			startActivity(intent);
