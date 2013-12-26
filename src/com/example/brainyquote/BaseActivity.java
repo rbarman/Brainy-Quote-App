@@ -42,17 +42,7 @@ public abstract class BaseActivity extends Activity {
 		getActionBar().setCustomView(view);
 		
 		appDir = getFilesDir().getAbsolutePath().toString();
-		
-		 try {
-		        ViewConfiguration config = ViewConfiguration.get(this);
-		        java.lang.reflect.Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-		        if(menuKeyField != null) {
-		            menuKeyField.setAccessible(true);
-		            menuKeyField.setBoolean(config, false);
-		        }
-		    } catch (Exception ex) {
-		        // Ignore
-		    }
+
 		ImageButton fakeOverFlowIcon = (ImageButton)findViewById(R.id.fakeOverflowIcon);
 		fakeOverFlowIcon.setOnClickListener(new View.OnClickListener() {
 			
@@ -115,7 +105,7 @@ public abstract class BaseActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
 		switch (item.getItemId()) {
-		case R.id.launch_fav_activity:
+		case R.id.favorite:
 			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
 			startActivity(intent);
 			break;
