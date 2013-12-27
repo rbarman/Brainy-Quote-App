@@ -110,7 +110,7 @@ public class RandomQuote extends BaseActivity {
 						Toast.LENGTH_SHORT).show();
 				textView.setText(randomQuotes.get(currentIndex));
 				Tools.setShareQuote(textView.getText().toString());
-				invalidateOptionsMenu();
+				
 			} else {
 				Toast.makeText(RandomQuote.this,
 						"Swipe to Right : No more previous Quotes :(",
@@ -128,7 +128,7 @@ public class RandomQuote extends BaseActivity {
 						Toast.LENGTH_SHORT).show();
 				textView.setText(randomQuotes.get(currentIndex));
 				Tools.setShareQuote(textView.getText().toString());
-				invalidateOptionsMenu();
+				
 			} else {
 				Toast.makeText(RandomQuote.this,
 						"Swipe to Left : New Random Quote Coming!",
@@ -208,35 +208,13 @@ public class RandomQuote extends BaseActivity {
 
 			textView.setText(title);
 			Tools.setShareQuote(textView.getText().toString());
-			invalidateOptionsMenu();
+			
 			if (quotePlaceHolder == 0 || quotePlaceHolder == 1) {
 				showCustomToast(quotePlaceHolder);
 			}
 		}
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
-
-//		case R.id.favorite:
-//			
-//			String text = textView.getText().toString();
-//			String[] quoteAndDir = {text, appDir};
-//			if (toggle == 0) { 				
-//				favorite.setIcon(R.drawable.btn_star_big_on);
-//				new WriteFavQuoteTask().execute(quoteAndDir);
-//				toggle = 1;
-//			} else if (toggle == 1) {
-//
-//				favorite.setIcon(R.drawable.btn_star_big_off);
-//				new DeleteFavTask().execute(quoteAndDir);
-//				toggle = 0;
-//			}
-//			
-//		}
-		return super.onOptionsItemSelected(item);
-	}
 
 //	@Override
 //	public boolean onPrepareOptionsMenu(Menu menu) {

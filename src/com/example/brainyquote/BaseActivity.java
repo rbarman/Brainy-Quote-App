@@ -39,6 +39,7 @@ public abstract class BaseActivity extends Activity {
 		getActionBar();
 		appDir = getFilesDir().getAbsolutePath().toString();
 
+		//this try catch is a hack to show the action overflow menu on phones with hardware menu button. 
 		try {
 			ViewConfiguration config = ViewConfiguration.get(this);
 			java.lang.reflect.Field menuKeyField = ViewConfiguration.class

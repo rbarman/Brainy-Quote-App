@@ -482,7 +482,7 @@ public class SpecificQuote extends BaseActivity {
 			} else {
 				textView.setText(quote);
 				Tools.setShareQuote(textView.getText().toString());
-				invalidateOptionsMenu();
+				
 				if ((pageNum == 1 && index == 0)
 						|| (pageNum == 1 && index == 1))
 					showCustomToast(index);
@@ -509,7 +509,7 @@ public class SpecificQuote extends BaseActivity {
 		protected void onPostExecute(String quote) {
 			textView.setText(quote);
 			Tools.setShareQuote(textView.getText().toString());
-			invalidateOptionsMenu();
+			
 
 			if ((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
 				showCustomToast(index);
@@ -542,7 +542,7 @@ public class SpecificQuote extends BaseActivity {
 			} else {
 				textView.setText(quote);
 				Tools.setShareQuote(textView.getText().toString());
-				invalidateOptionsMenu();
+				
 				if ((pageNum == 1 && index == 0)
 						|| (pageNum == 1 && index == 1))
 					showCustomToast(index);
