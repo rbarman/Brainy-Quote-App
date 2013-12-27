@@ -91,6 +91,7 @@ public class FavQuotesScreen extends BaseActivity {
 		            	String[] quoteAndDir = {quoteText, quotesDir};
 		            	DeleteFavTask favDelete = new DeleteFavTask();
 		            	favDelete.execute(quoteAndDir);
+		            	new GetFavQuotesTask().execute();
 		                mode.finish(); // Action picked, so close the CAB
 		                return true;
 		            case R.id.deleteAll:
