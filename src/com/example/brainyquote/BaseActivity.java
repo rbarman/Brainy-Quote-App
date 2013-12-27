@@ -1,9 +1,10 @@
 package com.example.brainyquote;
 
-
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,9 +24,8 @@ import android.widget.Toast;
 //features such as menus, search bars, settings. 
 //Eliminates redundant code.
 public abstract class BaseActivity extends Activity {
-	
+
 	String appDir;
-	Menu menu;
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
 	protected static String sharingQuote = "";
@@ -33,105 +33,78 @@ public abstract class BaseActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		getActionBar().setDisplayOptions(
-				ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP
-						| ActionBar.DISPLAY_SHOW_CUSTOM);
-		View view = View.inflate(getApplicationContext(),
-				R.layout.custom_actionbar, null);
-		getActionBar().setCustomView(view);
-		
+
+		getActionBar();
 		appDir = getFilesDir().getAbsolutePath().toString();
 
 		try {
-			             ViewConfiguration config = ViewConfiguration.get(this);
-			             java.lang.reflect.Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-			             if(menuKeyField != null) {
-			                 menuKeyField.setAccessible(true);
-			                 menuKeyField.setBoolean(config, false);
-			             }
-			         } catch (Exception ex) {
-			             // Ignore
-			         }
-		
-		
-		ImageButton fakeOverFlowIcon = (ImageButton)findViewById(R.id.fakeOverflowIcon);
-		fakeOverFlowIcon.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {			
-				showPopUpMenu(v);
+			ViewConfiguration config = ViewConfiguration.get(this);
+			java.lang.reflect.Field menuKeyField = ViewConfiguration.class
+					.getDeclaredField("sHasPermanentMenuKey");
+			if (menuKeyField != null) {
+				menuKeyField.setAccessible(true);
+				menuKeyField.setBoolean(config, false);
 			}
-		});
-		
-		SearchView searchView = (SearchView) findViewById(R.id.searchView);
-		searchView.setQueryHint("Search BrainyQuote");
-		final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-
-			@Override
-			public boolean onQueryTextChange(String newText) {
-				return true;
-			}
-
-			@Override
-			public boolean onQueryTextSubmit(String query) {
-				if(!query.isEmpty())
-					launchSpecificQuoteActivity(query);
-				else {}
-				return true;
-			}
-		};
-		searchView.setOnQueryTextListener(queryTextListener);
+		} catch (Exception ex) {
+			// Ignore
+		}
 	}
 
-	
-	public void showPopUpMenu(View v) {
-		PopupMenu popUpMenu = new PopupMenu(BaseActivity.this, v);
-	    popUpMenu.getMenuInflater().inflate(R.menu.fake_overflow_menu, popUpMenu.getMenu());
-	    popUpMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-			
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				switch(item.getItemId()) {
-				case R.id.Favorites:
-					Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-					startActivity(intent);
-				}
-				return true;
-			}
-		});
-	    	popUpMenu.show();
-	}
-	
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.base, menu);
-		this.menu = menu;
+
+		// Associate searchable configuration with the SearchView
+	    SearchManager searchManager =
+	           (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+	    SearchView searchView =
+	            (SearchView) menu.findItem(R.id.search).getActionView();
+	    searchView.setSearchableInfo(
+	            searchManager.getSearchableInfo(getComponentName()));
+
+      final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+    	
+	    @Override
+	    public boolean onQueryTextChange(String newText) {
+//	    	textChanged = true;
+//	        queryText = newText;
+	        return true;
+	    }
+
+	    @Override
+	    public boolean onQueryTextSubmit(String query) {    	    		
+	        launchSpecificQuoteActivity(query);
+	        return true;
+	    }
+	};
+	searchView.setOnQueryTextListener(queryTextListener);
+	    
+	    
 		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
-		switch (item.getItemId()) {
-		case R.id.favorite:
-			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-			startActivity(intent);
-			break;
-		case R.id.menu_share:
-			Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
-			Intent shareIntent = new Intent();
-			shareIntent.setAction(Intent.ACTION_SEND);
-			shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
-			shareIntent.setType("text/plain");
-			startActivity(Intent.createChooser(shareIntent, "Share via"));
-			break;			
-		}
-		return super.onOptionsItemSelected(item);
-	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
+//
+//		switch (item.getItemId()) {
+//		case R.id.favorite:
+//			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+//			startActivity(intent);
+//			break;
+//		case R.id.menu_share:
+//			Toast.makeText(getApplicationContext(), "clicked",
+//					Toast.LENGTH_SHORT).show();
+//			Intent shareIntent = new Intent();
+//			shareIntent.setAction(Intent.ACTION_SEND);
+//			shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
+//			shareIntent.setType("text/plain");
+//			startActivity(Intent.createChooser(shareIntent, "Share via"));
+//			break;
+//		}
+//		return super.onOptionsItemSelected(item);
+//	}
 
 	public void setupActionBar() {
 
@@ -158,7 +131,7 @@ public abstract class BaseActivity extends Activity {
 		toast.setView(layout);
 		toast.show();
 	}
-	
+
 	public void launchSpecificQuoteActivity(String queryText) {
 
 		queryText = queryText.replaceAll("[^a-zA-Z\\s]", "");

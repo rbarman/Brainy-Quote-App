@@ -36,7 +36,6 @@
         <activity
             android:name="com.example.brainyquote.RandomQuote"
             android:label="@string/title_activity_random_quote"
-            android:uiOptions="splitActionBarWhenNarrow"
             android:parentActivityName="com.example.brainyquote.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -48,7 +47,7 @@
             android:name="com.example.brainyquote.SpecificQuote"
             android:label="@string/title_activity_specific_quote"
             android:parentActivityName="com.example.brainyquote.MainActivity" 
-            android:uiOptions="splitActionBarWhenNarrow">
+		>
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -77,7 +76,6 @@
         <activity
             android:name="com.example.brainyquote.SelectedQuote"
             android:label="@string/title_activity_selected_quote"
-            android:uiOptions="splitActionBarWhenNarrow"
             android:parentActivityName="com.example.brainyquote.FavQuotesScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

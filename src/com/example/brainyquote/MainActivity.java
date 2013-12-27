@@ -24,7 +24,6 @@ public class MainActivity extends BaseActivity {
 		 super.onCreate(savedInstanceState);
 		 
 	    setContentView(R.layout.activity_main);
-		searchView = (SearchView)findViewById(R.id.searchView);
         searchButton = (Button) findViewById(R.id.searchButton);
         randomButton = (Button) findViewById(R.id.randomButton);
         logo = (ImageView)findViewById(R.id.logo);
@@ -33,41 +32,12 @@ public class MainActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				//May seem a little redundant, since user knows that he/she requested random quote
-				//Toast.makeText(getApplicationContext(), "Random Quote Will be Generated...", Toast.LENGTH_SHORT).show();				//
 
 				//Now a new intent will be created to go to the RandomQuote.java activity! 
 				Intent intent = new Intent(getBaseContext(), RandomQuote.class);
 				startActivity(intent);				 
 			}
 		});        
-    
-        searchButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				searchView.setIconified(false);		
-				if(textChanged == true) {
-					launchSpecificQuoteActivity(queryText);
-				}
-			}
-		});
-        final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
-        	
-    	    @Override
-    	    public boolean onQueryTextChange(String newText) {
-    	    	textChanged = true;
-    	        queryText = newText;
-    	        return true;
-    	    }
-
-    	    @Override
-    	    public boolean onQueryTextSubmit(String query) {    	    		
-    	        launchSpecificQuoteActivity(query);
-    	        return true;
-    	    }
-    	};
-    	searchView.setOnQueryTextListener(queryTextListener);
     }
 
     public void launchSpecificQuoteActivity(String queryText) {
@@ -88,11 +58,6 @@ public class MainActivity extends BaseActivity {
 		intent.putExtra("queryText", queryText);
 		startActivity(intent);	
     }
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		//overriding to inflate the main menu. (which has nothing)
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+
 
 }

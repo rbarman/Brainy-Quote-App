@@ -1,6 +1,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
 
+        <item android:id="@+id/search"
+           android:title="@string/search_title"
+           android:icon="@drawable/ic_search"
+           android:showAsAction="always"
+           android:actionViewClass="android.widget.SearchView"      
+           />
+    
+    
      <item android:id = "@+id/launch_fav_activity"
            android:title="Favorites"
            android:showAsAction="never"
@@ -14,7 +22,7 @@
            android:showAsAction="never"
          />
     
-       <item android:id = "@+id/favorite"
+<!--        <item android:id = "@+id/favorite"
           android:icon="@drawable/star"
           android:title="add to favorites"
           android:showAsAction="always"
@@ -25,6 +33,6 @@
         android:showAsAction="always"
         android:title="Share quote"
         android:icon="@drawable/ic_menu_share"
-         />
+         /> -->
     
 </menu>
