@@ -27,13 +27,4 @@
         android:text="You have no favorites :-("
         android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/clearAllFavs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="Clear"
-        android:onClick="deleteAllFavorites" />
-
 </RelativeLayout>

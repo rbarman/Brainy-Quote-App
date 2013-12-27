@@ -93,6 +93,9 @@ public class FavQuotesScreen extends BaseActivity {
 		            	favDelete.execute(quoteAndDir);
 		                mode.finish(); // Action picked, so close the CAB
 		                return true;
+		            case R.id.deleteAll:
+		            	deleteAllFavorites();
+		            	mode.finish();
 		            default:
 		                return false;
 		        }
@@ -195,7 +198,7 @@ public class FavQuotesScreen extends BaseActivity {
 
 	//deletes all favorites stored in quotesDir
 	//and refreshes listView
-	public void deleteAllFavorites(View view) {
+	public void deleteAllFavorites() {
 		
 		new DeleteAllFavsTask().execute(quotesDir);
 		quotes.clear();
