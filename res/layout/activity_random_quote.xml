@@ -19,5 +19,12 @@
         android:layout_marginTop="94dp"
         android:text=""
         android:textSize="20sp" />
+    
+    <include
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        layout="@layout/customized_bottom" />
 
 </RelativeLayout>

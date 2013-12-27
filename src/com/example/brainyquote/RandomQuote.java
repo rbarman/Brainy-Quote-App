@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
@@ -35,6 +36,7 @@ public class RandomQuote extends BaseActivity {
 	ArrayList<String> randomQuotes = new ArrayList<String>();
 	TextView textView;
 	Menu menu;
+	ImageButton share;
 	MenuItem favorite;
 	View view;
 	int toggle = 0;
@@ -52,6 +54,19 @@ public class RandomQuote extends BaseActivity {
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
 		appDir = getFilesDir().getAbsolutePath().toString();
+		share = (ImageButton)findViewById(R.id.share);
+		share.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
+				Intent shareIntent = new Intent();
+				shareIntent.setAction(Intent.ACTION_SEND);
+				shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
+				shareIntent.setType("text/plain");
+				startActivity(Intent.createChooser(shareIntent, "Share via"));
+			}
+		});
 		
 		getCategories();
 		

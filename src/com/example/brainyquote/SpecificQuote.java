@@ -31,6 +31,7 @@ public class SpecificQuote extends BaseActivity {
 
 	TextView textView;
 	MenuItem favorite;
+	ImageButton share;
 	String queryText;
 	String appDir;
 	String url = "";
@@ -67,6 +68,24 @@ public class SpecificQuote extends BaseActivity {
 		textView = (TextView) findViewById(R.id.textView);
 		appDir = getFilesDir().getAbsolutePath().toString();
 
+		share = (ImageButton)findViewById(R.id.share);
+		share.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
+				Intent shareIntent = new Intent();
+				shareIntent.setAction(Intent.ACTION_SEND);
+				shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
+				shareIntent.setType("text/plain");
+				startActivity(Intent.createChooser(shareIntent, "Share via"));
+			}
+		});
+		
+		
+		
+		
+		
 		// execute the AsyncTask
 		// InitialSearch will determine if we have an author or tag query.
 		// then from InitialSearch we will start other respective AsyncTasks.

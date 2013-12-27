@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -29,7 +30,8 @@ public abstract class BaseActivity extends Activity {
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
 	protected static String sharingQuote = "";
-
+	Button menu;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,7 +50,8 @@ public abstract class BaseActivity extends Activity {
 		} catch (Exception ex) {
 			// Ignore
 		}
-	}
+	}	
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
