@@ -30,7 +30,6 @@ import android.widget.Toast;
 public class SpecificQuote extends BaseActivity {
 
 	TextView textView;
-	MenuItem favorite;
 	ImageButton share;
 	ImageButton star;
 	String queryText;
