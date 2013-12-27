@@ -42,6 +42,7 @@ public class SelectedQuote extends BaseActivity {
 					star.setImageResource(R.drawable.btn_star_big_on);
 					new WriteFavQuoteTask().execute(quoteAndDir);
 					Toast.makeText(getApplicationContext(), "Quote is added to favorites!", Toast.LENGTH_SHORT).show();
+					isFavorite = true;
 				}
 			}
 		});
