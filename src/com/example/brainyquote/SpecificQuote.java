@@ -32,6 +32,7 @@ public class SpecificQuote extends BaseActivity {
 	TextView textView;
 	MenuItem favorite;
 	ImageButton share;
+	ImageButton star;
 	String queryText;
 	String appDir;
 	String url = "";
@@ -82,7 +83,24 @@ public class SpecificQuote extends BaseActivity {
 			}
 		});
 		
-		
+		star = (ImageButton)findViewById(R.id.star);
+		star.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String text = textView.getText().toString();
+				String[] quoteAndDir = {text, appDir};
+				if (toggle == 0) { 	
+					star.setImageResource(R.drawable.btn_star_big_on);				
+					new WriteFavQuoteTask().execute(quoteAndDir);
+					toggle = 1;
+				} else if (toggle == 1) {
+					star.setImageResource(R.drawable.btn_star_big_off);
+					new DeleteFavTask().execute(quoteAndDir);
+					toggle = 0;
+				}
+			}
+		});
 		
 		
 		

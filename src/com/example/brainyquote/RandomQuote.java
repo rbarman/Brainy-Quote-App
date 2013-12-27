@@ -35,9 +35,8 @@ public class RandomQuote extends BaseActivity {
 	ArrayList<String> categories = new ArrayList<String>();
 	ArrayList<String> randomQuotes = new ArrayList<String>();
 	TextView textView;
-	Menu menu;
 	ImageButton share;
-	MenuItem favorite;
+	ImageButton star;
 	View view;
 	int toggle = 0;
 	int currentIndex = -1;
@@ -67,6 +66,26 @@ public class RandomQuote extends BaseActivity {
 				startActivity(Intent.createChooser(shareIntent, "Share via"));
 			}
 		});
+		
+		star = (ImageButton)findViewById(R.id.star);
+		star.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String text = textView.getText().toString();
+				String[] quoteAndDir = {text, appDir};
+				if (toggle == 0) { 	
+					star.setImageResource(R.drawable.btn_star_big_on);				
+					new WriteFavQuoteTask().execute(quoteAndDir);
+					toggle = 1;
+				} else if (toggle == 1) {
+					star.setImageResource(R.drawable.btn_star_big_off);
+					new DeleteFavTask().execute(quoteAndDir);
+					toggle = 0;
+				}
+			}
+		});
+		
 		
 		getCategories();
 		
@@ -196,32 +215,10 @@ public class RandomQuote extends BaseActivity {
 		}
 	}
 
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//
-//		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.base, menu);
-//		MenuItem item = menu.findItem(R.id.menu_share);
-//		favorite = menu.findItem(R.id.favorite);
-//		return true;
-//	}
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		
-//		switch (item.getItemId()) {
-//		case R.id.launch_fav_activity:
-//			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-//			startActivity(intent);
-//			break;
-//		case R.id.menu_share:
-//			Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
-//			Intent shareIntent = new Intent();
-//			shareIntent.setAction(Intent.ACTION_SEND);
-//			shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
-//			shareIntent.setType("text/plain");
-//			shareActionProvider.setShareIntent(shareIntent);
-//			break;
+
 //		case R.id.favorite:
 //			
 //			String text = textView.getText().toString();
