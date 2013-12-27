@@ -30,7 +30,6 @@ public abstract class BaseActivity extends Activity {
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
 	protected static String sharingQuote = "";
-	Button menu;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,13 +66,11 @@ public abstract class BaseActivity extends Activity {
 	            (SearchView) menu.findItem(R.id.search).getActionView();
 	    searchView.setSearchableInfo(
 	            searchManager.getSearchableInfo(getComponentName()));
-
+	    searchView.setQueryHint("Search BrainyQuote");
       final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
     	
 	    @Override
 	    public boolean onQueryTextChange(String newText) {
-//	    	textChanged = true;
-//	        queryText = newText;
 	        return true;
 	    }
 
@@ -84,8 +81,6 @@ public abstract class BaseActivity extends Activity {
 	    }
 	};
 	searchView.setOnQueryTextListener(queryTextListener);
-	    
-	    
 		return true;
 	}
 

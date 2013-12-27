@@ -124,4 +124,9 @@ public class Tools {
 	public static void setShareQuote(String quote) {
 		BaseActivity.sharingQuote = quote;
 	}
+
+
+
+
+
 }
