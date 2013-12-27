@@ -85,26 +85,17 @@ public abstract class BaseActivity extends Activity {
 		return true;
 	}
 
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//
-//		switch (item.getItemId()) {
-//		case R.id.favorite:
-//			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-//			startActivity(intent);
-//			break;
-//		case R.id.menu_share:
-//			Toast.makeText(getApplicationContext(), "clicked",
-//					Toast.LENGTH_SHORT).show();
-//			Intent shareIntent = new Intent();
-//			shareIntent.setAction(Intent.ACTION_SEND);
-//			shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
-//			shareIntent.setType("text/plain");
-//			startActivity(Intent.createChooser(shareIntent, "Share via"));
-//			break;
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		switch (item.getItemId()) {
+		case R.id.launch_fav_activity:
+			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+			startActivity(intent);
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	public void setupActionBar() {
 
