@@ -110,7 +110,7 @@ public class RandomQuote extends BaseActivity {
 						Toast.LENGTH_SHORT).show();
 				textView.setText(randomQuotes.get(currentIndex));
 				Tools.setShareQuote(textView.getText().toString());
-				
+				changeStarIfFavorite();
 			} else {
 				Toast.makeText(RandomQuote.this,
 						"Swipe to Right : No more previous Quotes :(",
@@ -128,14 +128,13 @@ public class RandomQuote extends BaseActivity {
 						Toast.LENGTH_SHORT).show();
 				textView.setText(randomQuotes.get(currentIndex));
 				Tools.setShareQuote(textView.getText().toString());
-				
+				changeStarIfFavorite();
 			} else {
 				Toast.makeText(RandomQuote.this,
 						"Swipe to Left : New Random Quote Coming!",
 						Toast.LENGTH_SHORT).show();
 				
-				new GetQuote().execute();
-				
+				new GetQuote().execute();				
 			}
 		}
 
@@ -208,32 +207,29 @@ public class RandomQuote extends BaseActivity {
 
 			textView.setText(title);
 			Tools.setShareQuote(textView.getText().toString());
-			
+			changeStarIfFavorite();
 			if (quotePlaceHolder == 0 || quotePlaceHolder == 1) {
 				showCustomToast(quotePlaceHolder);
 			}
 		}
 	}
 
-
-//	@Override
-//	public boolean onPrepareOptionsMenu(Menu menu) {
-//		favorite = menu.findItem(R.id.favorite);
-//		String[] quoteAndDir = { textView.getText().toString(), appDir };
-//		
-//		try {
-//			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
-//				favorite.setIcon(R.drawable.btn_star_big_on);
-//				toggle = 1;
-//			} else {
-//				favorite.setIcon(R.drawable.btn_star_big_off);
-//				toggle = 0;
-//			}
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		} catch (ExecutionException e) {
-//			e.printStackTrace();
-//		}
-//		return true;
-//	}
+	//uses CheckQuote async task and will change the star accordingly if quote is favorited or not!
+	public void changeStarIfFavorite() {
+		String[] quoteAndDir = { textView.getText().toString(), appDir };
+		
+		try {
+			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
+				star.setImageResource(R.drawable.btn_star_big_on);
+				toggle = 1;
+			} else {
+				star.setImageResource(R.drawable.btn_star_big_off);
+				toggle = 0;
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
 }

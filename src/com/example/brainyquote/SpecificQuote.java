@@ -482,7 +482,7 @@ public class SpecificQuote extends BaseActivity {
 			} else {
 				textView.setText(quote);
 				Tools.setShareQuote(textView.getText().toString());
-				
+				changeStarIfFavorite();
 				if ((pageNum == 1 && index == 0)
 						|| (pageNum == 1 && index == 1))
 					showCustomToast(index);
@@ -509,7 +509,7 @@ public class SpecificQuote extends BaseActivity {
 		protected void onPostExecute(String quote) {
 			textView.setText(quote);
 			Tools.setShareQuote(textView.getText().toString());
-			
+			changeStarIfFavorite();
 
 			if ((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
 				showCustomToast(index);
@@ -542,7 +542,7 @@ public class SpecificQuote extends BaseActivity {
 			} else {
 				textView.setText(quote);
 				Tools.setShareQuote(textView.getText().toString());
-				
+				changeStarIfFavorite();
 				if ((pageNum == 1 && index == 0)
 						|| (pageNum == 1 && index == 1))
 					showCustomToast(index);
@@ -576,59 +576,23 @@ public class SpecificQuote extends BaseActivity {
 			}
 		}
 	}
-
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
-//
-//		switch (item.getItemId()) {
-//
-//		case R.id.favorite:
-//
-//			String text = textView.getText().toString();
-//			String[] quoteAndDir = { text, appDir };
-//			if (toggle == 0) {
-//				favorite.setIcon(R.drawable.btn_star_big_on);
-//				new WriteFavQuoteTask().execute(quoteAndDir);
-//				toggle = 1;
-//			} else if (toggle == 1) {
-//
-//				favorite.setIcon(R.drawable.btn_star_big_off);
-//				new DeleteFavTask().execute(quoteAndDir);
-//				toggle = 0;
-//			}
-//
-//		}
-//		return super.onOptionsItemSelected(item);
-//	}
-
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
-//
-//		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.base, menu);
-//		MenuItem item = menu.findItem(R.id.menu_share);
-//		favorite = menu.findItem(R.id.favorite);
-//		return true;
-//	}
-
-//	@Override
-//	public boolean onPrepareOptionsMenu(Menu menu) {
-//		favorite = menu.findItem(R.id.favorite);
-//		String[] quoteAndDir = { textView.getText().toString(), appDir };
-//		
-//		try {
-//			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
-//				favorite.setIcon(R.drawable.btn_star_big_on);
-//				toggle = 1;
-//			} else {
-//				favorite.setIcon(R.drawable.btn_star_big_off);
-//				toggle = 0;
-//			}
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		} catch (ExecutionException e) {
-//			e.printStackTrace();
-//		}
-//		return true;
-//	}
+	
+	//uses CheckQuote async task and will change the star accordingly if quote is favorited or not!
+		public void changeStarIfFavorite() {
+			String[] quoteAndDir = { textView.getText().toString(), appDir };
+			
+			try {
+				if (new CheckQuoteTask().execute(quoteAndDir).get()) {
+					star.setImageResource(R.drawable.btn_star_big_on);
+					toggle = 1;
+				} else {
+					star.setImageResource(R.drawable.btn_star_big_off);
+					toggle = 0;
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+		}
 }
