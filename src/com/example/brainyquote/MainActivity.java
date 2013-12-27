@@ -90,6 +90,7 @@ public class MainActivity extends BaseActivity {
     }
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		//overriding to inflate the main menu. (which has nothing)
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}

@@ -1,6 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
 
+     <item android:id = "@+id/launch_fav_activity"
+           android:title="Favorites"
+           android:showAsAction="never"
+         />
+     <item android:id = "@+id/settings"
+           android:title="Settings"
+           android:showAsAction="never"
+         />
+     <item android:id = "@+id/help"
+           android:title="Help"
+           android:showAsAction="never"
+         />
+    
        <item android:id = "@+id/favorite"
           android:icon="@drawable/star"
           android:title="add to favorites"

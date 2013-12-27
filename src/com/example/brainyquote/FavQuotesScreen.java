@@ -204,6 +204,7 @@ public class FavQuotesScreen extends BaseActivity {
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		//overriding to not display the bottom actionbar. 
 		return true;
 	}
 }

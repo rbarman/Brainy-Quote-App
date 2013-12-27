@@ -1,6 +1,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     
-<!--  bottom action bar will be empty for main activity -->
+
+    
+    
+         <item android:id="@+id/search"
+           android:title="@string/search_title"
+           android:icon="@drawable/ic_search"
+           android:showAsAction="always"
+           android:actionViewClass="android.widget.SearchView"      
+           />
+         <item android:id = "@+id/launch_fav_activity"
+           android:title="Favorites"
+           android:showAsAction="never"
+         />
+     <item android:id = "@+id/settings"
+           android:title="Settings"
+           android:showAsAction="never"
+         />
+     <item android:id = "@+id/help"
+           android:title="Help"
+           android:showAsAction="never"
+         />
+    
+    
 </menu>
     
 

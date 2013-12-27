@@ -43,6 +43,18 @@ public abstract class BaseActivity extends Activity {
 		
 		appDir = getFilesDir().getAbsolutePath().toString();
 
+		try {
+			             ViewConfiguration config = ViewConfiguration.get(this);
+			             java.lang.reflect.Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+			             if(menuKeyField != null) {
+			                 menuKeyField.setAccessible(true);
+			                 menuKeyField.setBoolean(config, false);
+			             }
+			         } catch (Exception ex) {
+			             // Ignore
+			         }
+		
+		
 		ImageButton fakeOverFlowIcon = (ImageButton)findViewById(R.id.fakeOverflowIcon);
 		fakeOverFlowIcon.setOnClickListener(new View.OnClickListener() {
 			
