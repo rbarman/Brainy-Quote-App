@@ -1,11 +1,6 @@
 package com.example.brainyquote;
 
-import java.util.concurrent.ExecutionException;
-
-import com.example.brainyquote.Tools.CheckQuoteTask;
-
 import android.os.Bundle;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
@@ -17,10 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
