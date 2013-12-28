@@ -121,8 +121,11 @@ public abstract class BaseActivity extends Activity {
 	public void launchSpecificQuoteActivity(String queryText) {
 
 		queryText = queryText.replaceAll("[^a-zA-Z\\s]", "");
-		String[] queryTextSplit = queryText.split(" ");
 		// regex statement gets rid of all non letter characters.
+		queryText = queryText.trim().replaceAll(" +", " ");
+		//removes consecutive spaces and replaces with one space
+		String[] queryTextSplit = queryText.split(" ");
+		//splits queryText by space and puts in queryTextSplit
 		Toast toast = Toast.makeText(getApplicationContext(), "Searching for "
 				+ queryText + "...", Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
