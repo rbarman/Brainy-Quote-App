@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.Menu;
@@ -95,11 +96,23 @@ public class FavQuotesScreen extends BaseActivity {
 		        // Respond to clicks on the actions in the CAB
 		        switch (item.getItemId()) {
 		            case R.id.delete:
-		            	String quoteText = ((TextView) findViewById(R.id.quoteTextView)).getText().toString();
+		            	//Finds all positions of selected items in listview and
+		            	//gets text at each position. Next, delete the quotes using 
+		            	//their text and the quote directory.
+		            	SparseBooleanArray selectedItems = list.getCheckedItemPositions();
+		            	for (int i = 0; i < selectedItems.size(); i++) {
+		            		if (selectedItems.get(i)) {
+		            			String quoteText = (list.getItemAtPosition(i).toString());
+				            	String[] quoteAndDir = {quoteText, quotesDir};
+				            	DeleteFavTask favDelete = new DeleteFavTask();
+				            	favDelete.execute(quoteAndDir);
+		            		}
+		            	}
+		            	/*String quoteText = ((TextView) findViewById(R.id.quoteTextView)).getText().toString();
 		            	String[] quoteAndDir = {quoteText, quotesDir};
 		            	DeleteFavTask favDelete = new DeleteFavTask();
-		            	favDelete.execute(quoteAndDir);
-		            	new GetFavQuotesTask().execute();
+		            	favDelete.execute(quoteAndDir);*/
+		            	
 		                mode.finish(); // Action picked, so close the CAB
 		                return true;
 		            case R.id.deleteAll:
@@ -123,6 +136,7 @@ public class FavQuotesScreen extends BaseActivity {
 		    public void onDestroyActionMode(ActionMode mode) {
 		        // Here you can make any necessary updates to the activity when
 		        // the CAB is removed. By default, selected items are deselected/unchecked.
+		    	new GetFavQuotesTask().execute();
 		    }
 
 		    @Override
