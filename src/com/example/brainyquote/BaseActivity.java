@@ -126,6 +126,10 @@ public abstract class BaseActivity extends Activity {
 		//removes consecutive spaces and replaces with one space
 		String[] queryTextSplit = queryText.split(" ");
 		//splits queryText by space and puts in queryTextSplit
+		
+		if(queryTextSplit.length == 1 && queryTextSplit[0].isEmpty())
+			return;
+		
 		Toast toast = Toast.makeText(getApplicationContext(), "Searching for "
 				+ queryText + "...", Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
