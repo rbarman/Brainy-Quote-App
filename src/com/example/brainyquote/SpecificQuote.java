@@ -33,7 +33,6 @@ public class SpecificQuote extends BaseActivity {
 	ImageButton share;
 	ImageButton star;
 	String queryText;
-	String appDir;
 	String url = "";
 	String searchType = null;
 	// possible types are aboutAuthor, byAuthor, tag

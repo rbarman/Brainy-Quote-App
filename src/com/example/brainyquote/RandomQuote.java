@@ -41,7 +41,6 @@ public class RandomQuote extends BaseActivity {
 	int toggle = 0;
 	int currentIndex = -1;
 	int quotePlaceHolder = -1;
-	String appDir;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,6 @@ public class RandomQuote extends BaseActivity {
 		textView = (TextView) findViewById(R.id.textView);
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
-		appDir = getFilesDir().getAbsolutePath().toString();
 		share = (ImageButton)findViewById(R.id.share);
 		share.setOnClickListener(new View.OnClickListener() {
 			
