@@ -5,9 +5,11 @@
           android:icon="@drawable/ic_action_delete"
           android:showAsAction="always"
         />
-
-    <item android:id = "@+id/deleteAll"
-          android:title="Delete All"
-          android:showAsAction="always"
-        />
+    
+    <item
+            android:id="@+id/menu_item_share"
+            android:showAsAction="always"
+            android:icon="@drawable/ic_menu_share"
+            android:title="Share"
+             />
 </menu>

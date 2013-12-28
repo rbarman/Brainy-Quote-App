@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v4.app.NavUtils;
@@ -44,7 +45,8 @@ public class FavQuotesScreen extends BaseActivity {
 	private ListView list;
 	int numSelected = 0;
 	View noQuoteTextView;
-	Button clearButton;
+	Menu contextMenu;
+	ShareActionProvider shareProvider;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +117,20 @@ public class FavQuotesScreen extends BaseActivity {
 		            	
 		                mode.finish(); // Action picked, so close the CAB
 		                return true;
-		            case R.id.deleteAll:
-		            	deleteAllFavorites();
+		            case R.id.menu_item_share:
+		            	StringBuilder quotes = new StringBuilder();
+		            	quotes.append("");
+		            	SparseBooleanArray selectedQuotes = list.getCheckedItemPositions();
+		            	for (int i = 0; i < selectedQuotes.size(); i++) {
+		            		if (selectedQuotes.get(i)) {
+		            			String quoteText = (list.getItemAtPosition(i).toString());
+				            	quotes.append(quoteText + "\n\n");
+		            		}
+		            	}
+		            	Intent sendIntent = new Intent(android.content.Intent.ACTION_SEND);
+		            	sendIntent.putExtra(Intent.EXTRA_TEXT, quotes.toString());
+		            	sendIntent.setType("text/plain");
+		            	startActivity(Intent.createChooser(sendIntent, "Share via"));
 		            	mode.finish();
 		            default:
 		                return false;
@@ -129,6 +143,7 @@ public class FavQuotesScreen extends BaseActivity {
 		    	numSelected = 0;
 		        MenuInflater inflater = mode.getMenuInflater();
 		        inflater.inflate(R.menu.context, menu);
+		        		        
 		        return true;
 		    }
 
