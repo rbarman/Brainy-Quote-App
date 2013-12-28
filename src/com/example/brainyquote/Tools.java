@@ -1,6 +1,8 @@
 package com.example.brainyquote;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -8,11 +10,8 @@ import java.io.PrintWriter;
 import android.os.AsyncTask;
 
 /**Houses many AsyncTask classes with common methods
- *used by other activities for background work.
- *Most background methods take an array of 2 strings.
- *Index 0 stores text of textview which contains quote.
- *Next index stores a location of where to write the file.
- *In this case, its the app's installation directory.
+ *used by other activities for background work. Also
+ *contains methods for retrieving data.
  */
 public class Tools {
 	
@@ -125,8 +124,46 @@ public class Tools {
 		BaseActivity.sharingQuote = quote;
 	}
 
+	//writes a config file for user settings such as fonts, colors, etc.
+	protected static class WriteSettingsTask extends AsyncTask<String, Void, Void> {
 
+		@Override
+		protected Void doInBackground(String... configInfo) {
+			//configInfo[0]: file contents
+			//configInfo[1]: name of file
+			//configInfo[2]: parent directory of file
+			String filePath = configInfo[2] + "/" + configInfo[1] + ".txt";;
+			
+			// Create file name and write out contents
+			try {
+				PrintWriter out = new PrintWriter(filePath);
+				out.print(configInfo[0]);
+				out.close();
 
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
 
+	}
 
+	//returns config file content for user settings such as fonts, colors, etc.
+	protected static String readSettings(String fileName, String parentDir) {
+
+		String filePath = parentDir + "/" + fileName + ".txt";
+		String content = "";
+			
+		try {
+			FileReader fr = new FileReader(filePath);
+			BufferedReader textReader = new BufferedReader(fr);
+			content = textReader.readLine();
+				
+			textReader.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return content;
+	}
 }
