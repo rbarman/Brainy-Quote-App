@@ -41,6 +41,7 @@ public class FavQuotesScreen extends BaseActivity {
 	private ArrayList<String> quotes = new ArrayList<String>();
 	private ArrayAdapter<String> adapter;
 	private ListView list;
+	int numSelected = 0;
 	View noQuoteTextView;
 	Button clearButton;
 
@@ -80,6 +81,13 @@ public class FavQuotesScreen extends BaseActivity {
 		                                          long id, boolean checked) {
 		        // Here you can do something when items are selected/de-selected,
 		        // such as update the title in the CAB
+		    	if (checked) {
+		    		numSelected++;
+		    		mode.setTitle(numSelected + " Selected");
+		    	} else {
+		    		numSelected--;
+		    		mode.setTitle(numSelected + " Selected");
+		    	}
 		    }
 		    
 		    @Override
@@ -105,6 +113,7 @@ public class FavQuotesScreen extends BaseActivity {
 		    @Override
 		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 		        // Inflate the menu for the CAB
+		    	numSelected = 0;
 		        MenuInflater inflater = mode.getMenuInflater();
 		        inflater.inflate(R.menu.context, menu);
 		        return true;
