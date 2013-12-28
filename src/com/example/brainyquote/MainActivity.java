@@ -9,13 +9,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 public class MainActivity extends BaseActivity {
 
 	Button searchButton;
 	Button randomButton;
 	SearchView searchView;
-	ImageView logo;
 	String queryText = null;
 	boolean textChanged = false;
 
@@ -26,7 +26,6 @@ public class MainActivity extends BaseActivity {
 	    setContentView(R.layout.activity_main);
         searchButton = (Button) findViewById(R.id.searchButton);
         randomButton = (Button) findViewById(R.id.randomButton);
-        logo = (ImageView)findViewById(R.id.logo);
         
         randomButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -57,7 +56,7 @@ public class MainActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				searchView.setIconified(false);
-				if(textChanged == true)
+				if(textChanged == true && !queryText.isEmpty())
 					launchSpecificQuoteActivity(queryText);
 			}
 		}); 
@@ -66,6 +65,8 @@ public class MainActivity extends BaseActivity {
     	
 	    @Override
 	    public boolean onQueryTextChange(String newText) {
+	    	textChanged = true;
+	    	queryText = newText;
 	        return true;
 	    }
 
