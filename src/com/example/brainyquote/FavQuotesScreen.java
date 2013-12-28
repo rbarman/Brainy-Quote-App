@@ -45,7 +45,6 @@ public class FavQuotesScreen extends BaseActivity {
 	private ListView list;
 	int numSelected = 0;
 	View noQuoteTextView;
-	Menu contextMenu;
 	ShareActionProvider shareProvider;
 
 	@Override
@@ -53,7 +52,6 @@ public class FavQuotesScreen extends BaseActivity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_fav_quotes_screen);
-		// Show the Up button in the action bar.
 		setupActionBar();
 		
 		list = (ListView) findViewById(R.id.listViewMain);
@@ -66,6 +64,7 @@ public class FavQuotesScreen extends BaseActivity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) {
+				
 				TextView noteClicked = (TextView) viewClicked;
 				String message = noteClicked.getText().toString();
 				
@@ -80,10 +79,9 @@ public class FavQuotesScreen extends BaseActivity {
 		list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
 		    @Override
-		    public void onItemCheckedStateChanged(ActionMode mode, int position,
-		                                          long id, boolean checked) {
-		        // Here you can do something when items are selected/de-selected,
-		        // such as update the title in the CAB
+		    public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+		        
+		    	//update the counter in the CAB
 		    	if (checked) {
 		    		numSelected++;
 		    		mode.setTitle(numSelected + " Selected");
@@ -95,6 +93,7 @@ public class FavQuotesScreen extends BaseActivity {
 		    
 		    @Override
 		    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+		    	
 		        // Respond to clicks on the actions in the CAB
 		        switch (item.getItemId()) {
 		            case R.id.delete:
@@ -110,17 +109,16 @@ public class FavQuotesScreen extends BaseActivity {
 				            	favDelete.execute(quoteAndDir);
 		            		}
 		            	}
-		            	/*String quoteText = ((TextView) findViewById(R.id.quoteTextView)).getText().toString();
-		            	String[] quoteAndDir = {quoteText, quotesDir};
-		            	DeleteFavTask favDelete = new DeleteFavTask();
-		            	favDelete.execute(quoteAndDir);*/
 		            	
 		                mode.finish(); // Action picked, so close the CAB
 		                return true;
 		            case R.id.menu_item_share:
+		            	//gets positions of selected items and builds a string 
+		            	//using all the quote text at each position
 		            	StringBuilder quotes = new StringBuilder();
 		            	quotes.append("");
 		            	SparseBooleanArray selectedQuotes = list.getCheckedItemPositions();
+		            	
 		            	for (int i = 0; i < selectedQuotes.size(); i++) {
 		            		if (selectedQuotes.get(i)) {
 		            			String quoteText = (list.getItemAtPosition(i).toString());
@@ -139,6 +137,7 @@ public class FavQuotesScreen extends BaseActivity {
 
 		    @Override
 		    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+		    	
 		        // Inflate the menu for the CAB
 		    	numSelected = 0;
 		        MenuInflater inflater = mode.getMenuInflater();
@@ -149,15 +148,14 @@ public class FavQuotesScreen extends BaseActivity {
 
 		    @Override
 		    public void onDestroyActionMode(ActionMode mode) {
-		        // Here you can make any necessary updates to the activity when
-		        // the CAB is removed. By default, selected items are deselected/unchecked.
+		        
+		    	//update the listview for any deletions the user made
 		    	new GetFavQuotesTask().execute();
 		    }
 
 		    @Override
 		    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-		        // Here you can perform updates to the CAB due to
-		        // an invalidate() request
+
 		        return false;
 		    }
 		});
@@ -175,8 +173,8 @@ public class FavQuotesScreen extends BaseActivity {
 
 		@Override
 		protected ArrayList<String> doInBackground(Void... params) {
-			quotes.clear();
 			
+			quotes.clear();
 			try {
 				//get directory of fav files and list the interior files ending with ".txt"
 				File dir = new File(getFilesDir().getAbsolutePath());
@@ -223,6 +221,7 @@ public class FavQuotesScreen extends BaseActivity {
 	}
 	
 	private void populateView(ArrayList<String> quotes) {
+		
 		noQuoteTextView.setVisibility(View.INVISIBLE);
 		//build adapter using the quotes array list
 		adapter = new ArrayAdapter<String>(this, R.layout.list_view_box, quotes);
