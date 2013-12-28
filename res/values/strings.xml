@@ -13,5 +13,6 @@
     <string name="fav_launcher_title">Launch Fav Activity</string>
     <string name="title_activity_base">BaseActivity</string>
     <string name="title_activity_selected_quote">Favorited Quote</string>
+    <string name="title_activity_settings">Settings</string>
 
 </resources>

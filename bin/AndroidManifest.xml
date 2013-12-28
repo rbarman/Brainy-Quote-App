@@ -46,8 +46,7 @@
         <activity
             android:name="com.example.brainyquote.SpecificQuote"
             android:label="@string/title_activity_specific_quote"
-            android:parentActivityName="com.example.brainyquote.MainActivity" 
-		>
+            android:parentActivityName="com.example.brainyquote.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -67,12 +66,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brainyquote.MainActivity" />
         </activity>
-        <!--  Base Activity -->
+        <!-- Base Activity -->
         <activity
             android:name="com.example.brainyquote.BaseActivity"
             android:label="@string/title_activity_base" >
         </activity>
-        <!--  Selected Quote Activity -->
+        <!-- Selected Quote Activity -->
         <activity
             android:name="com.example.brainyquote.SelectedQuote"
             android:label="@string/title_activity_selected_quote"
@@ -80,6 +79,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brainyquote.FavQuotesScreen" />
+        </activity>
+        <activity
+            android:name="com.example.brainyquote.Settings"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.example.brainyquote" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.brainyquote" />
         </activity>
     </application>
 

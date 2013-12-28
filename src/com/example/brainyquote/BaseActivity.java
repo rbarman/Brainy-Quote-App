@@ -84,10 +84,14 @@ public abstract class BaseActivity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		switch (item.getItemId()) {
-		case R.id.launch_fav_activity:
-			Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
-			startActivity(intent);
-			break;
+			case R.id.launch_fav_activity:
+				Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
+				startActivity(intent);
+				break;
+			case R.id.settings:
+				Intent settingsIntent = new Intent(getBaseContext(), Settings.class);
+				startActivity(settingsIntent);
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
