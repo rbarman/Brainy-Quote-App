@@ -65,7 +65,6 @@ public class SpecificQuote extends BaseActivity {
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView) findViewById(R.id.textView);
-		appDir = getFilesDir().getAbsolutePath().toString();
 
 		share = (ImageButton)findViewById(R.id.share);
 		share.setOnClickListener(new View.OnClickListener() {
@@ -100,12 +99,10 @@ public class SpecificQuote extends BaseActivity {
 			}
 		});
 		
-		
-		
+		getTopics();
 		// execute the AsyncTask
 		// InitialSearch will determine if we have an author or tag query.
 		// then from InitialSearch we will start other respective AsyncTasks.
-		getTopics();
 		new InitialSearch().execute((generateAuthorUrl()));
 	}
 
@@ -576,21 +573,21 @@ public class SpecificQuote extends BaseActivity {
 	}
 	
 	//uses CheckQuote async task and will change the star accordingly if quote is favorited or not!
-		public void changeStarIfFavorite() {
-			String[] quoteAndDir = { textView.getText().toString(), appDir };
+	public void changeStarIfFavorite() {
+		String[] quoteAndDir = { textView.getText().toString(), appDir };
 			
-			try {
-				if (new CheckQuoteTask().execute(quoteAndDir).get()) {
-					star.setImageResource(R.drawable.btn_star_big_on);
-					toggle = 1;
-				} else {
-					star.setImageResource(R.drawable.btn_star_big_off);
-					toggle = 0;
-				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				e.printStackTrace();
+		try {
+			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
+				star.setImageResource(R.drawable.btn_star_big_on);
+				toggle = 1;
+			} else {
+				star.setImageResource(R.drawable.btn_star_big_off);
+				toggle = 0;
 			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
 		}
+	}
 }
