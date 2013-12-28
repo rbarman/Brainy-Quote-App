@@ -1,5 +1,9 @@
 package com.example.brainyquote;
 
+import java.util.concurrent.ExecutionException;
+
+import com.example.brainyquote.Tools.CheckQuoteTask;
+
 import android.os.Bundle;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -37,7 +41,7 @@ public abstract class BaseActivity extends Activity {
 
 		getActionBar();
 		appDir = getFilesDir().getAbsolutePath().toString();
-
+		
 		//this try catch is a hack to show the action overflow menu on phones with hardware menu button. 
 		try {
 			ViewConfiguration config = ViewConfiguration.get(this);
@@ -144,5 +148,4 @@ public abstract class BaseActivity extends Activity {
 		intent.putExtra("queryText", queryText);
 		startActivity(intent);
 	}
-
 }
