@@ -32,7 +32,7 @@ import android.widget.Toast;
 //This is the activity launched when the user selects the randomButton on main activity.
 public class RandomQuote extends BaseActivity {
 
-	ArrayList<String> categories = new ArrayList<String>();
+	ArrayList<String> topics = new ArrayList<String>();
 	ArrayList<String> randomQuotes = new ArrayList<String>();
 	TextView textView;
 	ImageButton share;
@@ -85,7 +85,7 @@ public class RandomQuote extends BaseActivity {
 		});
 		
 		
-		getCategories();
+		getTopics(topics);
 		
 		// execute the async task
 		new GetQuote().execute();
@@ -145,18 +145,6 @@ public class RandomQuote extends BaseActivity {
 		}
 	};
 
-	public void getCategories() {
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new InputStreamReader(getAssets().open(
-					"categories.txt")));
-			String word;
-			while ((word = br.readLine()) != null) {
-				categories.add(word);
-			}
-		} catch (IOException ioe) {
-		}
-	}
 
 	// need to create an AsyncTask so that the UI thread does not have to do
 	// extra work
@@ -168,7 +156,7 @@ public class RandomQuote extends BaseActivity {
 		@Override
 		protected String doInBackground(Void... params) {
 
-			String topic = categories.get((int) (Math.random() * (categories
+			String topic = topics.get((int) (Math.random() * (topics
 					.size() - 1)));
 			Document doc;
 			try {

@@ -97,7 +97,7 @@ public class SpecificQuote extends BaseActivity {
 			}
 		});
 		
-		getTopics();
+		getTopics(topics);
 		// execute the AsyncTask
 		// InitialSearch will determine if we have an author or tag query.
 		// then from InitialSearch we will start other respective AsyncTasks.
@@ -532,19 +532,6 @@ public class SpecificQuote extends BaseActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
-	}
-
-	public void getTopics() {
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader(new InputStreamReader(getAssets().open(
-					"categories.txt")));
-			String word;
-			while ((word = br.readLine()) != null) {
-				topics.add(word);
-			}
-		} catch (IOException e) {
-		}
 	}
 
 	public boolean checkIfTopic(String str) {

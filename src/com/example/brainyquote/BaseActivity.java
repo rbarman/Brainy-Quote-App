@@ -1,5 +1,9 @@
 package com.example.brainyquote;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import com.example.brainyquote.Tools.CheckQuoteTask;
@@ -176,5 +180,19 @@ public abstract class BaseActivity extends Activity {
 			e.printStackTrace();
 		}
 	
+	}
+	
+	//gets all topics from "categories.txt" and puts in ArrayList<String> topics
+	public void getTopics(ArrayList<String> topics) {
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(getAssets().open(
+					"categories.txt")));
+			String word;
+			while ((word = br.readLine()) != null) {
+				topics.add(word);
+			}
+		} catch (IOException ioe) {
+		}
 	}
 }
