@@ -378,18 +378,18 @@ public class SpecificQuote extends BaseActivity {
 				pageNum --;
 				if(checkIfTopic(queryTextSplit[0])) {
 					pageNum = 0;
-					return "found topic";					
+					return "tag";					
 				}
 				if(checkIfContainsInitials(queryTextSplit[0]))
 					return "found initials";
-				return "error";
+				return "tag";
 			}
 		}
 
 		@Override
 		protected void onPostExecute(String message) {
 
-			if (message.equals("error") || message.equals("found topic")) {
+			if (message.equals("tag")) {
 				
 				// we now know that the search query the user entered does NOT
 				// represent an author
