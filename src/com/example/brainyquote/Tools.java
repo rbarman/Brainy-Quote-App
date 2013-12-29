@@ -124,18 +124,17 @@ public class Tools {
 		BaseActivity.sharingQuote = quote;
 	}
 
-	//writes a config file for user settings such as fonts, colors, etc.
-	protected static class WriteSettingsTask extends AsyncTask<String, Void, Void> {
+	//TODO 
+	//Updates a settings file for user settings such as fonts, colors, etc.
+	//Takes a String array of length three. 1. File setting name
+	//2. File setting value 3. Settings file path
+	protected static class updateSettingsTask extends AsyncTask<String[], Void, Void> {
 
 		@Override
-		protected Void doInBackground(String... configInfo) {
-			//configInfo[0]: file contents
-			//configInfo[1]: name of file
-			//configInfo[2]: parent directory of file
-			String filePath = configInfo[2] + "/" + configInfo[1] + ".txt";;
+		protected Void doInBackground(String[]... filePath) {
+						
 			
-			// Create file name and write out contents
-			try {
+			/*try {
 				PrintWriter out = new PrintWriter(filePath);
 				out.print(configInfo[0]);
 				out.close();
@@ -144,10 +143,10 @@ public class Tools {
 				e.printStackTrace();
 			}
 			return null;
-		}
-
+		}*/
 	}
 
+	//TODO
 	//returns config file content for user settings such as fonts, colors, etc.
 	protected static String readSettings(String fileName, String parentDir) {
 
@@ -165,5 +164,34 @@ public class Tools {
 		}
 		
 		return content;
+	}
+	
+	//Checks if there is settings file. If not, make one
+	//with default values. Takes a String dir of where to write
+	//and check for settings file.
+	protected static class initSettingsTask extends AsyncTask<String, Void, Void> {
+
+		@Override
+		protected Void doInBackground(String... Dir) {
+			
+			String filePath = Dir[0] + "/" + "Settings.txt";
+			
+			try {
+				File file = new File(filePath);
+				if (file.exists()) {
+					//No need to make a file :D
+				} else {
+					PrintWriter out = new PrintWriter(filePath);
+					out.append("QuoteFontSize = 20;\n");
+					out.append("QuoteFontColor = #000000;\n");
+					//more setting configs may be added later
+					out.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
 	}
 }
