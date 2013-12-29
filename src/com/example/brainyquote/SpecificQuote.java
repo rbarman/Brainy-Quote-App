@@ -114,12 +114,14 @@ public class SpecificQuote extends BaseActivity {
 			// on every swipe to the right we will get the previous quote.
 			if (noSuchPage == false) {
 				if (index > 0) {
+					//user is going to previous quote. 
 					Toast.makeText(SpecificQuote.this,
 							"Swipe to Right : Previous Quote Coming!",
 							Toast.LENGTH_SHORT).show();
 					index--;
 					startTaskOnSwipe();
 				} else if (index == 0 && pageNum > 1) {
+					//In this case the user is going back to a previous page of quotes. 
 					Toast.makeText(SpecificQuote.this,
 							"Swipe to Right : Previous Quote Coming!",
 							Toast.LENGTH_SHORT).show();
@@ -128,6 +130,7 @@ public class SpecificQuote extends BaseActivity {
 					wentPreviousPage = true;
 					startTaskOnSwipe();
 				} else {
+					//In this case the user is attempting to go back but the user is at the first quote of first page. 
 					Toast.makeText(SpecificQuote.this,
 							"Swipe to Right : No more previous Quotes :(",
 							Toast.LENGTH_SHORT).show();
@@ -156,8 +159,10 @@ public class SpecificQuote extends BaseActivity {
 	};
 
 	public void getDocumentAndModifyElements(String url) {
-		// this method wil get a new Document and modify author + quote only
-		// when we are on a New Page (newPage == true)
+		// ONLY when we are on a New Page (newPage == true)
+		//gets a new Document [getDocument()]
+		// modifies author, quote, and quotesOnPage [modifyElements()]
+
 		if (newPage == true) {
 			doc = getDocument(url);
 			modifyElements();
@@ -182,7 +187,8 @@ public class SpecificQuote extends BaseActivity {
 
 	public void modifyElements() {
 		// if there is a document then we select elements from the document.
-		// quote and author will take these elements.
+		// quote and author will take these elements
+		// quotesOnPage will be updated and index will be recalculated if the user went to a previous page. 
 		if (doc != null) {
 			quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 			author = doc.select(".boxyPaddingBig span.bodybold a");
@@ -215,7 +221,7 @@ public class SpecificQuote extends BaseActivity {
 		if (index == quotesOnPage) {
 			// we are here if we go to a new page of quotes.
 			pageNum++;
-			index = 0;
+			index = 0; //index is set to zero to get first quote on new page url 
 			newPage = true;
 			return writeAuthorWithInitialsUrl();
 		} else if (newPage == true) {
@@ -226,7 +232,7 @@ public class SpecificQuote extends BaseActivity {
 
 	public String writeAuthorWithInitialsUrl() {
 		// writes a url without ".html" for authors with initials based on how
-		// many initials are in the first name.
+		// many initials are in the first name. Currently either 2 or 3 initials in first name.
 		if (queryTextSplit[0].length() == 2)
 			// http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
 			url = "http://www.brainyquote.com/quotes/authors/"
@@ -248,9 +254,9 @@ public class SpecificQuote extends BaseActivity {
 		// generates and returns a url for Authors.
 
 		if (index == quotesOnPage) {
-			// we are here if we go to a new page of quotes. g
+			// we are here if we go to a new page of quotes. 
 			pageNum++;
-			index = 0;
+			index = 0; //index is set to zero to get first quote on new page url 
 			newPage = true;
 			return writeAuthorUrl();
 		} else if (newPage == true) {
@@ -269,11 +275,11 @@ public class SpecificQuote extends BaseActivity {
 	}
 
 	public String generateTagUrl() {
-		// generates and returns a url for Authors.
+		// generates and returns a url for Tags.
 
 		if (index == quotesOnPage) {
 			pageNum++;
-			index = 0;
+			index = 0; //index is set to zero to get first quote on new page url 
 			newPage = true;
 			return writeTagUrl();
 		} else if (newPage == true) {
@@ -312,6 +318,8 @@ public class SpecificQuote extends BaseActivity {
 						.get();
 				return "";
 			} catch (IOException ioe) {
+				//we are here if the first name or string value of queryText when converted to be read as initials
+				//results in an invalid author search. This means that queryText can be a tag or an invalid search parameter. 
 				return "error";
 			}
 		}
