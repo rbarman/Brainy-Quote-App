@@ -43,7 +43,6 @@ public class SpecificQuote extends BaseActivity {
 	View view;
 	boolean foundInitials = false;
 	boolean foundTopic = false;
-	boolean first = false;
 	boolean error = false;
 	boolean newPage = false; //newPage is true when we got to the previous or next page. 
 	Document doc = null;
@@ -216,11 +215,6 @@ public class SpecificQuote extends BaseActivity {
 
 	public String generateAuthorWithInitialsUrl() {
 		// generates and returns an url for Author with Initials
-		if (first == true) {
-			pageNum--;
-			first = false;
-		} else {
-		}
 
 		if (index == quotesOnPage) {
 			// we are here if we go to a new page of quotes.
@@ -280,11 +274,6 @@ public class SpecificQuote extends BaseActivity {
 
 	public String generateTagUrl() {
 		// generates and returns a url for Authors.
-		if (first == true && foundTopic == true) {
-			pageNum--;
-			first = false;
-		} else {
-		}
 
 		if (index == quotesOnPage) {
 			pageNum++;
@@ -386,8 +375,11 @@ public class SpecificQuote extends BaseActivity {
 				// search, we are put here.
 				// queryText can be a tag or an author with initials in the
 				// first name.
-				first = true;
-				checkIfTopic(queryTextSplit[0]);
+				pageNum --;
+				if(checkIfTopic(queryTextSplit[0])) {
+					pageNum = 0;
+					return "found topic";					
+				}
 				if(checkIfContainsInitials(queryTextSplit[0]))
 					return "found initials";
 				return "error";
@@ -397,7 +389,8 @@ public class SpecificQuote extends BaseActivity {
 		@Override
 		protected void onPostExecute(String message) {
 
-			if (message.equals("error")) {
+			if (message.equals("error") || message.equals("found topic")) {
+				
 				// we now know that the search query the user entered does NOT
 				// represent an author
 				// the search query entered something that represents a keyword
@@ -409,7 +402,6 @@ public class SpecificQuote extends BaseActivity {
 			} else if (message.equals("found initials")) {
 				new SearchWithInitials()
 						.execute(generateAuthorWithInitialsUrl());
-
 			} else {
 
 				textView.setText("You are searching for " + message + " quotes");
@@ -493,7 +485,7 @@ public class SpecificQuote extends BaseActivity {
 		}
 
 		@Override
-		protected void onPostExecute(String quote) {
+		protected void onPostExecute(String quote) { 
 			textView.setText(quote);
 			Tools.setShareQuote(textView.getText().toString());
 			changeStarIfFavorite();
@@ -555,13 +547,14 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 
-	public void checkIfTopic(String str) {
+	public boolean checkIfTopic(String str) {
 		for (String s : topics) {
 			if (s.equalsIgnoreCase(str)) {
 				foundTopic = true;
-				break;
+				return true;
 			}
 		}
+		return false;
 	}
 	public boolean checkIfContainsInitials(String str) {
 		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3) {
