@@ -144,8 +144,9 @@ public class Tools {
 			}
 			return null;
 		}*/
+			return null;
 	}
-
+	}
 	//TODO
 	//returns config file content for user settings such as fonts, colors, etc.
 	protected static String readSettings(String fileName, String parentDir) {
