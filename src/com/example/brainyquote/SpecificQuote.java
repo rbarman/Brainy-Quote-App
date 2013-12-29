@@ -36,6 +36,7 @@ public class SpecificQuote extends BaseActivity {
 	boolean foundTopic = false; //foundTopic is true when checkIfTopic(String s) finds that s is a topic. 
 	boolean noSuchPage = false; //noSuchPage is true in the onPostExecute of TagSearch if "error" is returned => invalid url
 	boolean newPage = false; //newPage is true when we got to the previous or next page. 
+	boolean wentPreviousPage = false; //wentPreviousPage is true when we go to the previous page. main function will be to recalc index.
 	Document doc = null;
 	Elements author = null;
 	Elements quote = null;
@@ -122,9 +123,9 @@ public class SpecificQuote extends BaseActivity {
 					Toast.makeText(SpecificQuote.this,
 							"Swipe to Right : Previous Quote Coming!",
 							Toast.LENGTH_SHORT).show();
-					index = quotesOnPage - 1;
 					pageNum--;
 					newPage = true;
+					wentPreviousPage = true;
 					startTaskOnSwipe();
 				} else {
 					Toast.makeText(SpecificQuote.this,
@@ -186,6 +187,10 @@ public class SpecificQuote extends BaseActivity {
 			quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 			author = doc.select(".boxyPaddingBig span.bodybold a");
 			quotesOnPage = quote.size();
+			if(wentPreviousPage == true) {
+				index = quotesOnPage - 1;
+				wentPreviousPage = false;
+			}
 		} else {
 		}
 	}
