@@ -43,10 +43,9 @@ public class SpecificQuote extends BaseActivity {
 	View view;
 	boolean foundInitials = false;
 	boolean foundTopic = false;
-	boolean nextPage = false;
 	boolean first = false;
-	boolean wentPreviousPage = false;
 	boolean error = false;
+	boolean newPage = false; //newPage is true when we got to the previous or next page. 
 	Document doc = null;
 	Elements author = null;
 	Elements quote = null;
@@ -135,7 +134,7 @@ public class SpecificQuote extends BaseActivity {
 							Toast.LENGTH_SHORT).show();
 					index = quotesOnPage - 1;
 					pageNum--;
-					wentPreviousPage = true;
+					newPage = true;
 					startTaskOnSwipe();
 				} else {
 					Toast.makeText(SpecificQuote.this,
@@ -146,7 +145,7 @@ public class SpecificQuote extends BaseActivity {
 		}
 
 		public void onSwipeLeft() {
-			// on every swipe to the left we will get the next quote.
+			// on every swipe to the left we will get the next quote. 
 			if (error == false) {
 				index++;
 				Toast.makeText(SpecificQuote.this,
@@ -167,13 +166,13 @@ public class SpecificQuote extends BaseActivity {
 
 	public void getDocumentAndModifyElements(String url) {
 		// this method wil get a new Document and modify author + quote only
-		// when we are on a New Page (nextPage == true)
-		if (nextPage == true) {
+		// when we are on a New Page (newPage == true)
+		if (newPage == true) {
 			doc = getDocument(url);
 			modifyElements();
 		} else {
 		}
-		nextPage = false;
+		newPage = false;
 	}
 
 	public Document getDocument(String url) {
@@ -227,10 +226,9 @@ public class SpecificQuote extends BaseActivity {
 			// we are here if we go to a new page of quotes.
 			pageNum++;
 			index = 0;
-			nextPage = true;
+			newPage = true;
 			return writeAuthorWithInitialsUrl();
-		} else if (wentPreviousPage == true) {
-			wentPreviousPage = false;
+		} else if (newPage == true) {
 			return writeAuthorWithInitialsUrl();
 		} else
 			return url;
@@ -267,10 +265,9 @@ public class SpecificQuote extends BaseActivity {
 			// we are here if we go to a new page of quotes. g
 			pageNum++;
 			index = 0;
-			nextPage = true;
+			newPage = true;
 			return writeAuthorUrl();
-		} else if (wentPreviousPage == true) {
-			wentPreviousPage = false;
+		} else if (newPage == true) {
 			return writeAuthorUrl();
 		} else
 			return url;
@@ -296,10 +293,9 @@ public class SpecificQuote extends BaseActivity {
 		if (index == quotesOnPage) {
 			pageNum++;
 			index = 0;
-			nextPage = true;
+			newPage = true;
 			return writeTagUrl();
-		} else if (wentPreviousPage == true) {
-			wentPreviousPage = false;
+		} else if (newPage == true) {
 			return writeTagUrl();
 		} else
 			return url;
