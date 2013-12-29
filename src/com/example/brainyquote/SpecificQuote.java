@@ -1,29 +1,20 @@
 package com.example.brainyquote;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-
-import com.example.brainyquote.Tools.CheckQuoteTask;
 import com.example.brainyquote.Tools.DeleteFavTask;
 import com.example.brainyquote.Tools.WriteFavQuoteTask;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
-import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -375,13 +366,14 @@ public class SpecificQuote extends BaseActivity {
 				// search, we are put here.
 				// queryText can be a tag or an author with initials in the
 				// first name.
-				pageNum --;
 				if(checkIfTopic(queryTextSplit[0])) {
 					pageNum = 0;
 					return "tag";					
 				}
-				if(checkIfContainsInitials(queryTextSplit[0]))
+				if(checkIfContainsInitials(queryTextSplit[0])) {
+					pageNum--;
 					return "found initials";
+				}
 				return "tag";
 			}
 		}
