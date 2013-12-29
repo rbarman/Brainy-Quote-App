@@ -36,14 +36,14 @@ public class SpecificQuote extends BaseActivity {
 	String url = "";
 	String searchType = null;
 	// possible types are aboutAuthor, byAuthor, tag
-	int index = 0;
+	int index = 0; 
 	int pageNum = -1;
 	int quotesOnPage = 0; // number of quotes on page
 	int toggle = 0;
 	View view;
-	boolean foundInitials = false;
-	boolean foundTopic = false;
-	boolean error = false;
+	boolean foundInitials = false; //foundInitials is true when checkIfContainsInitials(String s) find that s has initials
+	boolean foundTopic = false; //foundTopic is true when checkIfTopic(String s) finds that s is a topic. 
+	boolean noSuchPage = false; //noSuchPage is true in the onPostExecute of TagSearch if "error" is returned => invalid url
 	boolean newPage = false; //newPage is true when we got to the previous or next page. 
 	Document doc = null;
 	Elements author = null;
@@ -120,7 +120,7 @@ public class SpecificQuote extends BaseActivity {
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 		public void onSwipeRight() {
 			// on every swipe to the right we will get the previous quote.
-			if (error == false) {
+			if (noSuchPage == false) {
 				if (index > 0) {
 					Toast.makeText(SpecificQuote.this,
 							"Swipe to Right : Previous Quote Coming!",
@@ -145,7 +145,7 @@ public class SpecificQuote extends BaseActivity {
 
 		public void onSwipeLeft() {
 			// on every swipe to the left we will get the next quote. 
-			if (error == false) {
+			if (noSuchPage == false) {
 				index++;
 				Toast.makeText(SpecificQuote.this,
 						"Swipe to Left : Next Quote Coming!",
@@ -456,7 +456,7 @@ public class SpecificQuote extends BaseActivity {
 		@Override
 		protected void onPostExecute(String quote) {
 			if (quote.equals("error")) {
-				error = true;
+				noSuchPage = true;
 				textView.setText("ERROR!  INVALID SEARCH" + "\n\n URL : " + url);
 			} else {
 				textView.setText(quote);
