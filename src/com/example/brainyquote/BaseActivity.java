@@ -1,5 +1,9 @@
 package com.example.brainyquote;
 
+import java.util.concurrent.ExecutionException;
+
+import com.example.brainyquote.Tools.CheckQuoteTask;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.SearchManager;
@@ -12,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -23,6 +28,7 @@ import android.widget.Toast;
 public abstract class BaseActivity extends Activity {
 
 	String appDir;
+	int toggle;
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
 	protected static String sharingQuote = "";
@@ -150,5 +156,25 @@ public abstract class BaseActivity extends Activity {
 		intent.putExtra("queryTextSplit", queryTextSplit);
 		intent.putExtra("queryText", queryText);
 		startActivity(intent);
+	}
+	
+	//uses CheckQuoteTask async task to set star to the appropriate resource. 
+	public void changeStarIfFavorite(TextView textView, ImageButton star) {
+		String[] quoteAndDir = { textView.getText().toString(), appDir };
+		
+		try {
+			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
+				star.setImageResource(R.drawable.btn_star_big_on);
+				toggle = 1;
+			} else {
+				star.setImageResource(R.drawable.btn_star_big_off);
+				toggle = 0;
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+	
 	}
 }

@@ -461,7 +461,7 @@ public class SpecificQuote extends BaseActivity {
 			} else {
 				textView.setText(quote);
 				Tools.setShareQuote(textView.getText().toString());
-				changeStarIfFavorite();
+				changeStarIfFavorite(textView, star);
 				if ((pageNum == 1 && index == 0)
 						|| (pageNum == 1 && index == 1))
 					showCustomToast(index);
@@ -488,7 +488,7 @@ public class SpecificQuote extends BaseActivity {
 		protected void onPostExecute(String quote) { 
 			textView.setText(quote);
 			Tools.setShareQuote(textView.getText().toString());
-			changeStarIfFavorite();
+			changeStarIfFavorite(textView, star);
 
 			if ((pageNum == 1 && index == 0) || (pageNum == 1 && index == 1))
 				showCustomToast(index);
@@ -521,7 +521,7 @@ public class SpecificQuote extends BaseActivity {
 			} else {
 				textView.setText(quote);
 				Tools.setShareQuote(textView.getText().toString());
-				changeStarIfFavorite();
+				changeStarIfFavorite(textView, star);
 				if ((pageNum == 1 && index == 0)
 						|| (pageNum == 1 && index == 1))
 					showCustomToast(index);
@@ -563,24 +563,5 @@ public class SpecificQuote extends BaseActivity {
 		}
 		else 
 			return false;
-	}
-	
-	//uses CheckQuote async task and will change the star accordingly if quote is favorited or not!
-	public void changeStarIfFavorite() {
-		String[] quoteAndDir = { textView.getText().toString(), appDir };
-			
-		try {
-			if (new CheckQuoteTask().execute(quoteAndDir).get()) {
-				star.setImageResource(R.drawable.btn_star_big_on);
-				toggle = 1;
-			} else {
-				star.setImageResource(R.drawable.btn_star_big_off);
-				toggle = 0;
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		}
 	}
 }
