@@ -256,10 +256,6 @@ public class SpecificQuote extends BaseActivity {
 
 	public String generateAuthorUrl() {
 		// generates and returns a url for Authors.
-		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3)
-			foundInitials = true;
-		else {
-		}
 
 		if (index == quotesOnPage) {
 			// we are here if we go to a new page of quotes. g
@@ -392,7 +388,7 @@ public class SpecificQuote extends BaseActivity {
 				// first name.
 				first = true;
 				checkIfTopic(queryTextSplit[0]);
-				if (foundInitials == true)
+				if(checkIfContainsInitials(queryTextSplit[0]))
 					return "found initials";
 				return "error";
 			}
@@ -566,6 +562,14 @@ public class SpecificQuote extends BaseActivity {
 				break;
 			}
 		}
+	}
+	public boolean checkIfContainsInitials(String str) {
+		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3) {
+			foundInitials = true;
+			return true;
+		}
+		else 
+			return false;
 	}
 	
 	//uses CheckQuote async task and will change the star accordingly if quote is favorited or not!
