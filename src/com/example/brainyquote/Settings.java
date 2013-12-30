@@ -8,9 +8,7 @@ import android.view.View;
 import android.support.v4.app.NavUtils;
 
 public class Settings extends BaseActivity {
-	
-	String settingsDir;
-	
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -23,6 +21,6 @@ public class Settings extends BaseActivity {
 	//Saves the user defined settings by
 	//creating a new settings.cfg file
 	public void saveSettings(View view) {
-		settingsDir = getFilesDir().getAbsolutePath().toString() + "/System";
+		
 	}
 }

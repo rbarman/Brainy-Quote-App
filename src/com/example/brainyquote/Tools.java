@@ -1,8 +1,10 @@
 package com.example.brainyquote;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -64,9 +66,10 @@ public class Tools {
 			}
 			// Create file name and write out contents
 			try {
-				PrintWriter out = new PrintWriter(filePath);
-				out.print(quoteAndDir[0]);
-				out.close();
+				FileWriter fw = new FileWriter(filePath);
+				BufferedWriter bw = new BufferedWriter(fw);
+				bw.write(quoteAndDir[0]);
+				bw.close();
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -185,11 +188,12 @@ public class Tools {
 			if (file.exists()) {
 				//No need to make a file :D
 			} else {
-				PrintWriter out = new PrintWriter(filePath);
-				out.print("QuoteFontSize = 20;\n");
-				out.print("QuoteFontColor = #000000;\n");
+				FileWriter fw = new FileWriter(filePath);
+				BufferedWriter bw = new BufferedWriter(fw);
+				bw.write("QuoteFontSize = 20;\n");
+				bw.write("QuoteFontColor = #000000;\n");
+				bw.close();
 				//more setting configs may be added later
-				out.close();
 			} 
 		} catch (IOException e) {
 			e.printStackTrace();
