@@ -107,6 +107,7 @@ public class SpecificQuote extends BaseActivity {
 		// then from InitialSearch we will start other respective AsyncTasks.
 		newPage = true;
 		searchType = "byAuthor";
+		//foundTopic == false && foundInitials == false;
 		new InitialSearch().execute((generateUrl()));
 	}
 
@@ -228,6 +229,7 @@ public class SpecificQuote extends BaseActivity {
 	}
 
 	public String generateUrl() {
+		//searchType will be set to its appropriate value within the appropriate async task. 
 		if(newPage == true) {
 			if (searchType.equals("tag")) 
 				writeTagUrl();			
@@ -239,12 +241,12 @@ public class SpecificQuote extends BaseActivity {
 				writeAuthorWithInitialsUrl();
 			else
 				writeTagUrl();
-			return addHTMLtoUrl(url);
+			return addHTMLtoUrl();
 		}
 		else 
 			return url;
 	}
-	public String addHTMLtoUrl(String url) {
+	public String addHTMLtoUrl() {
 		// this method will add ".html" to url added based on the page number.
 		if (pageNum == 1)
 			url = url + ".html";
@@ -409,7 +411,6 @@ public class SpecificQuote extends BaseActivity {
 				searchType = "byAuthor";
 				new SearchWithInitials()
 						.execute(generateUrl());
-				//:TODO
 			} else {
 
 				textView.setText("You are searching for " + message + " quotes");
