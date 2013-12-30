@@ -28,7 +28,7 @@ public class SpecificQuote extends BaseActivity {
 	String searchType = null;
 	// possible types are aboutAuthor, byAuthor, tag
 	int index = 0; 
-	int pageNum = -1;
+	int pageNum = 1;
 	int quotesOnPage = 0; // number of quotes on page
 	int toggle = 0;
 	View view;
@@ -55,7 +55,7 @@ public class SpecificQuote extends BaseActivity {
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView) findViewById(R.id.textView);
-
+		textView.setTextSize(quoteFont);
 		share = (ImageButton)findViewById(R.id.share);
 		share.setOnClickListener(new View.OnClickListener() {
 			
@@ -93,6 +93,7 @@ public class SpecificQuote extends BaseActivity {
 		// execute the AsyncTask
 		// InitialSearch will determine if we have an author or tag query.
 		// then from InitialSearch we will start other respective AsyncTasks.
+		newPage = true;
 		new InitialSearch().execute((generateAuthorUrl()));
 	}
 
@@ -110,7 +111,7 @@ public class SpecificQuote extends BaseActivity {
 	}
 
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
-		public void onSwipeRight() {
+		public void onSwipeRight() { 
 			// on every swipe to the right we will get the previous quote.
 			if (noSuchPage == false) {
 				if (index > 0) {
@@ -142,6 +143,12 @@ public class SpecificQuote extends BaseActivity {
 			// on every swipe to the left we will get the next quote. 
 			if (noSuchPage == false) {
 				index++;
+				if (index == quotesOnPage) {
+					// we are here if we go to a new page of quotes. 
+					pageNum++;
+					index = 0; //index is set to zero to get first quote on new page url 
+					newPage = true;
+				}
 				Toast.makeText(SpecificQuote.this,
 						"Swipe to Left : Next Quote Coming!",
 						Toast.LENGTH_SHORT).show();
@@ -201,7 +208,7 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 
-	public String addHTMLtoUrl(String url) {
+	public void addHTMLtoUrl(String url) {
 		// this method will add ".html" to url added based on the page number.
 		if (pageNum == 1)
 			url = url + ".html";
@@ -212,25 +219,21 @@ public class SpecificQuote extends BaseActivity {
 			else
 				url = url + "_" + pageNum + ".html";
 		}
-		return url;
 	}
-
+	
 	public String generateAuthorWithInitialsUrl() {
 		// generates and returns an url for Author with Initials
 
-		if (index == quotesOnPage) {
-			// we are here if we go to a new page of quotes.
-			pageNum++;
-			index = 0; //index is set to zero to get first quote on new page url 
-			newPage = true;
-			return writeAuthorWithInitialsUrl();
-		} else if (newPage == true) {
-			return writeAuthorWithInitialsUrl();
-		} else
+		if (newPage == true) {
+			writeAuthorWithInitialsUrl();
+			addHTMLtoUrl(url);
+			return url;
+		}
+		 else
 			return url;
 	}
 
-	public String writeAuthorWithInitialsUrl() {
+	public void writeAuthorWithInitialsUrl() {
 		// writes a url without ".html" for authors with initials based on how
 		// many initials are in the first name. Currently either 2 or 3 initials in first name.
 		if (queryTextSplit[0].length() == 2)
@@ -247,61 +250,51 @@ public class SpecificQuote extends BaseActivity {
 					+ queryTextSplit[0].charAt(2);
 		for (int i = 1; i < queryTextSplit.length; i++)
 			url = url + "_" + queryTextSplit[i];
-		return addHTMLtoUrl(url);
 	}
 
 	public String generateAuthorUrl() {
 		// generates and returns a url for Authors.
 
-		if (index == quotesOnPage) {
-			// we are here if we go to a new page of quotes. 
-			pageNum++;
-			index = 0; //index is set to zero to get first quote on new page url 
-			newPage = true;
-			return writeAuthorUrl();
-		} else if (newPage == true) {
-			return writeAuthorUrl();
-		} else
+		 if (newPage == true) {
+			writeAuthorUrl();
+			addHTMLtoUrl(url);
+			return url;
+		 }
+		 else
 			return url;
 	}
 
-	public String writeAuthorUrl() {
+	public void writeAuthorUrl() {
 		// writes a url without ".html" for authors
 		url = "http://www.brainyquote.com/quotes/authors/"
 				+ queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
 		for (int i = 1; i < queryTextSplit.length; i++)
 			url = url + "_" + queryTextSplit[i];
-		return addHTMLtoUrl(url);
 	}
 
 	public String generateTagUrl() {
 		// generates and returns a url for Tags.
-
-		if (index == quotesOnPage) {
-			pageNum++;
-			index = 0; //index is set to zero to get first quote on new page url 
-			newPage = true;
-			return writeTagUrl();
-		} else if (newPage == true) {
-			return writeTagUrl();
-		} else
+		if (newPage == true) {
+			writeTagUrl();
+			addHTMLtoUrl(url);
+			return url;
+		}
+		 else
 			return url;
 	}
 
-	public String writeTagUrl() {
+	public void writeTagUrl() {
 		// writes a tag url based on if the tag is a keyword or topic.
 		if (foundTopic == true) {
 			// tag is a topic
 			url = "http://www.brainyquote.com/quotes/topics/topic_"
 					+ queryTextSplit[0];
-			return addHTMLtoUrl(url);
 		} else {
 			// tag is a keyword
 			url = "http://www.brainyquote.com/quotes/keywords/"
 					+ queryTextSplit[0];
 			for (int i = 1; i < queryTextSplit.length; i++)
 				url = url + "_" + queryTextSplit[i];
-			return addHTMLtoUrl(url);
 		}
 	}
 
@@ -380,11 +373,9 @@ public class SpecificQuote extends BaseActivity {
 				// queryText can be a tag or an author with initials in the
 				// first name.
 				if(checkIfTopic(queryTextSplit[0])) {
-					pageNum = 0;
 					return "tag";					
 				}
 				if(checkIfContainsInitials(queryTextSplit[0])) {
-					pageNum--;
 					return "found initials";
 				}
 				return "tag";
