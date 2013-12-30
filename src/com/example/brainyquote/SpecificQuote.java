@@ -2,14 +2,18 @@ package com.example.brainyquote;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+
 import com.example.brainyquote.Tools.DeleteFavTask;
 import com.example.brainyquote.Tools.WriteFavQuoteTask;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -27,16 +31,25 @@ public class SpecificQuote extends BaseActivity {
 	String url = "";
 	String searchType = null;
 	// possible types are aboutAuthor, byAuthor, tag
-	int index = 0; 
+	private static final String TAG = "MyApp";  
+	int index = 0;
 	int pageNum = 1;
 	int quotesOnPage = 0; // number of quotes on page
 	int toggle = 0;
 	View view;
-	boolean foundInitials = false; //foundInitials is true when checkIfContainsInitials(String s) find that s has initials
-	boolean foundTopic = false; //foundTopic is true when checkIfTopic(String s) finds that s is a topic. 
-	boolean noSuchPage = false; //noSuchPage is true in the onPostExecute of TagSearch if "error" is returned => invalid url
-	boolean newPage = false; //newPage is true when we got to the previous or next page. 
-	boolean wentPreviousPage = false; //wentPreviousPage is true when we go to the previous page. main function will be to recalc index.
+	boolean foundInitials = false; // foundInitials is true when
+									// checkIfContainsInitials(String s) find
+									// that s has initials
+	boolean foundTopic = false; // foundTopic is true when checkIfTopic(String
+								// s) finds that s is a topic.
+	boolean noSuchPage = false; // noSuchPage is true in the onPostExecute of
+								// TagSearch if "error" is returned => invalid
+								// url
+	boolean newPage = false; // newPage is true when we got to the previous or
+								// next page.
+	boolean wentPreviousPage = false; // wentPreviousPage is true when we go to
+										// the previous page. main function will
+										// be to recalc index.
 	Document doc = null;
 	Elements author = null;
 	Elements quote = null;
@@ -56,12 +69,13 @@ public class SpecificQuote extends BaseActivity {
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView) findViewById(R.id.textView);
 
-		share = (ImageButton)findViewById(R.id.share);
+		share = (ImageButton) findViewById(R.id.share);
 		share.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(), "clicked", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "clicked",
+						Toast.LENGTH_SHORT).show();
 				Intent shareIntent = new Intent();
 				shareIntent.setAction(Intent.ACTION_SEND);
 				shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
@@ -69,16 +83,16 @@ public class SpecificQuote extends BaseActivity {
 				startActivity(Intent.createChooser(shareIntent, "Share via"));
 			}
 		});
-		
-		star = (ImageButton)findViewById(R.id.star);
+
+		star = (ImageButton) findViewById(R.id.star);
 		star.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				String text = textView.getText().toString();
-				String[] quoteAndDir = {text, appDir};
-				if (toggle == 0) { 	
-					star.setImageResource(R.drawable.btn_star_big_on);				
+				String[] quoteAndDir = { text, appDir };
+				if (toggle == 0) {
+					star.setImageResource(R.drawable.btn_star_big_on);
 					new WriteFavQuoteTask().execute(quoteAndDir);
 					toggle = 1;
 				} else if (toggle == 1) {
@@ -88,8 +102,9 @@ public class SpecificQuote extends BaseActivity {
 				}
 			}
 		});
-		
+
 		getTopics(topics);
+		Log.i(TAG, "ON CREATE");
 		// execute the AsyncTask
 		// InitialSearch will determine if we have an author or tag query.
 		// then from InitialSearch we will start other respective AsyncTasks.
@@ -111,18 +126,19 @@ public class SpecificQuote extends BaseActivity {
 	}
 
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
-		public void onSwipeRight() { 
+		public void onSwipeRight() {
 			// on every swipe to the right we will get the previous quote.
 			if (noSuchPage == false) {
 				if (index > 0) {
-					//user is going to previous quote. 
+					// user is going to previous quote.
 					Toast.makeText(SpecificQuote.this,
 							"Swipe to Right : Previous Quote Coming!",
 							Toast.LENGTH_SHORT).show();
 					index--;
 					startTaskOnSwipe();
 				} else if (index == 0 && pageNum > 1) {
-					//In this case the user is going back to a previous page of quotes. 
+					// In this case the user is going back to a previous page of
+					// quotes.
 					Toast.makeText(SpecificQuote.this,
 							"Swipe to Right : Previous Quote Coming!",
 							Toast.LENGTH_SHORT).show();
@@ -131,7 +147,8 @@ public class SpecificQuote extends BaseActivity {
 					wentPreviousPage = true;
 					startTaskOnSwipe();
 				} else {
-					//In this case the user is attempting to go back but the user is at the first quote of first page. 
+					// In this case the user is attempting to go back but the
+					// user is at the first quote of first page.
 					Toast.makeText(SpecificQuote.this,
 							"Swipe to Right : No more previous Quotes :(",
 							Toast.LENGTH_SHORT).show();
@@ -140,14 +157,19 @@ public class SpecificQuote extends BaseActivity {
 		}
 
 		public void onSwipeLeft() {
-			// on every swipe to the left we will get the next quote. 
+			// on every swipe to the left we will get the next quote.
 			if (noSuchPage == false) {
 				index++;
-				if (index == quotesOnPage) {
-					// we are here if we go to a new page of quotes. 
+				if (index == quotesOnPage) { 
+					// we are here if we go to a new page of quotes.
 					pageNum++;
-					index = 0; //index is set to zero to get first quote on new page url 
+					index = 0; // index is set to zero to get first quote on new
+								// page url
 					newPage = true;
+					Log.i(TAG, "IN THE IF STATEMENT");
+				}
+				else {
+					Log.i(TAG, "IN THE ELSE STATEMENT");
 				}
 				Toast.makeText(SpecificQuote.this,
 						"Swipe to Left : Next Quote Coming!",
@@ -167,7 +189,7 @@ public class SpecificQuote extends BaseActivity {
 
 	public void getDocumentAndModifyElements(String url) {
 		// ONLY when we are on a New Page (newPage == true)
-		//gets a new Document [getDocument()]
+		// gets a new Document [getDocument()]
 		// modifies author, quote, and quotesOnPage [modifyElements()]
 
 		if (newPage == true) {
@@ -195,12 +217,13 @@ public class SpecificQuote extends BaseActivity {
 	public void modifyElements() {
 		// if there is a document then we select elements from the document.
 		// quote and author will take these elements
-		// quotesOnPage will be updated and index will be recalculated if the user went to a previous page. 
+		// quotesOnPage will be updated and index will be recalculated if the
+		// user went to a previous page.
 		if (doc != null) {
 			quote = doc.select(".boxyPaddingBig span.bqQuoteLink a");
 			author = doc.select(".boxyPaddingBig span.bodybold a");
 			quotesOnPage = quote.size();
-			if(wentPreviousPage == true) {
+			if (wentPreviousPage == true) {
 				index = quotesOnPage - 1;
 				wentPreviousPage = false;
 			}
@@ -208,7 +231,7 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 
-	public void addHTMLtoUrl(String url) {
+	public String addHTMLtoUrl(String url) {
 		// this method will add ".html" to url added based on the page number.
 		if (pageNum == 1)
 			url = url + ".html";
@@ -219,23 +242,24 @@ public class SpecificQuote extends BaseActivity {
 			else
 				url = url + "_" + pageNum + ".html";
 		}
+		return url;
 	}
-	
+
 	public String generateAuthorWithInitialsUrl() {
 		// generates and returns an url for Author with Initials
 
 		if (newPage == true) {
 			writeAuthorWithInitialsUrl();
-			addHTMLtoUrl(url);
-			return url;
-		}
-		 else
+			return addHTMLtoUrl(url);
+			
+		} else
 			return url;
 	}
 
 	public void writeAuthorWithInitialsUrl() {
 		// writes a url without ".html" for authors with initials based on how
-		// many initials are in the first name. Currently either 2 or 3 initials in first name.
+		// many initials are in the first name. Currently either 2 or 3 initials
+		// in first name.
 		if (queryTextSplit[0].length() == 2)
 			// http://www.brainyquote.com/quotes/authors/c/c_s_lewis.html
 			url = "http://www.brainyquote.com/quotes/authors/"
@@ -255,12 +279,11 @@ public class SpecificQuote extends BaseActivity {
 	public String generateAuthorUrl() {
 		// generates and returns a url for Authors.
 
-		 if (newPage == true) {
+		if (newPage == true) {
 			writeAuthorUrl();
-			addHTMLtoUrl(url);
-			return url;
-		 }
-		 else
+			return addHTMLtoUrl(url);
+			
+		} else
 			return url;
 	}
 
@@ -276,10 +299,8 @@ public class SpecificQuote extends BaseActivity {
 		// generates and returns a url for Tags.
 		if (newPage == true) {
 			writeTagUrl();
-			addHTMLtoUrl(url);
-			return url;
-		}
-		 else
+			return addHTMLtoUrl(url);
+		} else
 			return url;
 	}
 
@@ -311,8 +332,10 @@ public class SpecificQuote extends BaseActivity {
 						.get();
 				return "";
 			} catch (IOException ioe) {
-				//we are here if the first name or string value of queryText when converted to be read as initials
-				//results in an invalid author search. This means that queryText can be a tag or an invalid search parameter. 
+				// we are here if the first name or string value of queryText
+				// when converted to be read as initials
+				// results in an invalid author search. This means that
+				// queryText can be a tag or an invalid search parameter.
 				return "error";
 			}
 		}
@@ -372,10 +395,10 @@ public class SpecificQuote extends BaseActivity {
 				// search, we are put here.
 				// queryText can be a tag or an author with initials in the
 				// first name.
-				if(checkIfTopic(queryTextSplit[0])) {
-					return "tag";					
+				if (checkIfTopic(queryTextSplit[0])) {
+					return "tag";
 				}
-				if(checkIfContainsInitials(queryTextSplit[0])) {
+				if (checkIfContainsInitials(queryTextSplit[0])) {
 					return "found initials";
 				}
 				return "tag";
@@ -386,7 +409,7 @@ public class SpecificQuote extends BaseActivity {
 		protected void onPostExecute(String message) {
 
 			if (message.equals("tag")) {
-				
+
 				// we now know that the search query the user entered does NOT
 				// represent an author
 				// the search query entered something that represents a keyword
@@ -481,7 +504,7 @@ public class SpecificQuote extends BaseActivity {
 		}
 
 		@Override
-		protected void onPostExecute(String quote) { 
+		protected void onPostExecute(String quote) {
 			textView.setText(quote);
 			Tools.setShareQuote(textView.getText().toString());
 			changeStarIfFavorite(textView, star);
@@ -539,12 +562,12 @@ public class SpecificQuote extends BaseActivity {
 		}
 		return false;
 	}
+
 	public boolean checkIfContainsInitials(String str) {
 		if (queryTextSplit[0].length() == 2 || queryTextSplit[0].length() == 3) {
 			foundInitials = true;
 			return true;
-		}
-		else 
+		} else
 			return false;
 	}
 }
