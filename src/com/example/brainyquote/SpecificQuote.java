@@ -114,15 +114,15 @@ public class SpecificQuote extends BaseActivity {
 
 	public void startTaskOnSwipe() {
 		if (searchType.equals("tag"))
-			new TagSearch().execute(generateTagUrl());
+			new TagSearch().execute(generateUrl());
 		else if (searchType.equals("byAuthor") && foundInitials == false)
-			new ByAuthorSearch().execute(generateAuthorUrl());
+			new ByAuthorSearch().execute(generateUrl());
 		else if (searchType.equals("byAuthor") && foundInitials == true)
-			new ByAuthorSearch().execute(generateAuthorWithInitialsUrl());
+			new ByAuthorSearch().execute(generateUrl());
 		else if (searchType.equals("aboutAuthor") && foundInitials == true)
-			new AboutAuthorSearch().execute(generateAuthorWithInitialsUrl());
+			new ByAuthorSearch().execute(generateUrl());
 		else
-			new AboutAuthorSearch().execute(generateTagUrl());
+			new AboutAuthorSearch().execute(generateUrl());
 	}
 
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
@@ -231,6 +231,23 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 
+	public String generateUrl() {
+		if(newPage == true) {
+			if (searchType.equals("tag")) 
+				writeTagUrl();			
+			else if (searchType.equals("byAuthor") && foundInitials == false)
+				writeAuthorUrl();
+			else if (searchType.equals("byAuthor") && foundInitials == true)
+				writeAuthorWithInitialsUrl();
+			else if (searchType.equals("aboutAuthor") && foundInitials == true)
+				writeAuthorWithInitialsUrl();
+			else
+				writeTagUrl();
+			return addHTMLtoUrl(url);
+		}
+		else 
+			return url;
+	}
 	public String addHTMLtoUrl(String url) {
 		// this method will add ".html" to url added based on the page number.
 		if (pageNum == 1)
