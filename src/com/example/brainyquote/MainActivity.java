@@ -1,5 +1,6 @@
 package com.example.brainyquote;
 
+
 import android.os.Bundle;
 import android.app.SearchManager;
 import android.content.Context;
@@ -21,8 +22,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-		 super.onCreate(savedInstanceState);
-		 
+    	super.onCreate(savedInstanceState);
+		
 	    setContentView(R.layout.activity_main);
         searchButton = (Button) findViewById(R.id.searchButton);
         randomButton = (Button) findViewById(R.id.randomButton);

@@ -55,7 +55,7 @@ public class SpecificQuote extends BaseActivity {
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView) findViewById(R.id.textView);
-		textView.setTextSize(quoteFont);
+
 		share = (ImageButton)findViewById(R.id.share);
 		share.setOnClickListener(new View.OnClickListener() {
 			

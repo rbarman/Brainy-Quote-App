@@ -31,18 +31,25 @@ import android.widget.Toast;
 //Eliminates redundant code.
 public abstract class BaseActivity extends Activity {
 
-	String appDir;
-	int toggle;
+	protected String appDir;
+	protected int quoteFont;
+	protected int toggle;
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
 	protected static String sharingQuote = "";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
-
-		getActionBar();
+		
 		appDir = getFilesDir().getAbsolutePath().toString();
+    	Tools.initSettings(appDir);
+    	String[] userSettings = Tools.readSettings(appDir);
+    	quoteFont = Integer.parseInt(userSettings[0].substring(
+    			userSettings[0].lastIndexOf(" ") + 1, userSettings[0].indexOf(";")));
+    	
+		getActionBar();
 		
 		//this try catch is a hack to show the action overflow menu on phones with hardware menu button. 
 		try {
@@ -73,26 +80,26 @@ public abstract class BaseActivity extends Activity {
 	    searchView.setSearchableInfo(
 	            searchManager.getSearchableInfo(getComponentName()));
 	    searchView.setQueryHint("Search BrainyQuote");
-      final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+	    final SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
     	
-	    @Override
-	    public boolean onQueryTextChange(String newText) {
-	        return true;
-	    }
+	    	@Override
+	    	public boolean onQueryTextChange(String newText) {
+	    		return true;
+	    	}
 
-	    @Override
-	    public boolean onQueryTextSubmit(String query) {    	    		
-	        launchSpecificQuoteActivity(query);
-	        return true;
-	    }
-	};
-	searchView.setOnQueryTextListener(queryTextListener);
-		return true;
-	}
+	    	@Override
+	    	public boolean onQueryTextSubmit(String query) {    	    		
+	    		launchSpecificQuoteActivity(query);
+	    		return true;
+	    	}
+	    };
+	    searchView.setOnQueryTextListener(queryTextListener);
+	    return true;
+		}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
+		
 		switch (item.getItemId()) {
 			case R.id.launch_fav_activity:
 				Intent intent = new Intent(getBaseContext(), FavQuotesScreen.class);
@@ -112,6 +119,7 @@ public abstract class BaseActivity extends Activity {
 	}
 
 	public void showCustomToast(int quotePlaceHolder) {
+		
 		LayoutInflater inflater = getLayoutInflater();
 
 		View layout = inflater.inflate(R.layout.custom_toast,
@@ -164,6 +172,7 @@ public abstract class BaseActivity extends Activity {
 	
 	//uses CheckQuoteTask async task to set star to the appropriate resource. 
 	public void changeStarIfFavorite(TextView textView, ImageButton star) {
+		
 		String[] quoteAndDir = { textView.getText().toString(), appDir };
 		
 		try {
@@ -184,6 +193,7 @@ public abstract class BaseActivity extends Activity {
 	
 	//gets all topics from "categories.txt" and puts in ArrayList<String> topics
 	public void getTopics(ArrayList<String> topics) {
+		
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new InputStreamReader(getAssets().open(

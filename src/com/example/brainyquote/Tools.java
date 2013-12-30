@@ -147,18 +147,24 @@ public class Tools {
 			return null;
 	}
 	}
+	
 	//TODO
 	//returns config file content for user settings such as fonts, colors, etc.
-	protected static String readSettings(String fileName, String parentDir) {
+	protected static String[] readSettings(String Dir) {
 
-		String filePath = parentDir + "/" + fileName + ".txt";
-		String content = "";
+		//Currently there are 2 settings, each on its own line
+		int numLines = 2;
+		String filePath = Dir + "/Settings.cfg";
+		String[] content = new String[2];
 			
 		try {
 			FileReader fr = new FileReader(filePath);
 			BufferedReader textReader = new BufferedReader(fr);
-			content = textReader.readLine();
-				
+			
+			for (int i = 0; i < numLines; i++) {
+				content[i] = textReader.readLine();	
+			}
+			
 			textReader.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -170,29 +176,23 @@ public class Tools {
 	//Checks if there is settings file. If not, make one
 	//with default values. Takes a String dir of where to write
 	//and check for settings file.
-	protected static class initSettingsTask extends AsyncTask<String, Void, Void> {
-
-		@Override
-		protected Void doInBackground(String... Dir) {
-			
-			String filePath = Dir[0] + "/" + "Settings.txt";
-			
-			try {
-				File file = new File(filePath);
-				if (file.exists()) {
-					//No need to make a file :D
-				} else {
-					PrintWriter out = new PrintWriter(filePath);
-					out.append("QuoteFontSize = 20;\n");
-					out.append("QuoteFontColor = #000000;\n");
-					//more setting configs may be added later
-					out.close();
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			return null;
+	public static void initSettings(String dir) {
+		
+		String filePath = dir + "/Settings.cfg";
+		
+		try {
+			File file = new File(filePath);
+			if (file.exists()) {
+				//No need to make a file :D
+			} else {
+				PrintWriter out = new PrintWriter(filePath);
+				out.print("QuoteFontSize = 20;\n");
+				out.print("QuoteFontColor = #000000;\n");
+				//more setting configs may be added later
+				out.close();
+			} 
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

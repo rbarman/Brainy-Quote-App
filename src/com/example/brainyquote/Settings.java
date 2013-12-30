@@ -20,10 +20,9 @@ public class Settings extends BaseActivity {
 	}
 	
 	//TODO
-	//will create a fonts file in the app's "System" folder
-	//that stores a font size integer. This will then be referenced
-	//by random and specific quote activities to adjust the quote font size
-	public void changeQuoteFont(View view) {
+	//Saves the user defined settings by
+	//creating a new settings.cfg file
+	public void saveSettings(View view) {
 		settingsDir = getFilesDir().getAbsolutePath().toString() + "/System";
 	}
 }
