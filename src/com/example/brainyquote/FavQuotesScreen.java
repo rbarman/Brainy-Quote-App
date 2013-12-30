@@ -28,13 +28,11 @@ import android.widget.TextView;
 public class FavQuotesScreen extends BaseActivity {
 	
 	public final static String QUOTE_MESSAGE = "com.example.brainyquote.MESSAGE";
-	private String quotesDir = "";
 	private ArrayList<String> quotes = new ArrayList<String>();
 	private ArrayAdapter<String> adapter;
 	private ListView list;
 	int numSelected = 0;
-	View noQuoteTextView;
-	ShareActionProvider shareProvider;
+	private View noQuoteTextView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +42,6 @@ public class FavQuotesScreen extends BaseActivity {
 		setupActionBar();
 		
 		list = (ListView) findViewById(R.id.listViewMain);
-		quotesDir = getFilesDir().getAbsolutePath().toString();
 		noQuoteTextView = (View) findViewById(R.id.noQuoteTextView);
 		
 		new GetFavQuotesTask().execute();
@@ -93,7 +90,7 @@ public class FavQuotesScreen extends BaseActivity {
 		            	for (int i = 0; i < selectedItems.size(); i++) {
 		            		if (selectedItems.get(i)) {
 		            			String quoteText = (list.getItemAtPosition(i).toString());
-				            	String[] quoteAndDir = {quoteText, quotesDir};
+				            	String[] quoteAndDir = {quoteText, appDir};
 				            	DeleteFavTask favDelete = new DeleteFavTask();
 				            	favDelete.execute(quoteAndDir);
 		            		}
@@ -227,7 +224,7 @@ public class FavQuotesScreen extends BaseActivity {
 	//and refreshes listView
 	public void deleteAllFavorites() {
 		
-		new DeleteAllFavsTask().execute(quotesDir);
+		new DeleteAllFavsTask().execute(appDir);
 		quotes.clear();
 		adapter.notifyDataSetChanged();
 		noQuoteTextView.setVisibility(View.VISIBLE);
