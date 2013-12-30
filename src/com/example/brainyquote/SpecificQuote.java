@@ -13,7 +13,6 @@ import com.example.brainyquote.Tools.WriteFavQuoteTask;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -31,7 +30,6 @@ public class SpecificQuote extends BaseActivity {
 	String url = "";
 	String searchType = null;
 	// possible types are aboutAuthor, byAuthor, tag
-	private static final String TAG = "MyApp";  
 	int index = 0;
 	int pageNum = 1;
 	int quotesOnPage = 0; // number of quotes on page
@@ -104,12 +102,12 @@ public class SpecificQuote extends BaseActivity {
 		});
 
 		getTopics(topics);
-		Log.i(TAG, "ON CREATE");
 		// execute the AsyncTask
 		// InitialSearch will determine if we have an author or tag query.
 		// then from InitialSearch we will start other respective AsyncTasks.
 		newPage = true;
-		new InitialSearch().execute((generateAuthorUrl()));
+		searchType = "byAuthor";
+		new InitialSearch().execute((generateUrl()));
 	}
 
 	public void startTaskOnSwipe() {
@@ -166,10 +164,8 @@ public class SpecificQuote extends BaseActivity {
 					index = 0; // index is set to zero to get first quote on new
 								// page url
 					newPage = true;
-					Log.i(TAG, "IN THE IF STATEMENT");
 				}
 				else {
-					Log.i(TAG, "IN THE ELSE STATEMENT");
 				}
 				Toast.makeText(SpecificQuote.this,
 						"Swipe to Left : Next Quote Coming!",
@@ -262,17 +258,6 @@ public class SpecificQuote extends BaseActivity {
 		return url;
 	}
 
-	public String generateAuthorWithInitialsUrl() {
-		// generates and returns an url for Author with Initials
-
-		if (newPage == true) {
-			writeAuthorWithInitialsUrl();
-			return addHTMLtoUrl(url);
-			
-		} else
-			return url;
-	}
-
 	public void writeAuthorWithInitialsUrl() {
 		// writes a url without ".html" for authors with initials based on how
 		// many initials are in the first name. Currently either 2 or 3 initials
@@ -293,32 +278,12 @@ public class SpecificQuote extends BaseActivity {
 			url = url + "_" + queryTextSplit[i];
 	}
 
-	public String generateAuthorUrl() {
-		// generates and returns a url for Authors.
-
-		if (newPage == true) {
-			writeAuthorUrl();
-			return addHTMLtoUrl(url);
-			
-		} else
-			return url;
-	}
-
 	public void writeAuthorUrl() {
 		// writes a url without ".html" for authors
 		url = "http://www.brainyquote.com/quotes/authors/"
 				+ queryTextSplit[0].charAt(0) + "/" + queryTextSplit[0];
 		for (int i = 1; i < queryTextSplit.length; i++)
 			url = url + "_" + queryTextSplit[i];
-	}
-
-	public String generateTagUrl() {
-		// generates and returns a url for Tags.
-		if (newPage == true) {
-			writeTagUrl();
-			return addHTMLtoUrl(url);
-		} else
-			return url;
 	}
 
 	public void writeTagUrl() {
@@ -359,8 +324,10 @@ public class SpecificQuote extends BaseActivity {
 
 		@Override
 		protected void onPostExecute(String message) {
-			if (message.equals("error"))
-				new TagSearch().execute(generateTagUrl());
+			if (message.equals("error")) {
+				searchType = "tag";
+				new TagSearch().execute(generateUrl());
+			}
 			else {
 
 				textView.setText("You are searching for " + message + " quotes");
@@ -377,11 +344,13 @@ public class SpecificQuote extends BaseActivity {
 							// new
 							// AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 							// TODO: temporary fix.
-							new AboutAuthorSearch().execute(generateTagUrl());
+							searchType = "aboutAuthor";
+							new AboutAuthorSearch().execute(generateUrl());
 							break;
 						case R.id.byAuthor:
+							searchType = "byAuthor";
 							new ByAuthorSearch()
-									.execute(generateAuthorWithInitialsUrl());
+									.execute(generateUrl());
 							break;
 						}
 						return true;
@@ -433,11 +402,14 @@ public class SpecificQuote extends BaseActivity {
 				// / topic.
 				// we can start a new AsyncTask that will run a keyword search
 				// on the searchQuery.
-				new TagSearch().execute(generateTagUrl());
+				searchType = "tag";
+				new TagSearch().execute(generateUrl());
 
 			} else if (message.equals("found initials")) {
+				searchType = "byAuthor";
 				new SearchWithInitials()
-						.execute(generateAuthorWithInitialsUrl());
+						.execute(generateUrl());
+				//:TODO
 			} else {
 
 				textView.setText("You are searching for " + message + " quotes");
@@ -458,10 +430,12 @@ public class SpecificQuote extends BaseActivity {
 
 						switch (item.getItemId()) {
 						case R.id.aboutAuthor:
-							new AboutAuthorSearch().execute(generateTagUrl());
+							searchType = "aboutAuthor";
+							new AboutAuthorSearch().execute(generateUrl());
 							break;
 						case R.id.byAuthor:
-							new ByAuthorSearch().execute(generateAuthorUrl());
+							searchType = "byAuthor";
+							new ByAuthorSearch().execute(generateUrl());
 							break;
 						}
 						return true;
