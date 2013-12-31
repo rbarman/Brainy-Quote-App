@@ -108,18 +108,20 @@ public class SpecificQuote extends BaseActivity {
 		newPage = true;
 		searchType = "byAuthor";
 		//foundTopic == false && foundInitials == false;
-		new InitialSearch().execute((generateUrl()));
+		generateUrl();
+		new InitialSearch().execute();
 	}
 
 	public void startTaskOnSwipe() {
+		generateUrl();
 		if (searchType.equals("tag"))
-			new TagSearch().execute(generateUrl());
+			new TagSearch().execute();
 		else if (searchType.equals("byAuthor") && foundInitials == false)
-			new ByAuthorSearch().execute(generateUrl());
+			new ByAuthorSearch().execute();
 		else if (searchType.equals("byAuthor") && foundInitials == true)
-			new ByAuthorSearch().execute(generateUrl());
+			new ByAuthorSearch().execute();
 		else if (searchType.equals("aboutAuthor") && foundInitials == true)
-			new ByAuthorSearch().execute(generateUrl());
+			new ByAuthorSearch().execute();
 		else
 			new AboutAuthorSearch().execute(generateUrl());
 	}
@@ -241,12 +243,13 @@ public class SpecificQuote extends BaseActivity {
 				writeAuthorWithInitialsUrl();
 			else
 				writeTagUrl();
-			return addHTMLtoUrl();
+			addHTMLtoUrl();
+			return url;
 		}
 		else 
 			return url;
 	}
-	public String addHTMLtoUrl() {
+	public void addHTMLtoUrl() {
 		// this method will add ".html" to url added based on the page number.
 		if (pageNum == 1)
 			url = url + ".html";
@@ -257,7 +260,6 @@ public class SpecificQuote extends BaseActivity {
 			else
 				url = url + "_" + pageNum + ".html";
 		}
-		return url;
 	}
 
 	public void writeAuthorWithInitialsUrl() {
@@ -303,12 +305,11 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 
-	private class SearchWithInitials extends AsyncTask<String, Void, String> {
+	private class SearchWithInitials extends AsyncTask<Void, Void, String> {
 
 		@Override
-		protected String doInBackground(String... params) {
+		protected String doInBackground(Void... params) {
 			try {
-				url = params[0];
 				Document doc = Jsoup
 						.connect(url)
 						.userAgent(
@@ -328,7 +329,8 @@ public class SpecificQuote extends BaseActivity {
 		protected void onPostExecute(String message) {
 			if (message.equals("error")) {
 				searchType = "tag";
-				new TagSearch().execute(generateUrl());
+				generateUrl();
+				new TagSearch().execute();
 			}
 			else {
 
@@ -351,8 +353,9 @@ public class SpecificQuote extends BaseActivity {
 							break;
 						case R.id.byAuthor:
 							searchType = "byAuthor";
+							generateUrl();
 							new ByAuthorSearch()
-									.execute(generateUrl());
+									.execute();
 							break;
 						}
 						return true;
@@ -363,14 +366,13 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 
-	private class InitialSearch extends AsyncTask<String, Void, String> {
+	private class InitialSearch extends AsyncTask<Void, Void, String> {
 
 		@Override
-		protected String doInBackground(String... params) {
+		protected String doInBackground(Void... params) {
 
 			try {
 				// first run an author search...
-				url = params[0];
 				Document doc = Jsoup
 						.connect(url)
 						.userAgent(
@@ -405,12 +407,13 @@ public class SpecificQuote extends BaseActivity {
 				// we can start a new AsyncTask that will run a keyword search
 				// on the searchQuery.
 				searchType = "tag";
-				new TagSearch().execute(generateUrl());
+				generateUrl();
+				new TagSearch().execute();
 
 			} else if (message.equals("found initials")) {
 				searchType = "byAuthor";
-				new SearchWithInitials()
-						.execute(generateUrl());
+				generateUrl();
+				new SearchWithInitials().execute();
 			} else {
 
 				textView.setText("You are searching for " + message + " quotes");
@@ -436,7 +439,8 @@ public class SpecificQuote extends BaseActivity {
 							break;
 						case R.id.byAuthor:
 							searchType = "byAuthor";
-							new ByAuthorSearch().execute(generateUrl());
+							generateUrl();
+							new ByAuthorSearch().execute();
 							break;
 						}
 						return true;
@@ -447,13 +451,12 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 
-	private class TagSearch extends AsyncTask<String, Void, String> {
+	private class TagSearch extends AsyncTask<Void, Void, String> {
 		// this method will run a Tag search.
 		@Override
-		protected String doInBackground(String... params) {
+		protected String doInBackground(Void... params) {
 
 			searchType = "tag";
-			url = params[0];
 			getDocumentAndModifyElements(url);
 			if (doc == null)
 				return "error";
@@ -480,13 +483,12 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 
-	private class ByAuthorSearch extends AsyncTask<String, Void, String> {
+	private class ByAuthorSearch extends AsyncTask<Void, Void, String> {
 		// this method will return a quote BY the author
 		@Override
-		protected String doInBackground(String... params) {
+		protected String doInBackground(Void... params) {
 
 			searchType = "byAuthor";
-			url = params[0];
 			getDocumentAndModifyElements(url);
 			// doc will never be null here.
 			return quote.get(index).text() + "\n\n--" + queryText
@@ -512,7 +514,6 @@ public class SpecificQuote extends BaseActivity {
 		protected String doInBackground(String... params) {
 
 			searchType = "aboutAuthor";
-			url = params[0];
 			getDocumentAndModifyElements(url);
 			if (doc == null)
 				return "error";
