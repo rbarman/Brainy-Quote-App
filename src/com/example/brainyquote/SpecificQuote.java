@@ -123,7 +123,7 @@ public class SpecificQuote extends BaseActivity {
 		else if (searchType.equals("aboutAuthor") && foundInitials == true)
 			new ByAuthorSearch().execute();
 		else
-			new AboutAuthorSearch().execute(generateUrl());
+			new AboutAuthorSearch().execute();
 	}
 
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
@@ -230,7 +230,7 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 
-	public String generateUrl() {
+	public void generateUrl() {
 		//searchType will be set to its appropriate value within the appropriate async task. 
 		if(newPage == true) {
 			if (searchType.equals("tag")) 
@@ -244,10 +244,7 @@ public class SpecificQuote extends BaseActivity {
 			else
 				writeTagUrl();
 			addHTMLtoUrl();
-			return url;
 		}
-		else 
-			return url;
 	}
 	public void addHTMLtoUrl() {
 		// this method will add ".html" to url added based on the page number.
@@ -349,13 +346,13 @@ public class SpecificQuote extends BaseActivity {
 							// AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 							// TODO: temporary fix.
 							searchType = "aboutAuthor";
-							new AboutAuthorSearch().execute(generateUrl());
+							generateUrl();
+							new AboutAuthorSearch().execute();
 							break;
 						case R.id.byAuthor:
 							searchType = "byAuthor";
 							generateUrl();
-							new ByAuthorSearch()
-									.execute();
+							new ByAuthorSearch().execute();
 							break;
 						}
 						return true;
@@ -435,7 +432,8 @@ public class SpecificQuote extends BaseActivity {
 						switch (item.getItemId()) {
 						case R.id.aboutAuthor:
 							searchType = "aboutAuthor";
-							new AboutAuthorSearch().execute(generateUrl());
+							generateUrl();
+							new AboutAuthorSearch().execute();
 							break;
 						case R.id.byAuthor:
 							searchType = "byAuthor";
@@ -508,10 +506,10 @@ public class SpecificQuote extends BaseActivity {
 		}
 	}
 
-	private class AboutAuthorSearch extends AsyncTask<String, Void, String> {
+	private class AboutAuthorSearch extends AsyncTask<Void, Void, String> {
 		// this method will return a quote ABOUT the author.
 		@Override
-		protected String doInBackground(String... params) {
+		protected String doInBackground(Void... params) {
 
 			searchType = "aboutAuthor";
 			getDocumentAndModifyElements(url);
