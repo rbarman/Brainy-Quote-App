@@ -36,7 +36,7 @@ public class RandomQuote extends BaseActivity {
 		setContentView(R.layout.activity_random_quote);
 		
 		textView = (TextView) findViewById(R.id.textView);
-		textView.setTextSize(quoteFont);
+		textView.setTextSize(fontSize);
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
 		share = (ImageButton)findViewById(R.id.share);

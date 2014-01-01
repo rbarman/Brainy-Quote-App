@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+            
+    <ListPreference
+        android:key="quote_font_pref"
+        android:title="Quote Font"
+        android:summary="Adjust the font size of quotes."
+        android:entries="@array/fontSize"
+        android:entryValues="@array/fontSizeValues"
+        android:defaultValue="20" />
+
+</PreferenceScreen>

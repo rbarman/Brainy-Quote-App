@@ -24,7 +24,7 @@ public class SelectedQuote extends BaseActivity {
 		String quote = intent.getStringExtra(FavQuotesScreen.QUOTE_MESSAGE);
 		TextView textView = (TextView) findViewById(R.id.quoteTextView);
 		textView.setText(quote);
-		textView.setTextSize(quoteFont);
+		textView.setTextSize(fontSize);
 		String text = textView.getText().toString();
 		final String[] quoteAndDir = {text, appDir};
 		

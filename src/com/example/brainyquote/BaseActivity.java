@@ -9,10 +9,12 @@ import java.util.concurrent.ExecutionException;
 import com.example.brainyquote.Tools.CheckQuoteTask;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,7 +34,7 @@ import android.widget.Toast;
 public abstract class BaseActivity extends Activity {
 
 	protected String appDir;
-	protected int quoteFont;
+	protected int fontSize;
 	protected int toggle;
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
@@ -42,12 +44,13 @@ public abstract class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		//sets default prefs if never modified by user
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+		//gets the current pref values
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		
+		fontSize = Integer.parseInt(preferences.getString("quote_font_pref", "20"));
 		appDir = getFilesDir().getAbsolutePath().toString();
-    	Tools.initSettings(appDir);
-    	String[] userSettings = Tools.readSettings(appDir);
-    	quoteFont = Integer.parseInt(userSettings[0].substring(
-    			userSettings[0].lastIndexOf(" ") + 1, userSettings[0].indexOf(";")));
     	
 		getActionBar();
 		

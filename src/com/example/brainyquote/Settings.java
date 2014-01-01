@@ -1,26 +1,37 @@
 package com.example.brainyquote;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
+import android.preference.PreferenceFragment;
+import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.support.v4.app.NavUtils;
 
 public class Settings extends BaseActivity {
-		
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_settings);
+		setContentView(R.layout.activity_settings1);
 		// Show the Up button in the action bar.
-		setupActionBar();
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
+		//Displays the pref fragment of preference objects
+		getFragmentManager().beginTransaction()
+			.replace(android.R.id.content, new PrefsFragment())
+			.commit();
 	}
 	
-	//TODO
-	//Saves the user defined settings by
-	//creating a new settings.cfg file
-	public void saveSettings(View view) {
-		
+	public static class PrefsFragment extends PreferenceFragment {
+		 
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+        	super.onCreate(savedInstanceState);
+
+        	// Load the preferences from XML resource
+        	addPreferencesFromResource(R.xml.preferences);
+        }
 	}
+
 }
