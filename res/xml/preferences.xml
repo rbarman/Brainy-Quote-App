@@ -8,5 +8,6 @@
         android:entries="@array/fontSize"
         android:entryValues="@array/fontSizeValues"
         android:defaultValue="20" />
+    
 
 </PreferenceScreen>

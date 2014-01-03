@@ -23,6 +23,13 @@ public class Settings extends BaseActivity {
 			.commit();
 	}
 	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		
+		menu.findItem(R.id.settings).setVisible(false);
+		return true;
+	}
+	
 	public static class PrefsFragment extends PreferenceFragment {
 		 
         @Override

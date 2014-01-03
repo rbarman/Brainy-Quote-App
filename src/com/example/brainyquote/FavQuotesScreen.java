@@ -148,6 +148,13 @@ public class FavQuotesScreen extends BaseActivity {
 	}
 	
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		
+		menu.findItem(R.id.launch_fav_activity).setVisible(false);
+		return true;
+	}
+	
+	@Override
 	public void onResume() {
 		
 		super.onResume();
