@@ -120,6 +120,12 @@ public abstract class BaseActivity extends Activity {
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
+	
+	@Override
+	public void onResume() {
+		super.onResume();
+		
+	}	
 
 	public void showCustomToast(int quotePlaceHolder) {
 		

@@ -66,6 +66,7 @@ public class SpecificQuote extends BaseActivity {
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView) findViewById(R.id.textView);
+		textView.setTextSize(fontSize);
 
 		share = (ImageButton) findViewById(R.id.share);
 		share.setOnClickListener(new View.OnClickListener() {
@@ -537,11 +538,6 @@ public class SpecificQuote extends BaseActivity {
 					showCustomToast(index);
 			}
 		}
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
 	}
 
 	public boolean checkIfTopic(String str) {

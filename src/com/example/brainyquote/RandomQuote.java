@@ -79,11 +79,6 @@ public class RandomQuote extends BaseActivity {
 		new GetQuote().execute();
 	}
 
-	@Override
-	public void onResume() {
-		super.onResume();
-	}	
-
 	OnTouchListener viewSwiped = new OnSwipeTouchListener() {
 
 		// on every swipe to the right we will get the previous random quote.
