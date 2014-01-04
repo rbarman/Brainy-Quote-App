@@ -90,7 +90,7 @@
         </activity>
         <provider
    			android:authorities="com.example.brainquote.RecentSuggestionProvider"
-   			android:name="provider.RecentSuggestionProvider"
+   			android:name=".RecentSuggestionProvider"
    			android:enabled="true" >
 </provider>
     </application>
