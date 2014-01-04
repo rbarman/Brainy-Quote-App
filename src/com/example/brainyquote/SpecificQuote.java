@@ -106,15 +106,10 @@ public class SpecificQuote extends BaseActivity {
 		// execute the AsyncTask
 		// InitialSearch will determine if we have an author or tag query.
 		// then from InitialSearch we will start other respective AsyncTasks.
-		newPage = true;
-		searchType = "byAuthor";
-		//foundTopic == false && foundInitials == false;
-		generateUrl();
 		new InitialSearch().execute();
 	}
 
 	public void startTaskOnSwipe() {
-		generateUrl();
 		if (searchType.equals("tag"))
 			new TagSearch().execute();
 		else if (searchType.equals("byAuthor") && foundInitials == false)
@@ -307,6 +302,8 @@ public class SpecificQuote extends BaseActivity {
 
 		@Override
 		protected String doInBackground(Void... params) {
+			searchType = "byAuthor";
+			generateUrl();
 			try {
 				Document doc = Jsoup
 						.connect(url)
@@ -326,8 +323,6 @@ public class SpecificQuote extends BaseActivity {
 		@Override
 		protected void onPostExecute(String message) {
 			if (message.equals("error")) {
-				searchType = "tag";
-				generateUrl();
 				new TagSearch().execute();
 			}
 			else {
@@ -346,13 +341,9 @@ public class SpecificQuote extends BaseActivity {
 							// new
 							// AboutAuthorSearch().execute(generateAuthorWithInitialsUrl(queryText));
 							// TODO: temporary fix.
-							searchType = "aboutAuthor";
-							generateUrl();
 							new AboutAuthorSearch().execute();
 							break;
 						case R.id.byAuthor:
-							searchType = "byAuthor";
-							generateUrl();
 							new ByAuthorSearch().execute();
 							break;
 						}
@@ -368,7 +359,10 @@ public class SpecificQuote extends BaseActivity {
 
 		@Override
 		protected String doInBackground(Void... params) {
-
+			newPage = true;
+			searchType = "byAuthor";
+			//foundTopic == false && foundInitials == false;
+			generateUrl();
 			try {
 				// first run an author search...
 				Document doc = Jsoup
@@ -404,13 +398,10 @@ public class SpecificQuote extends BaseActivity {
 				// / topic.
 				// we can start a new AsyncTask that will run a keyword search
 				// on the searchQuery.
-				searchType = "tag";
-				generateUrl();
 				new TagSearch().execute();
 
 			} else if (message.equals("found initials")) {
-				searchType = "byAuthor";
-				generateUrl();
+
 				new SearchWithInitials().execute();
 			} else {
 
@@ -432,13 +423,9 @@ public class SpecificQuote extends BaseActivity {
 
 						switch (item.getItemId()) {
 						case R.id.aboutAuthor:
-							searchType = "aboutAuthor";
-							generateUrl();
 							new AboutAuthorSearch().execute();
 							break;
 						case R.id.byAuthor:
-							searchType = "byAuthor";
-							generateUrl();
 							new ByAuthorSearch().execute();
 							break;
 						}
@@ -456,6 +443,7 @@ public class SpecificQuote extends BaseActivity {
 		protected String doInBackground(Void... params) {
 
 			searchType = "tag";
+			generateUrl();
 			getDocumentAndModifyElements(url);
 			if (doc == null)
 				return "error";
@@ -488,6 +476,7 @@ public class SpecificQuote extends BaseActivity {
 		protected String doInBackground(Void... params) {
 
 			searchType = "byAuthor";
+			generateUrl();
 			getDocumentAndModifyElements(url);
 			// doc will never be null here.
 			return quote.get(index).text() + "\n\n--" + queryText
@@ -513,6 +502,7 @@ public class SpecificQuote extends BaseActivity {
 		protected String doInBackground(Void... params) {
 
 			searchType = "aboutAuthor";
+			generateUrl();
 			getDocumentAndModifyElements(url);
 			if (doc == null)
 				return "error";
