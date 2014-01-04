@@ -50,7 +50,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:resource="@xml/searchable"
@@ -80,6 +79,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brainyquote.FavQuotesScreen" />
         </activity>
+       <!--  Settings Activity -->
         <activity
             android:name="com.example.brainyquote.Settings"
             android:label="@string/title_activity_settings"
@@ -90,7 +90,8 @@
         </activity>
         <provider
    			android:authorities="com.example.brainquote.RecentSuggestionProvider"
-   			android:name=".RecentSuggestionProvider" >
+   			android:name="provider.RecentSuggestionProvider"
+   			android:enabled="true" >
 </provider>
     </application>
 
