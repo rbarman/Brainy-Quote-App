@@ -13,6 +13,7 @@ import com.example.brainyquote.Tools.WriteFavQuoteTask;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -53,6 +54,7 @@ public class SpecificQuote extends BaseActivity {
 	Elements quote = null;
 	ArrayList<String> topics = new ArrayList<String>();
 	String[] queryTextSplit;
+	private static final String TAG = "SpecificQuoteActivity";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -447,11 +449,13 @@ public class SpecificQuote extends BaseActivity {
 			getDocumentAndModifyElements(url);
 			if (doc == null)
 				return "error";
-			else
+			else {
+				Log.i(TAG,"INDEX : " + index
+						+ " quotesOnPage : " + quotesOnPage
+						+ " PAGE : " + pageNum + "\n\n URL : " + url);
 				return quote.get(index).text() + "\n\n--"
-						+ author.get(index).text() + "\n\n INDEX : " + index
-						+ "\n\n quotesOnPage : " + quotesOnPage
-						+ "\n\n PAGE : " + pageNum + "\n\n URL : " + url;
+						+ author.get(index).text();
+			}
 		}
 
 		@Override
@@ -479,10 +483,10 @@ public class SpecificQuote extends BaseActivity {
 			generateUrl();
 			getDocumentAndModifyElements(url);
 			// doc will never be null here.
-			return quote.get(index).text() + "\n\n--" + queryText
-					+ "\n\n INDEX : " + index + "\n\n quotesOnPage : "
-					+ quotesOnPage + "\n\n PAGE : " + pageNum + "\n\n URL : "
-					+ url;
+			Log.i(TAG,"INDEX : " + index
+					+ " quotesOnPage : " + quotesOnPage
+					+ " PAGE : " + pageNum + "\n\n URL : " + url);
+			return quote.get(index).text() + "\n\n--" + queryText;
 		}
 
 		@Override
@@ -507,10 +511,11 @@ public class SpecificQuote extends BaseActivity {
 			if (doc == null)
 				return "error";
 			else
+				Log.i(TAG,"INDEX : " + index
+						+ " quotesOnPage : " + quotesOnPage
+						+ " PAGE : " + pageNum + "\n\n URL : " + url);
 				return quote.get(index).text() + "\n\n--"
-						+ author.get(index).text() + "\n\n INDEX : " + index
-						+ "\n\n quotesOnPage : " + quotesOnPage + "\n\n URL : "
-						+ url;
+						+ author.get(index).text();
 		}
 
 		@Override
