@@ -88,6 +88,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.brainyquote.MainActivity" />
         </activity>
+        <provider
+   			android:authorities="com.example.brainquote.RecentSuggestionProvider"
+   			android:name=".RecentSuggestionProvider" >
+</provider>
     </application>
 
 </manifest>

@@ -12,6 +12,7 @@ import com.example.brainyquote.Tools.WriteFavQuoteTask;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MenuItem;
@@ -29,6 +30,7 @@ public class SpecificQuote extends BaseActivity {
 	ImageButton star;
 	String queryText;
 	String url = "";
+	String query;
 	String searchType = null;
 	// possible types are aboutAuthor, byAuthor, tag
 	int index = 0;
@@ -70,6 +72,12 @@ public class SpecificQuote extends BaseActivity {
 		textView = (TextView) findViewById(R.id.textView);
 		textView.setTextSize(fontSize);
 
+		SearchRecentSuggestions suggestions = 
+				   new SearchRecentSuggestions(this, 
+				      RecentSuggestionProvider.AUTHORITY, 
+				      RecentSuggestionProvider.MODE); 
+				suggestions.saveRecentQuery(query, null);
+		
 		share = (ImageButton) findViewById(R.id.share);
 		share.setOnClickListener(new View.OnClickListener() {
 
