@@ -33,9 +33,9 @@ import android.widget.Toast;
 //Eliminates redundant code.
 public abstract class BaseActivity extends Activity {
 
-	protected String appDir;
 	protected int fontSize;
 	protected int toggle;
+	protected static String appDir;
 	// quote used for sharing on google+, texting, etc.
 	// Modified by subclasses once a quote is shown on screen
 	protected static String sharingQuote = "";

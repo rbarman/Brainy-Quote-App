@@ -9,5 +9,15 @@
         android:entryValues="@array/fontSizeValues"
         android:defaultValue="20" />
     
+    <com.example.brainyquote.ClearFavsDiagPref  
+        android:dialogMessage="Delete all Favorites?"  
+        android:key="resetDialog"  
+        android:negativeButtonText="Cancel"  
+        android:persistent="false"  
+        android:positiveButtonText="Yes"  
+        android:summary="Deletes all favorited quotes"  
+        android:title="Clear Favorites" >  
+    </com.example.brainyquote.ClearFavsDiagPref >  
+    
 
 </PreferenceScreen>
