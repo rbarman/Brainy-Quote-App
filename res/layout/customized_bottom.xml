@@ -2,15 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#191919" >
-
+     >
+	<!-- android:background="#191919" -->
     <ImageButton
         android:id="@+id/star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/btn_star_big_off" />
+        android:src="@drawable/btn_star_big_off" 
+        android:background="#ffffff"
+        />
 
     <ImageButton
         android:id="@+id/share"
@@ -18,6 +20,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/ic_menu_share" />
+        android:src="@drawable/ic_menu_share"
+        android:background="#ffffff"
+         />
 
 </RelativeLayout>
