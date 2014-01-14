@@ -30,6 +30,7 @@ public class SpecificQuote extends BaseActivity {
 	TextView textView;
 	ImageButton share;
 	ImageButton star;
+	ImageButton bookmark;
 	String queryText;
 	String url = "";
 	String query;
@@ -114,7 +115,18 @@ public class SpecificQuote extends BaseActivity {
 				}
 			}
 		});
-
+		
+		bookmark = (ImageButton) findViewById(R.id.bookmark);
+		bookmark.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				bookmarkClicked = true;
+				bookmark.setBackgroundColor(0xffffff00);
+					//sets Background to Yellow.
+				Toast.makeText(SpecificQuote.this,"Quote Bookmarked!", Toast.LENGTH_SHORT).show();
+			}
+		});
 		getTopics(topics);
 		// execute the AsyncTask
 		// InitialSearch will determine if we have an author or tag query.
