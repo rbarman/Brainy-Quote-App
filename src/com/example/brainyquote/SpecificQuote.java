@@ -1,5 +1,7 @@
 package com.example.brainyquote;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -51,6 +53,7 @@ public class SpecificQuote extends BaseActivity {
 	boolean wentPreviousPage = false; // wentPreviousPage is true when we go to
 										// the previous page. main function will
 										// be to recalc index.
+	boolean bookmarkClicked = false;
 	Document doc = null;
 	Elements author = null;
 	Elements quote = null;
@@ -559,5 +562,34 @@ public class SpecificQuote extends BaseActivity {
 			return true;
 		} else
 			return false;
+	}
+
+	@Override
+	protected void onStop() {
+		//application calls onStop when the activity is hidden + user can not interact with activity
+		super.onStop();
+		String[] urlPlusIndex = {url, "" + index};
+		if(bookmarkClicked == true) 
+			new WriteBookmarkedUrlTask().execute(urlPlusIndex);
+		
+	}
+	
+	protected static class WriteBookmarkedUrlTask extends AsyncTask<String, Void, Void> {
+		// writes file with Url + Index value
+		@Override
+		protected Void doInBackground(String... urlPlusIndex) {
+			String filePath = urlPlusIndex[0] + urlPlusIndex[1];
+			
+			try {
+				FileWriter fw = new FileWriter(filePath);
+				BufferedWriter bw = new BufferedWriter(fw);
+				bw.write(filePath);
+				bw.close();
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}	
 	}
 }
