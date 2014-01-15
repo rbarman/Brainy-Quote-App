@@ -1,7 +1,9 @@
 package com.example.brainyquote;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -388,6 +390,7 @@ public class SpecificQuote extends BaseActivity {
 			searchType = "byAuthor";
 			//foundTopic == false && foundInitials == false;
 			generateUrl();
+			
 			try {
 				// first run an author search...
 				Document doc = Jsoup
@@ -469,6 +472,9 @@ public class SpecificQuote extends BaseActivity {
 
 			searchType = "tag";
 			generateUrl();
+			String[] urlWithoutDotCom = url.split(".html"); 
+			//TODO: call CheckSavedUrlTask here;
+			new CheckSavedUrlTask().execute(urlWithoutDotCom);
 			getDocumentAndModifyElements(url);
 			if (doc == null)
 				return "error";
@@ -580,7 +586,7 @@ public class SpecificQuote extends BaseActivity {
 	protected void onStop() {
 		//application calls onStop when the activity is hidden + user can not interact with activity
 		super.onStop();
-		String[] urlPlusIndex = {url, "" + index};
+		String urlPlusIndex[] = {url,""+index};
 		if(bookmarkClicked == true) 
 			new WriteBookmarkedUrlTask().execute(urlPlusIndex);
 	}
@@ -589,18 +595,46 @@ public class SpecificQuote extends BaseActivity {
 		// writes file with Url + Index value
 		@Override
 		protected Void doInBackground(String... urlPlusIndex) {
-			String filePath = urlPlusIndex[0] + urlPlusIndex[1];
+			String filePath = appDir + "/" + urlPlusIndex[0] + urlPlusIndex[1] + ".txt";
 			
 			try {
 				FileWriter fw = new FileWriter(filePath);
 				BufferedWriter bw = new BufferedWriter(fw);
-				bw.write(filePath);
+				bw.write(".");
 				bw.close();
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			Log.i(TAG,"saved : " + filePath);
+			// /data/data/com.example.brainyquote/files/http://www.brainyquote.com/quotes/keywords/hi.html0.txt
 			return null;
 		}	
+	}
+
+	protected static class CheckSavedUrlTask extends AsyncTask <String, Void, Void> {
+		//will be called the first time generateUrl is called.
+		@Override
+		protected Void doInBackground(String... urlWithoutDotCom) {
+			File dir = new File(appDir);
+
+			File[] dirFiles = dir.listFiles(new FilenameFilter() {
+			    public boolean accept(File dir, String name) {
+			        return name.endsWith(".txt");
+			    }
+			});
+			Log.i(TAG,"comparing with : " + appDir + "/" + urlWithoutDotCom[0]);
+			for(File item : dirFiles) {
+				String[] filePathWithoutDotCom = item.getPath().split(".html");
+				if((appDir + "/" + urlWithoutDotCom[0]).equalsIgnoreCase(filePathWithoutDotCom[0])) {
+					Log.i(TAG,"found match");
+					break;
+				}
+				else
+					Log.i(TAG,"found no match with : " + filePathWithoutDotCom[0]);	
+			}
+			
+			return null;
+		}
 	}
 }

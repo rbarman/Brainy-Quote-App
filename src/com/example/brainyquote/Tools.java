@@ -10,12 +10,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**Houses many AsyncTask classes with common methods
  *used by other activities for background work. Also
  *contains methods for retrieving data.
  */
 public class Tools {
+	private static final String TAG = "SpecificQuoteActivity";
 	
 	//checks if a given quote exists
 	protected static class CheckQuoteTask extends AsyncTask<String, Void, Boolean> {
@@ -38,7 +40,6 @@ public class Tools {
 			    }
 			});
 			
-			//
 			for (File item : dirFiles) {
 				if (filePath.equals(item.getAbsolutePath().toString())) {
 					return true;
@@ -70,6 +71,7 @@ public class Tools {
 				BufferedWriter bw = new BufferedWriter(fw);
 				bw.write(quoteAndDir[0]);
 				bw.close();
+				Log.i(TAG,"favorited (saved) : " + filePath);
 
 			} catch (IOException e) {
 				e.printStackTrace();
