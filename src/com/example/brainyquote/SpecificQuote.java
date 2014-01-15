@@ -583,7 +583,6 @@ public class SpecificQuote extends BaseActivity {
 		String[] urlPlusIndex = {url, "" + index};
 		if(bookmarkClicked == true) 
 			new WriteBookmarkedUrlTask().execute(urlPlusIndex);
-		
 	}
 	
 	protected static class WriteBookmarkedUrlTask extends AsyncTask<String, Void, Void> {

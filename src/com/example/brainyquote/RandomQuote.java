@@ -24,6 +24,7 @@ public class RandomQuote extends BaseActivity {
 	TextView textView;
 	ImageButton share;
 	ImageButton star;
+	ImageButton bookmark;
 	View view;
 	int toggle = 0;
 	int currentIndex = -1;
@@ -39,6 +40,9 @@ public class RandomQuote extends BaseActivity {
 		textView.setTextSize(fontSize);
 		view = (View) findViewById(R.id.view);
 		view.setOnTouchListener(viewSwiped);
+		bookmark = (ImageButton)findViewById(R.id.bookmark);
+		bookmark.setVisibility(4);
+			//not the best solution, but activity_random_quote <includes> customized_bottom.xml
 		share = (ImageButton)findViewById(R.id.share);
 		share.setOnClickListener(new View.OnClickListener() {
 			
