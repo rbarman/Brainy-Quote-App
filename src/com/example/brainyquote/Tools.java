@@ -1,14 +1,10 @@
 package com.example.brainyquote;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -60,6 +56,7 @@ public class Tools {
 			// This also prevents duplicate favorites by simply overwriting
 			// them.
 			String filePath;
+			
 			if (quoteAndDir[0].length() < 33) {
 				filePath = quoteAndDir[1] + "/" + quoteAndDir[0] + ".txt";
 			} else {
@@ -71,7 +68,9 @@ public class Tools {
 				BufferedWriter bw = new BufferedWriter(fw);
 				bw.write(quoteAndDir[0]);
 				bw.close();
-				Log.i(TAG,"favorited (saved) : " + filePath);
+				Log.i(TAG,"favorited filePath (saved) : " + filePath);
+				Log.i(TAG,"favorited write (saved) : " + quoteAndDir[0]);
+				
 
 			} catch (IOException e) {
 				e.printStackTrace();
