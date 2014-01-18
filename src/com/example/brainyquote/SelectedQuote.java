@@ -21,7 +21,7 @@ public class SelectedQuote extends BaseActivity {
 		setContentView(R.layout.activity_selected_quote);
 		
 		Intent intent = getIntent();
-		String quote = intent.getStringExtra(FavQuotesScreen.QUOTE_MESSAGE);
+		final String quote = intent.getStringExtra(FavQuotesScreen.QUOTE_MESSAGE);
 		TextView textView = (TextView) findViewById(R.id.quoteTextView);
 		textView.setText(quote);
 		textView.setTextSize(fontSize);
@@ -58,7 +58,7 @@ public class SelectedQuote extends BaseActivity {
 						Toast.LENGTH_SHORT).show();
 				Intent shareIntent = new Intent();
 				shareIntent.setAction(Intent.ACTION_SEND);
-				shareIntent.putExtra(Intent.EXTRA_TEXT, sharingQuote);
+				shareIntent.putExtra(Intent.EXTRA_TEXT, quote);
 				shareIntent.setType("text/plain");
 				startActivity(Intent.createChooser(shareIntent, "Share via"));
 			}
