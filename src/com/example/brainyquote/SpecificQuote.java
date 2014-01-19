@@ -9,7 +9,6 @@ import com.example.brainyquote.Tools.DeleteFavTask;
 import com.example.brainyquote.Tools.WriteFavQuoteTask;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.SearchRecentSuggestions;
 import android.content.Intent;
 import android.util.Log;
 import android.view.MenuItem;
@@ -70,12 +69,6 @@ public class SpecificQuote extends BaseActivity {
 		view.setOnTouchListener(viewSwiped);
 		textView = (TextView) findViewById(R.id.textView);
 		textView.setTextSize(fontSize);
-
-		SearchRecentSuggestions suggestions = 
-				   new SearchRecentSuggestions(this, 
-				      RecentSuggestionProvider.AUTHORITY, 
-				      RecentSuggestionProvider.MODE); 
-				suggestions.saveRecentQuery(query, null);
 		
 		share = (ImageButton) findViewById(R.id.share);
 		share.setOnClickListener(new View.OnClickListener() {
