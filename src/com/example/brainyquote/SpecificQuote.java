@@ -27,7 +27,6 @@ public class SpecificQuote extends BaseActivity {
 	ImageButton bookmark;
 	String queryText;
 	String url = "";
-	String query;
 	String searchType = null;
 	// possible types are aboutAuthor, byAuthor, tag
 	int index = 0;
